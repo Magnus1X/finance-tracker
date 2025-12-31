@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('../config/passport');
-const { register, login, getMe, googleCallback } = require('../controllers/authController');
+const { register, login, getMe, updateProfile, googleCallback } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 
 /**
@@ -24,6 +24,19 @@ router.post('/login', login);
  * @access  Private
  */
 router.get('/me', protect, getMe);
+
+/**
+ * @route   PUT /api/auth/profile
+ * @desc    Update user profile
+ * @access  Private
+ */
+router.put('/profile', protect, updateProfile);
+/**
+ * @route   PUT /api/auth/password
+ * @desc    Change user password
+ * @access  Private
+ */
+router.put('/password', protect, require('../controllers/authController').changePassword);
 
 /**
  * @route   GET /api/auth/google
@@ -49,4 +62,3 @@ router.get(
 );
 
 module.exports = router;
-

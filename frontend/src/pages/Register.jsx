@@ -1,41 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
 import { FiMail, FiLock, FiUser } from 'react-icons/fi';
-import { gsap } from 'gsap';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', avatar: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const containerRef = useRef(null);
-  const formRef = useRef(null);
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
-
-  useEffect(() => {
-    if (containerRef.current && formRef.current) {
-      gsap.from(containerRef.current, {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.5,
-      });
-      gsap.from(formRef.current.children, {
-        opacity: 0,
-        y: 20,
-        stagger: 0.1,
-        duration: 0.5,
-        delay: 0.2,
-      });
-    }
-  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -59,7 +39,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const result = await register(formData.name, formData.email, formData.password);
+      const result = await register(formData.name, formData.email, formData.password, formData.avatar);
       if (result.success) {
         navigate('/dashboard');
       } else {
@@ -81,7 +61,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div ref={containerRef} className="w-full max-w-md">
+      <div className="w-full max-w-md">
         <div className="glass card">
           <div className="text-center mb-8">
             <div className="mb-4">
@@ -91,13 +71,13 @@ const Register = () => {
                 </svg>
               </div>
             </div>
-            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
+            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent mb-3">
               Create Account
             </h1>
-            <p className="text-slate-600 dark:text-slate-300 font-medium">Sign up to start tracking your finances</p>
+            <p className="text-slate-700 dark:text-slate-300 font-medium">Sign up to start tracking your finances</p>
           </div>
 
-          <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-50 dark:bg-red-900/30 border-2 border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl font-medium">
                 {error}
@@ -165,6 +145,31 @@ const Register = () => {
                   placeholder="••••••••"
                   required
                 />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-200">Currency</label>
+              <div className="relative">
+                <FiDollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-500 dark:text-pink-400" />
+                <select
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  className="input-field pl-12 appearance-none"
+                  required
+                >
+                  {currencies.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.name} ({c.symbol})
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none text-slate-500">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               </div>
             </div>
 

@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { FiMessageCircle, FiX, FiSend } from 'react-icons/fi';
-import { gsap } from 'gsap';
 import { transactionAPI, budgetAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import { getCurrencySymbol } from '../utils/currency';
 
 const AIChatbot = () => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -15,17 +17,6 @@ const AIChatbot = () => {
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
   const messagesEndRef = useRef(null);
-
-  useEffect(() => {
-    if (isOpen && chatRef.current) {
-      gsap.from(chatRef.current, {
-        opacity: 0,
-        scale: 0.8,
-        y: 20,
-        duration: 0.3,
-      });
-    }
-  }, [isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -75,7 +66,7 @@ const AIChatbot = () => {
         const analytics = analyticsRes.data.data;
 
         if (analytics.savings > 0) {
-          return `You're saving $${analytics.savings.toFixed(2)} this month! That's excellent. Consider putting this into a savings account or investment.`;
+          return `You're saving ${getCurrencySymbol(user?.currency)}${analytics.savings.toFixed(2)} this month! That's excellent. Consider putting this into a savings account or investment.`;
         } else {
           return `You're spending more than you're earning this month. I recommend reviewing your expenses and finding areas to cut back.`;
         }

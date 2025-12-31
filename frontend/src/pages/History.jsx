@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { budgetAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import { getCurrencySymbol } from '../utils/currency';
 import { format } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const History = () => {
+  const { user } = useAuth();
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedCategory, setSelectedCategory] = useState('');
 
@@ -127,6 +130,13 @@ const History = () => {
           </ResponsiveContainer>
         </div>
       )}
+      {history.length === 0 && !loading && (
+        <div className="glass card">
+          <div className="text-center py-12">
+            <p className="text-gray-500">No historical data available</p>
+          </div>
+        </div>
+      )}
 
       {/* History List */}
       <div className="glass card">
@@ -154,11 +164,15 @@ const History = () => {
                 <div className="grid grid-cols-3 gap-4 mb-4">
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Budgeted</p>
-                    <p className="text-lg font-bold">${item.budgetedAmount.toFixed(2)}</p>
+                    <p className="text-lg font-bold">
+                      {getCurrencySymbol(user?.currency)}{item.budgetedAmount.toFixed(2)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Spent</p>
-                    <p className="text-lg font-bold">${item.spentAmount.toFixed(2)}</p>
+                    <p className="text-lg font-bold">
+                      {getCurrencySymbol(user?.currency)}{item.spentAmount.toFixed(2)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Utilization</p>
@@ -190,4 +204,3 @@ const History = () => {
 };
 
 export default History;
-

@@ -1,14 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { gsap } from 'gsap';
 
-// Register ScrollTrigger if available
-if (typeof window !== 'undefined') {
-  import('gsap/ScrollTrigger').then((module) => {
-    gsap.registerPlugin(module.ScrollTrigger);
-  });
-}
 import { 
   FiDollarSign, 
   FiPieChart, 
@@ -30,63 +23,6 @@ const Landing = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const featuresInView = useInView(featuresRef, { once: true, amount: 0.2 });
-
-  useEffect(() => {
-    // GSAP timeline for hero - ensure text is fully visible
-    const tl = gsap.timeline();
-    
-    // Set initial opacity to 1 to prevent fading
-    gsap.set('.hero-title', { opacity: 1, visibility: 'visible' });
-    gsap.set('.hero-title span', { opacity: 1, visibility: 'visible' });
-    
-    // Set initial state to ensure visibility
-    gsap.set('.hero-title span', { opacity: 1, visibility: 'visible' });
-    
-    tl.from('.hero-title span', {
-      opacity: 0,
-      y: -100,
-      duration: 1.2,
-      ease: 'power4.out',
-      stagger: 0.2
-    })
-    .to('.hero-title span', {
-      opacity: 1,
-      duration: 0.1,
-      visibility: 'visible'
-    }, '-=0.1')
-    .from('.hero-subtitle', {
-      opacity: 0,
-      y: 50,
-      duration: 1,
-      ease: 'power3.out'
-    }, '-=0.5')
-    .to('.hero-subtitle', {
-      opacity: 1,
-      duration: 0.1
-    }, '-=0.1')
-    .from('.hero-cta', {
-      opacity: 0,
-      scale: 0,
-      rotation: -180,
-      duration: 0.8,
-      ease: 'back.out(2)',
-      stagger: 0.15
-    }, '-=0.3');
-
-    // Floating animation
-    gsap.to('.float-icon', {
-      y: -30,
-      rotation: 5,
-      duration: 3,
-      repeat: -1,
-      yoyo: true,
-      ease: 'power1.inOut'
-    });
-
-    // Parallax effect using Framer Motion's useScroll instead
-    // GSAP ScrollTrigger will be handled separately if needed
-
-  }, []);
 
   const handleFeatureClick = () => {
     navigate('/login');
@@ -193,14 +129,24 @@ const Landing = () => {
               Finance Tracker
             </span>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link
-              to="/login"
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold shadow-lg hover:shadow-xl transition-all"
-            >
-              Login
-            </Link>
-          </motion.div>
+          <div className="flex items-center gap-4">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/login"
+                className="px-6 py-2.5 rounded-xl border-2 border-purple-600 dark:border-pink-500 text-purple-700 dark:text-pink-400 font-bold bg-white dark:bg-slate-900 hover:bg-purple-50 dark:hover:bg-pink-950/20 transition-all shadow-lg"
+              >
+                Login
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/register"
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold shadow-lg hover:shadow-xl transition-all"
+              >
+                Sign Up
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </motion.nav>
 
@@ -234,11 +180,10 @@ const Landing = () => {
           {/* Title */}
           <h1 className="hero-title text-7xl md:text-8xl font-black mb-6 leading-tight">
             <motion.span 
-              className="block bg-gradient-to-r from-purple-800 via-pink-600 to-purple-800 bg-clip-text text-transparent font-black"
+              className="block bg-gradient-to-r from-purple-800 via-pink-600 to-purple-800 dark:from-purple-400 dark:via-pink-400 dark:to-purple-400 bg-clip-text text-transparent font-black"
               style={{ 
                 opacity: 1, 
                 WebkitTextFillColor: 'transparent',
-                backgroundImage: 'linear-gradient(to right, rgb(107, 33, 168), rgb(219, 39, 119), rgb(107, 33, 168))'
               }}
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -250,8 +195,6 @@ const Landing = () => {
               className="block text-slate-900 dark:text-white mt-2 font-black"
               style={{ 
                 opacity: 1, 
-                color: 'rgb(15, 23, 42)',
-                WebkitTextFillColor: 'rgb(15, 23, 42)'
               }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
