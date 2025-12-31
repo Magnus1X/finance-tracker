@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Budgets from './pages/Budgets';
 import History from './pages/History';
+import Settings from './pages/Settings';
 import AIChatbot from './components/AIChatbot';
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                       <Route path="/transactions" element={<Transactions />} />
                       <Route path="/budgets" element={<Budgets />} />
                       <Route path="/history" element={<History />} />
+                      <Route path="/settings" element={<Settings />} />
                     </Routes>
                     <AIChatbot />
                   </Layout>
@@ -52,4 +54,3 @@ function App() {
 }
 
 export default App;
-

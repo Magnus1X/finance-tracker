@@ -287,20 +287,58 @@ const getBudgetHistory = async (req, res, next) => {
     const history = await prisma.budgetHistory.findMany({
       where,
       orderBy: [
-        { year: 'desc' },
-        { month: 'desc' },
+        { year: 'asc' },
+        { month: 'asc' },
       ],
       take: parseInt(limit),
       skip: parseInt(skip),
     });
 
-    const total = await prisma.budgetHistory.count({ where });
+    let total = await prisma.budgetHistory.count({ where });
+
+    // Fallback: if no archived history found for given filters, derive from budgets for the requested period
+    let derived = [];
+    if (history.length === 0 && month && year) {
+      const budgets = await prisma.budget.findMany({
+        where: {
+          userId: req.user.id,
+          month: parseInt(month),
+          year: parseInt(year),
+          ...(category && { category }),
+        },
+        orderBy: [
+          { year: 'asc' },
+          { month: 'asc' },
+        ],
+      });
+
+      derived = budgets
+        .sort((a, b) => (a.year - b.year) || (a.month - b.month))
+        .map((b) => {
+        const utilizationPercentage = b.amount > 0 ? (b.spent / b.amount) * 100 : 0;
+        let status = 'under';
+        if (utilizationPercentage > 100) status = 'over';
+        else if (utilizationPercentage >= 90) status = 'met';
+        return {
+          id: `${b.category}-${b.year}-${b.month}`,
+          userId: b.userId,
+          category: b.category,
+          budgetedAmount: b.amount,
+          spentAmount: b.spent,
+          month: b.month,
+          year: b.year,
+          status,
+          utilizationPercentage,
+          derived: true,
+        };
+      });
+    }
 
     res.json({
       success: true,
-      count: history.length,
-      total,
-      data: history,
+      count: (history.length || derived.length),
+      total: total || derived.length,
+      data: history.length ? history : derived,
     });
   } catch (error) {
     next(error);
@@ -316,4 +354,3 @@ module.exports = {
   archiveBudget,
   getBudgetHistory,
 };
-

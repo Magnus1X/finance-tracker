@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
 import { FiMail, FiLock, FiUser } from 'react-icons/fi';
-import { gsap } from 'gsap';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -11,31 +10,12 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const containerRef = useRef(null);
-  const formRef = useRef(null);
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
-
-  useEffect(() => {
-    if (containerRef.current && formRef.current) {
-      gsap.from(containerRef.current, {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.5,
-      });
-      gsap.from(formRef.current.children, {
-        opacity: 0,
-        y: 20,
-        stagger: 0.1,
-        duration: 0.5,
-        delay: 0.2,
-      });
-    }
-  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -86,7 +66,7 @@ const Login = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <span className="text-2xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
               Finance Tracker
             </span>
           </Link>
@@ -107,8 +87,8 @@ const Login = () => {
         </div>
       </div>
       
-      <div ref={containerRef} className="w-full max-w-md relative z-10 mt-20">
-        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-2 border-white/50 dark:border-slate-700/50 shadow-2xl rounded-3xl p-8">
+      <div className="w-full max-w-md relative z-10 mt-20">
+        <div className="glass card">
           <div className="text-center mb-8">
             <div className="mb-6">
               <div className="inline-block p-6 rounded-3xl bg-gradient-to-br from-purple-600 to-pink-600 shadow-2xl hover:scale-110 transition-transform">
@@ -117,13 +97,13 @@ const Login = () => {
                 </svg>
               </div>
             </div>
-            <h1 className="text-5xl font-black bg-gradient-to-r from-purple-700 via-pink-600 to-purple-700 bg-clip-text text-transparent mb-4">
+            <h1 className="text-5xl font-black bg-gradient-to-r from-purple-700 via-pink-600 to-purple-700 dark:from-purple-400 dark:via-pink-400 dark:to-purple-400 bg-clip-text text-transparent mb-4">
               Welcome Back
             </h1>
             <p className="text-slate-700 dark:text-slate-200 font-semibold text-lg">Sign in to continue your financial journey</p>
           </div>
 
-          <form ref={formRef} onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {error && (
               <div className="bg-red-50 dark:bg-red-900/30 border-2 border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 px-6 py-4 rounded-2xl font-semibold text-center">
                 {error}

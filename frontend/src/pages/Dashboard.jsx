@@ -2,10 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { transactionAPI, budgetAPI } from '../services/api';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { FiTrendingUp, FiTrendingDown, FiDollarSign, FiPieChart } from 'react-icons/fi';
-import { gsap } from 'gsap';
 import { format } from 'date-fns';
+import { useAuth } from '../context/AuthContext';
+import { getCurrencySymbol } from '../utils/currency';
 
 const Dashboard = () => {
+  const { user } = useAuth();
   const [analytics, setAnalytics] = useState(null);
   const [budgets, setBudgets] = useState([]);
   const [recentTransactions, setRecentTransactions] = useState([]);
@@ -15,18 +17,6 @@ const Dashboard = () => {
   useEffect(() => {
     fetchDashboardData();
   }, []);
-
-  useEffect(() => {
-    if (cardRefs.current.length > 0) {
-      gsap.from(cardRefs.current, {
-        opacity: 0,
-        y: 30,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: 'power3.out',
-      });
-    }
-  }, [analytics, budgets]);
 
   const fetchDashboardData = async () => {
     try {
@@ -81,25 +71,21 @@ const Dashboard = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Dashboard</h1>
-        <p className="text-slate-600 dark:text-slate-400 font-medium">Overview of your finances</p>
+        <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">Dashboard</h1>
+        <p className="text-slate-700 dark:text-slate-300 font-medium">Overview of your finances</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div
-          ref={(el) => (cardRefs.current[0] = el)}
           className="glass card group hover:scale-105 transition-transform"
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1 font-medium">Total Income</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300 mb-1 font-medium">Total Income</p>
               <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
-                ${analytics?.income?.toFixed(2) || '0.00'}
+                {getCurrencySymbol(user?.currency)}{analytics?.income?.toFixed(2) || '0.00'}
               </p>
-            </div>
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg">
-              <FiTrendingUp className="text-2xl text-white" />
             </div>
           </div>
         </div>
@@ -112,11 +98,8 @@ const Dashboard = () => {
             <div>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-1 font-medium">Total Expenses</p>
               <p className="text-3xl font-bold text-rose-600 dark:text-rose-400">
-                ${analytics?.expenses?.toFixed(2) || '0.00'}
+                {getCurrencySymbol(user?.currency)}{analytics?.expenses?.toFixed(2) || '0.00'}
               </p>
-            </div>
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 shadow-lg">
-              <FiTrendingDown className="text-2xl text-white" />
             </div>
           </div>
         </div>
@@ -129,11 +112,8 @@ const Dashboard = () => {
             <div>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-1 font-medium">Savings</p>
               <p className={`text-3xl font-bold ${(analytics?.savings || 0) >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
-                ${analytics?.savings?.toFixed(2) || '0.00'}
+                {getCurrencySymbol(user?.currency)}{analytics?.savings?.toFixed(2) || '0.00'}
               </p>
-            </div>
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-400 to-pink-600 shadow-lg">
-              <FiDollarSign className="text-2xl text-white" />
             </div>
           </div>
         </div>
@@ -144,7 +124,7 @@ const Dashboard = () => {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1 font-medium">Active Budgets</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300 mb-1 font-medium">Active Budgets</p>
               <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{budgets.length}</p>
             </div>
             <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg">
@@ -232,7 +212,7 @@ const Dashboard = () => {
                       transaction.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
                     }`}
                   >
-                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                    {transaction.type === 'income' ? '+' : '-'}{getCurrencySymbol(user?.currency)}{transaction.amount.toFixed(2)}
                   </p>
                   {transaction.description && (
                     <p className="text-sm text-slate-600 dark:text-slate-400">{transaction.description}</p>
@@ -250,4 +230,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

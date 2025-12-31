@@ -27,9 +27,11 @@ export const AuthProvider = ({ children }) => {
     if (token && storedUser) {
       try {
         const response = await authAPI.getMe();
-        setUser(response.data.user);
+        // Handle different response structures
+        const userData = response.data.data || response.data.user;
+        setUser(userData);
         setIsAuthenticated(true);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('user', JSON.stringify(userData));
       } catch (error) {
         console.error('Auth check failed:', error);
         // For demo: use stored user if API fails
@@ -95,6 +97,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -109,7 +116,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    checkAuth,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

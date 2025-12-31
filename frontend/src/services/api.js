@@ -43,6 +43,8 @@ export const authAPI = {
   register: (data) => api.post('/auth/register', data),
   login: (data) => api.post('/auth/login', data),
   getMe: () => api.get('/auth/me'),
+  updateProfile: (data) => api.put('/auth/profile', data),
+  changePassword: (data) => api.put('/auth/password', data),
   googleAuth: () => {
     window.location.href = `${API_URL}/auth/google`;
   },
@@ -70,4 +72,3 @@ export const budgetAPI = {
 };
 
 export default api;
-
