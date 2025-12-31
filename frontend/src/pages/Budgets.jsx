@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { budgetAPI } from '../services/api';
 import { FiPlus, FiEdit, FiTrash2, FiArchive } from 'react-icons/fi';
-import { gsap } from 'gsap';
 import { format } from 'date-fns';
+import { useAuth } from '../context/AuthContext';
+import { getCurrencySymbol } from '../utils/currency';
 
 const Budgets = () => {
+  const { user } = useAuth();
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -22,16 +24,6 @@ const Budgets = () => {
   useEffect(() => {
     fetchBudgets();
   }, [selectedMonth, selectedYear]);
-
-  useEffect(() => {
-    if (showModal && modalRef.current) {
-      gsap.from(modalRef.current, {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.3,
-      });
-    }
-  }, [showModal]);
 
   const fetchBudgets = async () => {
     try {
@@ -193,6 +185,10 @@ const Budgets = () => {
                         {format(new Date(budget.year, budget.month - 1), 'MMMM yyyy')}
                       </p>
                     </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Utilization</p>
+                      <p className="text-lg font-bold">{utilization.toFixed(1)}%</p>
+                    </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleEdit(budget)}
@@ -217,10 +213,10 @@ const Budgets = () => {
 
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span>Budgeted: ${budget.amount.toFixed(2)}</span>
-                      <span>Spent: ${budget.spent.toFixed(2)}</span>
+                      <span>Budgeted: {getCurrencySymbol(user?.currency)}{budget.amount.toFixed(2)}</span>
+                      <span>Spent: {getCurrencySymbol(user?.currency)}{budget.spent.toFixed(2)}</span>
                       <span className={remaining >= 0 ? 'text-green-600' : 'text-red-600'}>
-                        Remaining: ${remaining.toFixed(2)}
+                        Remaining: {getCurrencySymbol(user?.currency)}{remaining.toFixed(2)}
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
@@ -241,17 +237,31 @@ const Budgets = () => {
             })}
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-8">No budgets for this month</p>
+          <div className="text-center py-12">
+            <p className="text-gray-500 mb-4">No budgets for this month</p>
+            <button
+              onClick={() => {
+                resetForm();
+                setEditingBudget(null);
+                setShowModal(true);
+              }}
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              <FiPlus /> Create your first budget
+            </button>
+          </div>
         )}
       </div>
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div ref={modalRef} className="glass card max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4">
-              {editingBudget ? 'Edit Budget' : 'Create Budget'}
-            </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="glass card w-full max-w-md">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                {editingBudget ? 'Edit Budget' : 'Create Budget'}
+              </h2>
+            </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Category</label>
@@ -337,4 +347,3 @@ const Budgets = () => {
 };
 
 export default Budgets;
-

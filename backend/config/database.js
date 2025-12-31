@@ -18,7 +18,8 @@ const connectDB = async () => {
     console.log('✅ Prisma connected to MongoDB Atlas');
   } catch (error) {
     console.error(`❌ Prisma Connection Error: ${error.message}`);
-    process.exit(1);
+    console.error('⚠️  Please check your MONGODB_URI in backend/.env');
+    // process.exit(1); // Don't crash the server, let it run so user can see logs
   }
 };
 

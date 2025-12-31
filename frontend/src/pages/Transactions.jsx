@@ -1,15 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { transactionAPI } from '../services/api';
 import { FiPlus, FiEdit, FiTrash2, FiFilter, FiSearch } from 'react-icons/fi';
-import { gsap } from 'gsap';
 import { format } from 'date-fns';
+import { useAuth } from '../context/AuthContext';
+import { getCurrencySymbol } from '../utils/currency';
 
 const Transactions = () => {
+  const { user } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [filters, setFilters] = useState({ type: '', category: '', search: '' });
+  const [summary, setSummary] = useState({ income: 0, expense: 0 });
   const [formData, setFormData] = useState({
     type: 'expense',
     category: '',
@@ -17,21 +20,10 @@ const Transactions = () => {
     description: '',
     date: format(new Date(), 'yyyy-MM-dd'),
   });
-  const modalRef = useRef(null);
 
   useEffect(() => {
     fetchTransactions();
   }, [filters]);
-
-  useEffect(() => {
-    if (showModal && modalRef.current) {
-      gsap.from(modalRef.current, {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.3,
-      });
-    }
-  }, [showModal]);
 
   const fetchTransactions = async () => {
     try {
@@ -51,9 +43,13 @@ const Transactions = () => {
       }
       
       setTransactions(data);
+      const income = data.filter((t) => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+      const expense = data.filter((t) => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
+      setSummary({ income, expense });
     } catch (error) {
       console.error('Error fetching transactions:', error);
       setTransactions([]);
+      setSummary({ income: 0, expense: 0 });
     } finally {
       setLoading(false);
     }
@@ -174,6 +170,26 @@ const Transactions = () => {
         </div>
       </div>
 
+      {/* Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="glass card">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-slate-700 dark:text-slate-300 mb-1 font-medium">Total Income</p>
+            <p className="text-2xl font-bold text-emerald-600">
+              {getCurrencySymbol(user?.currency)}{summary.income.toFixed(2)}
+            </p>
+          </div>
+        </div>
+        <div className="glass card">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-slate-700 dark:text-slate-300 mb-1 font-medium">Total Expense</p>
+            <p className="text-2xl font-bold text-rose-600">
+              {getCurrencySymbol(user?.currency)}{summary.expense.toFixed(2)}
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Transactions List */}
       <div className="glass card">
         {loading ? (
@@ -215,7 +231,7 @@ const Transactions = () => {
                       transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
                     }`}
                   >
-                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                    {transaction.type === 'income' ? '+' : '-'}{getCurrencySymbol(user?.currency)}{transaction.amount.toFixed(2)}
                   </p>
                   <div className="flex gap-2">
                     <button
@@ -236,17 +252,31 @@ const Transactions = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-8">No transactions found</p>
+          <div className="text-center py-12">
+            <p className="text-gray-500 mb-4">No transactions found</p>
+            <button
+              onClick={() => {
+                resetForm();
+                setEditingTransaction(null);
+                setShowModal(true);
+              }}
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              <FiPlus /> Add your first transaction
+            </button>
+          </div>
         )}
       </div>
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div ref={modalRef} className="glass card max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4">
-              {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
-            </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="glass card w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
+              </h2>
+            </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Type</label>
@@ -331,4 +361,3 @@ const Transactions = () => {
 };
 
 export default Transactions;
-
