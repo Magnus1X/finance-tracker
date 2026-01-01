@@ -69,6 +69,7 @@ const Transactions = () => {
       fetchTransactions();
     } catch (error) {
       console.error('Error saving transaction:', error);
+      alert(error.response?.data?.message || 'Error saving transaction');
     }
   };
 
@@ -111,8 +112,8 @@ const Transactions = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Transactions</h1>
-          <p className="text-gray-600 dark:text-gray-400">Manage your income and expenses</p>
+          <h1 className="text-2xl font-bold mb-2">Transactions</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">Manage your income and expenses</p>
         </div>
         <button
           onClick={() => {
@@ -174,16 +175,16 @@ const Transactions = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="glass card">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-slate-700 dark:text-slate-300 mb-1 font-medium">Total Income</p>
-            <p className="text-2xl font-bold text-emerald-600">
+            <p className="text-xs text-slate-700 dark:text-slate-300 mb-1 font-medium">Total Income</p>
+            <p className="text-xl font-bold text-emerald-600">
               {getCurrencySymbol(user?.currency)}{summary.income.toFixed(2)}
             </p>
           </div>
         </div>
         <div className="glass card">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-slate-700 dark:text-slate-300 mb-1 font-medium">Total Expense</p>
-            <p className="text-2xl font-bold text-rose-600">
+            <p className="text-xs text-slate-700 dark:text-slate-300 mb-1 font-medium">Total Expense</p>
+            <p className="text-xl font-bold text-rose-600">
               {getCurrencySymbol(user?.currency)}{summary.expense.toFixed(2)}
             </p>
           </div>
@@ -273,7 +274,7 @@ const Transactions = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="glass card w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+              <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
                 {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
               </h2>
             </div>
@@ -307,7 +308,7 @@ const Transactions = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Amount</label>
+                <label className="block text-sm font-medium mb-2">Amount ({getCurrencySymbol(user?.currency)})</label>
                 <input
                   type="number"
                   step="0.01"

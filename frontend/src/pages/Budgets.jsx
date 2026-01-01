@@ -113,7 +113,7 @@ const Budgets = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Budgets</h1>
+          <h1 className="text-2xl font-bold mb-2">Budgets</h1>
           <p className="text-gray-600 dark:text-gray-400">Create and manage your monthly budgets</p>
         </div>
         <button
@@ -180,14 +180,14 @@ const Budgets = () => {
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-xl font-bold">{budget.category}</h3>
+                      <h3 className="text-lg font-bold">{budget.category}</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {format(new Date(budget.year, budget.month - 1), 'MMMM yyyy')}
                       </p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-gray-600 dark:text-gray-400">Utilization</p>
-                      <p className="text-lg font-bold">{utilization.toFixed(1)}%</p>
+                      <p className="text-base font-bold">{utilization.toFixed(1)}%</p>
                     </div>
                     <div className="flex gap-2">
                       <button
@@ -280,7 +280,9 @@ const Budgets = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Amount</label>
+                <label className="block text-sm font-medium mb-2">
+                  Amount ({getCurrencySymbol(user?.currency)})
+                </label>
                 <input
                   type="number"
                   step="0.01"
