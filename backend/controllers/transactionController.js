@@ -194,9 +194,17 @@ const deleteTransaction = async (req, res, next) => {
  */
 const getAnalytics = async (req, res, next) => {
   try {
-    const { month, year } = req.query;
-    const startDate = new Date(year || new Date().getFullYear(), (month || new Date().getMonth() + 1) - 1, 1);
-    const endDate = new Date(year || new Date().getFullYear(), month || new Date().getMonth() + 1, 0, 23, 59, 59);
+    const { month, year, startDate: qStartDate, endDate: qEndDate } = req.query;
+    let startDate, endDate;
+
+    if (qStartDate && qEndDate) {
+      startDate = new Date(qStartDate);
+      endDate = new Date(qEndDate);
+      endDate.setHours(23, 59, 59, 999);
+    } else {
+      startDate = new Date(year || new Date().getFullYear(), (month || new Date().getMonth() + 1) - 1, 1);
+      endDate = new Date(year || new Date().getFullYear(), month || new Date().getMonth() + 1, 0, 23, 59, 59);
+    }
 
     const transactions = await prisma.transaction.findMany({
       where: {
@@ -206,6 +214,7 @@ const getAnalytics = async (req, res, next) => {
           lte: endDate,
         },
       },
+      orderBy: { date: 'asc' },
     });
 
     const income = transactions
@@ -226,6 +235,19 @@ const getAnalytics = async (req, res, next) => {
         categoryBreakdown[t.category] = (categoryBreakdown[t.category] || 0) + t.amount;
       });
 
+    // Daily stats for line chart
+    const dailyStatsMap = {};
+    transactions.forEach((t) => {
+      const dateKey = t.date.toISOString().split('T')[0];
+      if (!dailyStatsMap[dateKey]) {
+        dailyStatsMap[dateKey] = { date: dateKey, income: 0, expense: 0 };
+      }
+      if (t.type === 'income') dailyStatsMap[dateKey].income += t.amount;
+      if (t.type === 'expense') dailyStatsMap[dateKey].expense += t.amount;
+    });
+
+    const dailyStats = Object.values(dailyStatsMap).sort((a, b) => new Date(a.date) - new Date(b.date));
+
     res.json({
       success: true,
       data: {
@@ -234,6 +256,7 @@ const getAnalytics = async (req, res, next) => {
         savings,
         categoryBreakdown,
         transactionCount: transactions.length,
+        dailyStats,
       },
     });
   } catch (error) {

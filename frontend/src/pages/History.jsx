@@ -59,8 +59,8 @@ const History = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Budget History</h1>
-        <p className="text-gray-600 dark:text-gray-400">View your past budget performance</p>
+        <h1 className="text-2xl font-bold mb-2">Budget History</h1>
+        <p className="text-gray-600 dark:text-gray-400 text-sm">View your past budget performance</p>
       </div>
 
       {/* Filters */}

@@ -14,14 +14,19 @@ A production-grade, full-stack web application for tracking income, expenses, an
 - ✅ **Financial Dashboard** - Visual overview with charts and statistics
 - ✅ **AI-Powered Chatbot** - Get budgeting advice and expense optimization tips
 - ✅ **OAuth Authentication** - Sign in with Google or email/password
+- ✅ **User Settings** - Profile management with currency preferences
+- ✅ **Multi-Currency Support** - Support for 8 major currencies (USD, EUR, GBP, INR, JPY, CNY, AUD, CAD)
+- ✅ **Landing Page** - Beautiful marketing page with feature showcase
 - ✅ **Dark/Light Mode** - Beautiful theme switching
 - ✅ **Responsive Design** - Works seamlessly on mobile, tablet, and desktop
 
 ### Premium UI/UX
-- 🎨 **Glassmorphism Design** - Modern, premium look
-- ✨ **GSAP Animations** - Smooth page transitions and interactions
+- 🎨 **Glassmorphism Design** - Modern, premium look with glass cards
+- ✨ **Framer Motion Animations** - Smooth page transitions, parallax effects, and micro-interactions
 - 📊 **Interactive Charts** - Recharts for beautiful data visualization
-- 🎭 **Smooth Animations** - Card hover effects, entrance animations, and more
+- 🎭 **Advanced Animations** - Blob animations, floating elements, staggered animations
+- 🌈 **Gradient Designs** - Beautiful gradient backgrounds and buttons
+- 🎯 **Interactive Landing** - Engaging hero section with animated elements
 
 ## 🛠️ Tech Stack
 
@@ -29,10 +34,13 @@ A production-grade, full-stack web application for tracking income, expenses, an
 - **React 18** - Latest React with hooks
 - **React Router** - Client-side routing
 - **Context API** - State management
-- **GSAP** - Advanced animations
+- **Framer Motion** - Advanced animations and transitions
 - **Recharts** - Chart visualization
 - **Tailwind CSS** - Utility-first styling
 - **Vite** - Fast build tool
+- **React Icons** - Icon library
+- **Axios** - HTTP client
+- **date-fns** - Date utility library
 
 ### Backend
 - **Node.js** - Runtime environment
@@ -79,18 +87,26 @@ finance-tracker/
 │   │   │   ├── AuthContext.jsx
 │   │   │   └── ThemeContext.jsx
 │   │   ├── pages/
+│   │   │   ├── AuthCallback.jsx  # OAuth callback handler
+│   │   │   ├── Budgets.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── History.jsx
+│   │   │   ├── Landing.jsx       # Landing page
 │   │   │   ├── Login.jsx
 │   │   │   ├── Register.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── Transactions.jsx
-│   │   │   ├── Budgets.jsx
-│   │   │   └── History.jsx
+│   │   │   ├── Settings.jsx      # User settings
+│   │   │   └── Transactions.jsx
 │   │   ├── services/
 │   │   │   └── api.js            # API client
+│   │   ├── utils/
+│   │   │   └── currency.js       # Currency utilities
 │   │   ├── App.jsx
 │   │   ├── main.jsx
 │   │   └── index.css
+│   ├── index.html
 │   ├── package.json
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
 │   └── vite.config.js
 │
 └── README.md
@@ -231,6 +247,9 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 - `provider` (String: 'local' or 'google')
 - `providerId` (String, for OAuth)
 - `avatar` (String, optional)
+- `currency` (String, default: 'USD') - User preferred currency
+- `occupation` (String, optional)
+- `lifestyle` (String, optional)
 - `createdAt`, `updatedAt`
 
 ### Transaction
@@ -268,27 +287,41 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ## 🎨 UI Components
 
 ### Pages
+- **Landing** - Marketing page with feature showcase and animations
 - **Dashboard** - Overview with charts and stats
 - **Transactions** - Manage income and expenses
 - **Budgets** - Create and track budgets
 - **History** - View past budget performance
+- **Settings** - User profile management and preferences
+- **AuthCallback** - OAuth authentication callback handler
 
 ### Features
-- **AI Chatbot** - Floating chatbot for financial advice
+- **AI Chatbot** - Floating chatbot with contextual financial advice
+- **Multi-Currency** - Support for 8 major world currencies
+- **User Settings** - Profile management with currency preferences
 - **Dark Mode** - Toggle between light and dark themes
 - **Responsive Layout** - Mobile-first design
-- **Animations** - GSAP-powered smooth transitions
+- **Advanced Animations** - Framer Motion powered smooth transitions
+- **Landing Page** - Beautiful marketing page with interactive elements
 
 ## 🤖 AI Chatbot
 
 The AI chatbot provides:
-- Budget status and recommendations
-- Expense analysis
-- Savings suggestions
-- General financial tips
-- Personalized advice based on user data
+- Real-time budget status and recommendations
+- Expense analysis with category breakdown
+- Savings suggestions based on income vs expenses
+- General financial tips and advice
+- Personalized responses based on actual user data
+- Interactive chat interface with typing indicators
 
-Currently uses mock responses. Can be easily integrated with OpenAI, Anthropic, or other AI APIs.
+Currently uses intelligent mock responses that analyze real user data. Can be easily integrated with OpenAI, Anthropic, or other AI APIs.
+
+### Chatbot Features:
+- Contextual responses based on user's financial data
+- Budget utilization warnings and alerts
+- Spending pattern analysis
+- Savings goal recommendations
+- Financial tips and best practices
 
 ## 🚢 Deployment
 
@@ -357,28 +390,34 @@ This project is open source and available for personal and commercial use.
 ## 👨‍💻 Resume-Ready Features
 
 This project demonstrates:
-- ✅ Full-stack development (React + Node.js)
-- ✅ Modern ORM usage (Prisma)
-- ✅ OAuth integration
-- ✅ RESTful API design
+- ✅ Full-stack development (React + Node.js + MongoDB)
+- ✅ Modern ORM usage (Prisma with MongoDB)
+- ✅ OAuth integration (Google authentication)
+- ✅ RESTful API design with Express.js
 - ✅ State management (Context API)
-- ✅ Advanced animations (GSAP)
+- ✅ Advanced animations (Framer Motion)
 - ✅ Data visualization (Recharts)
-- ✅ Responsive design
-- ✅ Authentication & Authorization
-- ✅ Database design & optimization
-- ✅ Clean code architecture
+- ✅ Responsive design with Tailwind CSS
+- ✅ Authentication & Authorization (JWT)
+- ✅ Database design & optimization with indexes
+- ✅ Clean code architecture and separation of concerns
+- ✅ Multi-currency support and internationalization
+- ✅ Real-time data processing and AI integration
+- ✅ Modern build tools (Vite) and development workflow
 
 ## 🎓 Interview Talking Points
 
-1. **Architecture**: MVC pattern, separation of concerns
-2. **Authentication**: JWT + OAuth implementation
-3. **Database**: Prisma ORM with MongoDB, schema design
-4. **State Management**: Context API for global state
-5. **Animations**: GSAP for premium UX
-6. **API Design**: RESTful endpoints with proper error handling
+1. **Architecture**: MVC pattern, separation of concerns, modular structure
+2. **Authentication**: JWT + OAuth implementation with Google integration
+3. **Database**: Prisma ORM with MongoDB, optimized schema design with indexes
+4. **State Management**: Context API for global state management
+5. **Animations**: Framer Motion for advanced animations and micro-interactions
+6. **API Design**: RESTful endpoints with proper error handling and validation
 7. **Security**: Password hashing, token-based auth, protected routes
-8. **Performance**: Optimized queries, efficient data fetching
+8. **Performance**: Optimized queries, efficient data fetching, lazy loading
+9. **UI/UX**: Glassmorphism design, responsive layout, accessibility
+10. **Multi-Currency**: International support with currency utilities
+11. **Real-time Features**: Dynamic budget tracking and AI chatbot responses
 
 ## 🤝 Contributing
 

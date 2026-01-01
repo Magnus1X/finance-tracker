@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
-import { FiMail, FiLock, FiUser } from 'react-icons/fi';
+import { currencies } from '../utils/currency';
+import { FiMail, FiLock, FiUser, FiDollarSign } from 'react-icons/fi';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', avatar: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', avatar: '', currency: 'USD' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register, isAuthenticated } = useAuth();
