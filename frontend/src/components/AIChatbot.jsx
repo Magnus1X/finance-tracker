@@ -9,7 +9,7 @@ const AIChatbot = () => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hi! I'm your AI-powered finance assistant. I can analyze your spending patterns, provide personalized budget advice, and help optimize your financial health. Ask me anything about your finances!",
+      content: "Hi! I'm your AI-powered finance assistant. I can analyze your spending patterns, budget utilization, and provide personalized financial advice based on your actual data. How can I help you today?",
     },
   ]);
   const [input, setInput] = useState('');
@@ -31,10 +31,13 @@ const AIChatbot = () => {
       }
     } catch (error) {
       console.error('AI API Error:', error);
+      if (error.response?.status === 401) {
+        return "Please log in again to use the AI assistant.";
+      }
       if (error.response?.data?.message) {
         return error.response.data.message;
       }
-      return "I'm having trouble connecting to the AI service. Please try again later.";
+      return "I'm temporarily unavailable. Please try again in a moment.";
     }
   };
 
