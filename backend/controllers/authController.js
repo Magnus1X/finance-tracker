@@ -51,7 +51,7 @@ const register = async (req, res, next) => {
         email: email.toLowerCase(),
         password: hashedPassword,
         provider: 'local',
-        currency: currency || 'USD',
+        currency: 'USD',
       },
       select: {
         id: true,

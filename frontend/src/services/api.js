@@ -71,4 +71,9 @@ export const budgetAPI = {
   getHistory: (params) => api.get('/budgets/history', { params }),
 };
 
+// AI API
+export const aiAPI = {
+  chat: (message) => api.post('/ai/chat', { message }),
+};
+
 export default api;
