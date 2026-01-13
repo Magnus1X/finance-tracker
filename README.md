@@ -428,5 +428,3 @@ This is a portfolio project. Feel free to fork and customize for your needs!
 For questions or issues, please open an issue on the repository.
 
 ---
-
-**Built with ❤️ for portfolio and interview purposes**

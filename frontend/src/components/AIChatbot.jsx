@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { FiMessageCircle, FiX, FiSend } from 'react-icons/fi';
-import { transactionAPI, budgetAPI } from '../services/api';
+import { aiAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { getCurrencySymbol } from '../utils/currency';
 
 const AIChatbot = () => {
   const { user } = useAuth();
@@ -10,7 +9,7 @@ const AIChatbot = () => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hi! I'm your finance assistant. I can help you with budgeting advice, expense optimization, and savings suggestions. How can I help you today?",
+      content: "Hi! I'm your AI-powered finance assistant. I can analyze your spending patterns, provide personalized budget advice, and help optimize your financial health. Ask me anything about your finances!",
     },
   ]);
   const [input, setInput] = useState('');
@@ -23,96 +22,20 @@ const AIChatbot = () => {
   }, [messages]);
 
   const getAIResponse = async (userMessage) => {
-    // Mock AI responses based on user queries
-    // In production, this would call an actual AI API
-    const lowerMessage = userMessage.toLowerCase();
-
-    if (lowerMessage.includes('budget') || lowerMessage.includes('spending')) {
-      try {
-        const currentDate = new Date();
-        const budgetsRes = await budgetAPI.getAll({
-          month: currentDate.getMonth() + 1,
-          year: currentDate.getFullYear(),
-        });
-        const budgets = budgetsRes.data.data;
-
-        if (budgets.length === 0) {
-          return "You don't have any active budgets. I recommend creating budgets for your main expense categories to better track your spending!";
-        }
-
-        const overBudget = budgets.filter((b) => b.spent > b.amount);
-        if (overBudget.length > 0) {
-          return `You're over budget in ${overBudget.length} category/categories: ${overBudget.map((b) => b.category).join(', ')}. Consider reducing spending in these areas.`;
-        }
-
-        const highUtilization = budgets.filter((b) => (b.spent / b.amount) * 100 >= 80);
-        if (highUtilization.length > 0) {
-          return `You're close to your budget limit in: ${highUtilization.map((b) => b.category).join(', ')}. Be mindful of your spending in these categories.`;
-        }
-
-        return `Great job! You have ${budgets.length} active budgets and you're staying within your limits. Keep up the good work!`;
-      } catch (error) {
-        return "I'm having trouble accessing your budget data. Please try again later.";
+    try {
+      const response = await aiAPI.chat(userMessage);
+      if (response.data.success) {
+        return response.data.data.message;
+      } else {
+        return response.data.message || "I'm having trouble right now. Please try again later.";
       }
-    }
-
-    if (lowerMessage.includes('save') || lowerMessage.includes('saving')) {
-      try {
-        const currentDate = new Date();
-        const analyticsRes = await transactionAPI.getAnalytics({
-          month: currentDate.getMonth() + 1,
-          year: currentDate.getFullYear(),
-        });
-        const analytics = analyticsRes.data.data;
-
-        if (analytics.savings > 0) {
-          return `You're saving ${getCurrencySymbol(user?.currency)}${analytics.savings.toFixed(2)} this month! That's excellent. Consider putting this into a savings account or investment.`;
-        } else {
-          return `You're spending more than you're earning this month. I recommend reviewing your expenses and finding areas to cut back.`;
-        }
-      } catch (error) {
-        return "I'm having trouble accessing your financial data. Please try again later.";
+    } catch (error) {
+      console.error('AI API Error:', error);
+      if (error.response?.data?.message) {
+        return error.response.data.message;
       }
+      return "I'm having trouble connecting to the AI service. Please try again later.";
     }
-
-    if (lowerMessage.includes('expense') || lowerMessage.includes('spend')) {
-      try {
-        const currentDate = new Date();
-        const analyticsRes = await transactionAPI.getAnalytics({
-          month: currentDate.getMonth() + 1,
-          year: currentDate.getFullYear(),
-        });
-        const analytics = analyticsRes.data.data;
-
-        if (analytics.categoryBreakdown) {
-          const topCategory = Object.entries(analytics.categoryBreakdown)
-            .sort(([, a], [, b]) => b - a)[0];
-          return `Your top spending category is ${topCategory[0]} at $${topCategory[1].toFixed(2)}. Consider if there are ways to reduce spending in this area.`;
-        }
-      } catch (error) {
-        return "I'm having trouble accessing your expense data. Please try again later.";
-      }
-    }
-
-    if (lowerMessage.includes('advice') || lowerMessage.includes('tip')) {
-      const tips = [
-        "Track every expense, no matter how small. Small purchases add up quickly!",
-        "Create a budget for each category and stick to it. Review and adjust monthly.",
-        "Build an emergency fund with 3-6 months of expenses.",
-        "Review your subscriptions regularly and cancel what you don't use.",
-        "Use the 50/30/20 rule: 50% needs, 30% wants, 20% savings.",
-        "Set up automatic transfers to savings to pay yourself first.",
-        "Compare prices before making large purchases.",
-        "Cook at home more often to save on food expenses.",
-      ];
-      return tips[Math.floor(Math.random() * tips.length)];
-    }
-
-    if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-      return "Hello! I'm here to help you manage your finances better. Ask me about budgets, expenses, savings, or get general financial advice!";
-    }
-
-    return "I can help you with budgeting advice, expense analysis, savings tips, and financial calculations. Try asking about your current budget status, spending patterns, or savings goals!";
   };
 
   const handleSend = async (e) => {
@@ -124,12 +47,10 @@ const AIChatbot = () => {
     setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
     setLoading(true);
 
-    // Simulate AI thinking time
-    setTimeout(async () => {
-      const aiResponse = await getAIResponse(userMessage);
-      setMessages((prev) => [...prev, { role: 'assistant', content: aiResponse }]);
-      setLoading(false);
-    }, 1000);
+    // Get AI response
+    const aiResponse = await getAIResponse(userMessage);
+    setMessages((prev) => [...prev, { role: 'assistant', content: aiResponse }]);
+    setLoading(false);
   };
 
   return (
