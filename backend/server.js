@@ -31,6 +31,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Finance Tracker API',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      transactions: '/api/transactions',
+      budgets: '/api/budgets',
+      ai: '/api/ai'
+    }
+  });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
