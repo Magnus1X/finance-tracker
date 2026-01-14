@@ -27,30 +27,16 @@ export const AuthProvider = ({ children }) => {
     if (token && storedUser) {
       try {
         const response = await authAPI.getMe();
-        // Handle different response structures
         const userData = response.data.data || response.data.user;
         setUser(userData);
         setIsAuthenticated(true);
         localStorage.setItem('user', JSON.stringify(userData));
       } catch (error) {
         console.error('Auth check failed:', error);
-        // For demo: use stored user if API fails
-        if (storedUser) {
-          try {
-            setUser(JSON.parse(storedUser));
-            setIsAuthenticated(true);
-          } catch (e) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            setUser(null);
-            setIsAuthenticated(false);
-          }
-        } else {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setUser(null);
-          setIsAuthenticated(false);
-        }
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null);
+        setIsAuthenticated(false);
       }
     } else {
       setUser(null);
