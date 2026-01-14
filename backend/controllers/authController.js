@@ -97,25 +97,40 @@ const login = async (req, res, next) => {
       where: { email: email.toLowerCase() },
     });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      res.json({
-        success: true,
-        token: generateToken(user.id),
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          avatar: user.avatar,
-          currency: user.currency,
-          createdAt: user.createdAt,
-        },
-      });
-    } else {
-      res.status(401).json({
+    if (!user) {
+      return res.status(401).json({
         success: false,
         message: 'Invalid email or password',
       });
     }
+
+    if (!user.password) {
+      return res.status(401).json({
+        success: false,
+        message: 'Please use OAuth login for this account',
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+      });
+    }
+
+    res.json({
+      success: true,
+      token: generateToken(user.id),
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        currency: user.currency,
+        createdAt: user.createdAt,
+      },
+    });
   } catch (error) {
     next(error);
   }
