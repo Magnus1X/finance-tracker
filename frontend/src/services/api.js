@@ -45,9 +45,6 @@ export const authAPI = {
   getMe: () => api.get('/auth/me'),
   updateProfile: (data) => api.put('/auth/profile', data),
   changePassword: (data) => api.put('/auth/password', data),
-  googleAuth: () => {
-    window.location.href = `${API_URL}/auth/google`;
-  },
 };
 
 // Transaction API
