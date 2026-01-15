@@ -2,25 +2,16 @@ const jwt = require('jsonwebtoken');
 const { prisma } = require('../config/database');
 const bcrypt = require('bcryptjs');
 
-/**
- * Generate JWT Token
- */
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
 };
 
-/**
- * @desc    Register new user
- * @route   POST /api/auth/register
- * @access  Public
- */
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
-    // Validation
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -28,7 +19,6 @@ const register = async (req, res, next) => {
       });
     }
 
-    // Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
     });
@@ -40,11 +30,9 @@ const register = async (req, res, next) => {
       });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create user
     const user = await prisma.user.create({
       data: {
         name,
@@ -63,7 +51,6 @@ const register = async (req, res, next) => {
       },
     });
 
-    // Generate token
     const token = generateToken(user.id);
 
     res.status(201).json({
@@ -76,16 +63,10 @@ const register = async (req, res, next) => {
   }
 };
 
-/**
- * @desc    Login user
- * @route   POST /api/auth/login
- * @access  Public
- */
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Validation
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -136,11 +117,6 @@ const login = async (req, res, next) => {
   }
 };
 
-/**
- * @desc    Get current user
- * @route   GET /api/auth/me
- * @access  Private
- */
 const getMe = async (req, res, next) => {
   try {
     const user = await prisma.user.findUnique({
@@ -164,11 +140,6 @@ const getMe = async (req, res, next) => {
   }
 };
 
-/**
- * @desc    Update user profile
- * @route   PUT /api/auth/profile
- * @access  Private
- */
 const updateProfile = async (req, res, next) => {
   try {
     const { name, currency, email, occupation, lifestyle } = req.body;
@@ -217,11 +188,6 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
-/**
- * @desc    Change password
- * @route   PUT /api/auth/password
- * @access  Private
- */
 const changePassword = async (req, res, next) => {
   try {
     const { currentPassword, newPassword } = req.body;

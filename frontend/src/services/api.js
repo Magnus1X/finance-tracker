@@ -2,16 +2,14 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-// Create axios instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 second timeout
+  timeout: 10000,
 });
 
-// Add token to requests
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -26,7 +24,6 @@ api.interceptors.request.use(
   }
 );
 
-// Handle response errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -42,7 +39,6 @@ api.interceptors.response.use(
   }
 );
 
-// Auth API
 export const authAPI = {
   register: (data) => api.post('/auth/register', data),
   login: (data) => api.post('/auth/login', data),
@@ -51,7 +47,6 @@ export const authAPI = {
   changePassword: (data) => api.put('/auth/password', data),
 };
 
-// Transaction API
 export const transactionAPI = {
   getAll: (params) => api.get('/transactions', { params }),
   getOne: (id) => api.get(`/transactions/${id}`),
@@ -61,7 +56,6 @@ export const transactionAPI = {
   getAnalytics: (params) => api.get('/transactions/analytics', { params }),
 };
 
-// Budget API
 export const budgetAPI = {
   getAll: (params) => api.get('/budgets', { params }),
   getOne: (id) => api.get(`/budgets/${id}`),
@@ -72,7 +66,6 @@ export const budgetAPI = {
   getHistory: (params) => api.get('/budgets/history', { params }),
 };
 
-// AI API
 export const aiAPI = {
   chat: (message) => api.post('/ai/chat', { message }),
 };
