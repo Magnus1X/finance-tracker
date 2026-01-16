@@ -1,15 +1,17 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const OpenAI = require('openai');
 const { prisma } = require('../config/database');
 
-let genAI = null;
+let openai = null;
 
 try {
-  if (process.env.GEMINI_API_KEY) {
-    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    console.log('✅ Gemini AI initialized');
+  if (process.env.OPENAI_API_KEY) {
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+    console.log('✅ OpenAI initialized');
   }
 } catch (error) {
-  console.error('❌ Gemini AI init failed:', error.message);
+  console.error('❌ OpenAI init failed:', error.message);
 }
 
 const getFinancialContext = async (userId) => {
@@ -42,7 +44,7 @@ const getFinancialContext = async (userId) => {
     const income = transactions
       .filter(t => t.type === 'income')
       .reduce((sum, t) => sum + t.amount, 0);
-    
+
     const expenses = transactions
       .filter(t => t.type === 'expense')
       .reduce((sum, t) => sum + t.amount, 0);
@@ -79,7 +81,7 @@ const chatWithAI = async (req, res) => {
   try {
     const { message } = req.body;
     const userId = req.user.id;
-    
+
     if (!message) {
       return res.status(400).json({
         success: false,
@@ -87,16 +89,20 @@ const chatWithAI = async (req, res) => {
       });
     }
 
-    if (!genAI) {
-      return res.status(500).json({
-        success: false,
-        message: 'AI service not available',
+    // Mock response if AI service is not available (missing key)
+    if (!openai) {
+      console.warn('⚠️ AI service not init, returning mock response');
+      return res.json({
+        success: true,
+        data: {
+          message: "I'm running in demo mode because the OpenAI API key is not configured. Based on your mocked data, you seem to be doing great! (Please configure OPENAI_API_KEY in backend/.env for real AI responses)",
+        },
       });
     }
 
     // Get user's financial context
     const financialData = await getFinancialContext(userId);
-    
+
     // Get user info
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -104,14 +110,17 @@ const chatWithAI = async (req, res) => {
     });
 
     // Create context for AI
-    const context = `You are a helpful financial advisor. User: ${user?.name || 'User'}, Currency: ${user?.currency || 'USD'}. Current month data - Income: ${financialData.income}, Expenses: ${financialData.expenses}, Savings: ${financialData.savings}, Transactions: ${financialData.transactionCount}. Top expenses: ${Object.entries(financialData.categoryBreakdown).sort(([,a], [,b]) => b - a).slice(0, 3).map(([cat, amt]) => `${cat}: ${amt}`).join(', ')}. Budgets: ${financialData.budgets.map(b => `${b.category} (${((b.spent/b.amount)*100).toFixed(0)}% used)`).join(', ')}. Provide concise, actionable financial advice.`;
+    const context = `You are a helpful financial advisor. User: ${user?.name || 'User'}, Currency: ${user?.currency || 'USD'}. Current month data - Income: ${financialData.income}, Expenses: ${financialData.expenses}, Savings: ${financialData.savings}, Transactions: ${financialData.transactionCount}. Top expenses: ${Object.entries(financialData.categoryBreakdown).sort(([, a], [, b]) => b - a).slice(0, 3).map(([cat, amt]) => `${cat}: ${amt}`).join(', ')}. Budgets: ${financialData.budgets.map(b => `${b.category} (${((b.spent / b.amount) * 100).toFixed(0)}% used)`).join(', ')}. Provide concise, actionable financial advice.`;
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-    const prompt = `${context}\n\nUser Question: ${message}`;
-    
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const aiResponse = response.text();
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: context },
+        { role: "user", content: message }
+      ],
+    });
+
+    const aiResponse = completion.choices[0].message.content;
 
     res.json({
       success: true,
@@ -119,12 +128,15 @@ const chatWithAI = async (req, res) => {
         message: aiResponse,
       },
     });
-    
+
   } catch (error) {
     console.error('AI Error:', error.message);
-    res.status(500).json({
-      success: false,
-      message: process.env.NODE_ENV === 'production' ? 'AI service temporarily unavailable' : error.message,
+    // Graceful degradation on error
+    res.json({
+      success: true,
+      data: {
+        message: "I'm having trouble connecting to the AI service right now. Please try again later. (Error: " + error.message + ")",
+      },
     });
   }
 };

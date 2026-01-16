@@ -70,7 +70,7 @@ const AIChatbot = () => {
       {isOpen && (
         <div
           ref={chatRef}
-          className="fixed bottom-24 right-6 w-96 h-[500px] glass card shadow-2xl flex flex-col z-40"
+          className="fixed bottom-24 right-6 w-[calc(100vw-3rem)] sm:w-96 h-[500px] glass card shadow-2xl flex flex-col z-40"
         >
           <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
             <div>
@@ -92,11 +92,10 @@ const AIChatbot = () => {
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-                    message.role === 'user'
+                  className={`max-w-[80%] rounded-2xl px-4 py-2 ${message.role === 'user'
                       ? 'bg-primary-500 text-white'
                       : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
-                  }`}
+                    }`}
                 >
                   <p className="text-sm">{message.content}</p>
                 </div>

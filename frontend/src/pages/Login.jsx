@@ -52,7 +52,7 @@ const Login = () => {
         <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-pink-200 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
         <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-4000" />
       </div>
-      
+
       {/* Navigation Bar */}
       <div className="absolute top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b-2 border-slate-200 dark:border-slate-800 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -66,7 +66,7 @@ const Login = () => {
               Finance Tracker
             </span>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
             <Link
               to="/login"
               className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all"
@@ -82,7 +82,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="w-full max-w-md relative z-10 mt-20">
         <div className="glass card">
           <div className="text-center mb-8">
