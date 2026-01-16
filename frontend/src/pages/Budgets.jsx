@@ -178,45 +178,49 @@ const Budgets = () => {
                   key={budget.id}
                   className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:shadow-md transition-shadow"
                 >
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
                     <div>
                       <h3 className="text-lg font-bold">{budget.category}</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {format(new Date(budget.year, budget.month - 1), 'MMMM yyyy')}
                       </p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Utilization</p>
-                      <p className="text-base font-bold">{utilization.toFixed(1)}%</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleEdit(budget)}
-                        className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                      >
-                        <FiEdit className="text-primary-600" />
-                      </button>
-                      <button
-                        onClick={() => handleArchive(budget.id)}
-                        className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                      >
-                        <FiArchive className="text-purple-600" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(budget.id)}
-                        className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                      >
-                        <FiTrash2 className="text-red-600" />
-                      </button>
+                    <div className="flex items-center justify-between md:justify-end gap-4">
+                      <div className="text-left md:text-right">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Utilization</p>
+                        <p className="text-base font-bold">{utilization.toFixed(1)}%</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleEdit(budget)}
+                          className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                        >
+                          <FiEdit className="text-primary-600" />
+                        </button>
+                        <button
+                          onClick={() => handleArchive(budget.id)}
+                          className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                        >
+                          <FiArchive className="text-purple-600" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(budget.id)}
+                          className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                        >
+                          <FiTrash2 className="text-red-600" />
+                        </button>
+                      </div>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
+                    <div className="flex flex-col sm:flex-row sm:justify-between text-sm gap-1">
                       <span>Budgeted: {getCurrencySymbol(user?.currency)}{budget.amount.toFixed(2)}</span>
                       <span>Spent: {getCurrencySymbol(user?.currency)}{budget.spent.toFixed(2)}</span>
-                      <span className={remaining >= 0 ? 'text-green-600' : 'text-red-600'}>
-                        Remaining: {getCurrencySymbol(user?.currency)}{remaining.toFixed(2)}
+                      <span className={remaining >= 0 ? 'text-green-600' : 'text-red-600 font-bold'}>
+                        {remaining >= 0
+                          ? `Remaining: ${getCurrencySymbol(user?.currency)}${remaining.toFixed(2)}`
+                          : `Over by: ${getCurrencySymbol(user?.currency)}${Math.abs(remaining).toFixed(2)}`}
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
