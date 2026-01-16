@@ -30,10 +30,10 @@ const Transactions = () => {
       const params = {};
       if (filters.type) params.type = filters.type;
       if (filters.category) params.category = filters.category;
-      
+
       const response = await transactionAPI.getAll(params).catch(() => ({ data: { data: [] } }));
       let data = response.data.data;
-      
+
       if (filters.search) {
         data = data.filter(
           (t) =>
@@ -41,7 +41,7 @@ const Transactions = () => {
             t.description?.toLowerCase().includes(filters.search.toLowerCase())
         );
       }
-      
+
       setTransactions(data);
       const income = data.filter((t) => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
       const expense = data.filter((t) => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
@@ -202,15 +202,14 @@ const Transactions = () => {
             {transactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:shadow-md transition-shadow"
+                className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:shadow-md transition-shadow gap-4"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 w-full md:w-auto">
                   <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                      transaction.type === 'income'
+                    className={`w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center ${transaction.type === 'income'
                         ? 'bg-green-100 dark:bg-green-900/30'
                         : 'bg-red-100 dark:bg-red-900/30'
-                    }`}
+                      }`}
                   >
                     <span className="font-bold">
                       {transaction.category.charAt(0).toUpperCase()}
@@ -226,11 +225,10 @@ const Transactions = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between w-full md:w-auto gap-4 pl-16 md:pl-0">
                   <p
-                    className={`font-bold text-lg ${
-                      transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
-                    }`}
+                    className={`font-bold text-lg ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
+                      }`}
                   >
                     {transaction.type === 'income' ? '+' : '-'}{getCurrencySymbol(user?.currency)}{transaction.amount.toFixed(2)}
                   </p>

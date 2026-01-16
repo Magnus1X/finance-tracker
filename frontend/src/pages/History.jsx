@@ -151,7 +151,7 @@ const History = () => {
                 key={item.id}
                 className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:shadow-md transition-shadow"
               >
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
                   <div>
                     <h3 className="text-xl font-bold">{item.category}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -161,7 +161,7 @@ const History = () => {
                   {getStatusBadge(item.status)}
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Budgeted</p>
                     <p className="text-lg font-bold">
@@ -174,7 +174,7 @@ const History = () => {
                       {getCurrencySymbol(user?.currency)}{item.spentAmount.toFixed(2)}
                     </p>
                   </div>
-                  <div>
+                  <div className="sm:col-span-2 md:col-span-1">
                     <p className="text-sm text-gray-600 dark:text-gray-400">Utilization</p>
                     <p className="text-lg font-bold">{item.utilizationPercentage.toFixed(1)}%</p>
                   </div>
@@ -182,13 +182,12 @@ const History = () => {
 
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                   <div
-                    className={`h-full ${
-                      item.status === 'over'
+                    className={`h-full ${item.status === 'over'
                         ? 'bg-red-500'
                         : item.status === 'met'
-                        ? 'bg-yellow-500'
-                        : 'bg-green-500'
-                    }`}
+                          ? 'bg-yellow-500'
+                          : 'bg-green-500'
+                      }`}
                     style={{ width: `${Math.min(item.utilizationPercentage, 100)}%` }}
                   ></div>
                 </div>
