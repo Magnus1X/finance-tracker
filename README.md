@@ -1,70 +1,98 @@
-# Personalized Finance & Budget Tracker
+# 💰 Finance Awareness Platform
 
-A production-grade, full-stack web application for tracking income, expenses, and budgets with financial insights. Built with modern technologies and featuring a premium UI/UX.
+## 📌 Project Overview
+Finance Awareness Platform is a beginner-friendly web application designed to educate users about personal finance, money management, investing basics, and market awareness. The platform targets users who have little to no financial knowledge but want to learn how to use their money wisely and grow their wealth in the future.
 
-## Features
+This project combines:
+- Financial education
+- Smart money management tools
+- AI-powered financial insights
+- Real-time market awareness
 
-- **Transaction Management**: Add, edit, and delete transactions with categories.
-- **Budget Tracking**: Create monthly budgets and track real-time progress.
-- **Analytics Dashboard**: Visual overview of financial health with charts.
-- **Budget History**: Permanent record of past budgets.
-- **Multi-Currency Support**: Support for USD, EUR, GBP, INR, JPY, CNY, AUD, CAD.
-- **Authentication**: Secure login with Email/Password or Google OAuth.
-- **Responsive Design**: Works seamlessly on mobile, tablet, and desktop.
-- **Dark Mode**: Built-in theme switching.
+---
 
-## Tech Stack
+# 🎯 Core Mission
+To help beginners understand:
+- How to manage money
+- Where to use money smartly
+- How to grow wealth over time
+- What is happening in the financial market (in simple language)
 
-### Frontend
-- **React 18** (Vite)
-- **Tailwind CSS** & **Framer Motion**
-- **Recharts** for visualization
-- **Context API** for state management
+---
 
-### Backend
-- **Node.js** & **Express**
-- **MongoDB Atlas** with **Prisma ORM**
-- **JWT** & **Passport.js** (Google OAuth)
+# 🧱 Complete Feature Breakdown (Page-wise)
 
-## Getting Started
+## 🏠 1. Home Page (Landing Page)
+The Home Page is the first interaction point that introduces users to financial awareness, daily tips, and quick insights.
+- Hero Section (Finance Awareness Message)
+- Daily Financial Tip
+- Quick Financial Health Snapshot
+- Navigation to Learn, Market, Tools, AI Advisor
 
-### Prerequisites
-- Node.js (v18+)
-- MongoDB Atlas account
-- Google OAuth credentials
+## 📚 2. Learn Finance Page (Education Section)
+Provides structured financial education in a simple and visual format.
+- Beginner to Advanced Roadmap
+- Bite-sized lessons (2-5 min learning cards)
+- Progress tracking system
 
-### Setup
+## 📈 3. Market Trends Page (Market Awareness)
+Displays current market happenings in easy-to-understand formats.
+- Latest Financial News (Simplified)
+- AI-generated simple summaries of complex news
+- Inflation & Interest Rate updates
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Magnus1X/finance-tracker.git
-   cd finance-tracker
-   ```
+## 🤖 4. AI Financial Advisor Page
+Intelligent assistant providing personalized guidance based on user data.
+- Income & Expense Input Form
+- Personalized Budget Suggestions
+- Financial Health Score
 
-2. **Backend Setup**
-   ```bash
-   cd backend
-   npm install
-   cp env.example .env
-   # Update .env with your MongoDB URI and credentials
-   npx prisma generate
-   npm run dev
-   ```
+## 📊 5. Dashboard Page (Tracker + Awareness)
+Visual dashboard showing income, expenses, and insights.
+- Expense vs Income Chart
+- Budget Tracking Progress Bar
+- Smart AI Insights
 
-3. **Frontend Setup**
-   ```bash
-   cd ../frontend
-   npm install
-   npm run dev
-   ```
+## 🧾 6. Transaction History Page
+Displays all user financial transactions with filtering.
+- Add/Edit/Delete Transactions
+- Category Tagging
+- Date Filters
 
-## Deployment
+## 🎯 7. Financial Goals Page (Goal-Based Planning)
+Allows users to set and track financial goals.
+- Goal Creation (Travel, Emergency Fund, etc.)
+- Progress Tracking Bar
+- Monthly Saving Requirement Calculator
 
-The application is ready for deployment on platforms like Render, Railway, or Vercel.
+## 🧮 8. Financial Tools Page (Calculators)
+Interactive financial calculators.
+- SIP Calculator
+- Compound Interest Calculator
+- EMI Calculator
 
-- **Backend**: Set `NODE_ENV=production` and configure environment variables.
-- **Frontend**: maintain `VITE_API_URL` pointing to your deployed backend.
+## 🔔 9. Smart Alerts & Awareness System
+Intelligent alerts about spending and budgeting.
+- Overspending Alerts
+- Budget Limit Notifications
+- Daily Financial Tips
 
-## License
+## 🌍 10. Future Advanced Features (Scalable)
+- Bank Statement Upload (PDF/CSV)
+- AI Expense Categorization
+- Voice Expense Entry
 
-MIT License.
+---
+
+# 💻 Tech Stack
+- **Frontend**: React.js, Tailwind CSS, Recharts
+- **Backend**: Node.js, Express, Prisma (MongoDB)
+- **AI**: OpenAI API / Google Gemini API
+
+---
+
+# 🏆 Target Users
+- College Students
+- Beginners in Finance
+- First Salary Earners
+- People with low financial awareness
