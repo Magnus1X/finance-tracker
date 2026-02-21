@@ -1,4 +1,7 @@
-const express = require('express');
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
+
+const express = require('express'); // Force restart for env changes
 const cors = require('cors');
 const dotenv = require('dotenv');
 const { connectDB, disconnectDB } = require('./config/database');
@@ -15,8 +18,20 @@ const app = express();
 
 connectDB();
 
+const allowedOrigins = process.env.FRONTEND_URL?.split(',') || ['http://localhost:3001', 'http://localhost:3000', 'http://127.0.0.1:3001'];
+
+console.log('Allowed Origins:', allowedOrigins);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL?.split(',') || ['http://localhost:3000'],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 
