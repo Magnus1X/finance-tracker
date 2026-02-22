@@ -12,6 +12,13 @@ import Transactions from './pages/Transactions';
 import Budgets from './pages/Budgets';
 import History from './pages/History';
 import Settings from './pages/Settings';
+import Learn from './pages/Learn';
+import MarketTrends from './pages/MarketTrends';
+import AIAdvisor from './pages/AIAdvisor';
+import FinancialTools from './pages/FinancialTools';
+import FinancialGoals from './pages/FinancialGoals';
+import SmartAlerts from './pages/SmartAlerts';
+import StatementParser from './pages/StatementParser';
 import AIChatbot from './components/AIChatbot';
 
 function App() {
@@ -36,6 +43,13 @@ function App() {
                   <Layout>
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/learn" element={<Learn />} />
+                      <Route path="/market" element={<MarketTrends />} />
+                      <Route path="/advisor" element={<AIAdvisor />} />
+                      <Route path="/goals" element={<FinancialGoals />} />
+                      <Route path="/tools" element={<FinancialTools />} />
+                      <Route path="/alerts" element={<SmartAlerts />} />
+                      <Route path="/parser" element={<StatementParser />} />
                       <Route path="/transactions" element={<Transactions />} />
                       <Route path="/budgets" element={<Budgets />} />
                       <Route path="/history" element={<History />} />
