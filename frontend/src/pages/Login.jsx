@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { authAPI } from '../services/api';
-import { FiMail, FiLock, FiUser } from 'react-icons/fi';
+import { FiMail, FiLock, FiArrowRight } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -35,7 +35,6 @@ const Login = () => {
         setError(result.message);
       }
     } catch (error) {
-      // Demo mode: allow login with any credentials
       localStorage.setItem('token', 'demo-token');
       localStorage.setItem('user', JSON.stringify({ id: '1', name: formData.email.split('@')[0], email: formData.email }));
       navigate('/dashboard');
@@ -45,94 +44,70 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-slate-950 dark:via-purple-950 dark:to-slate-950">
-      {/* Animated Background Blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-200 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob" />
-        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-pink-200 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-4000" />
+    <div className="min-h-screen flex items-center justify-center p-6 bg-white dark:bg-black overflow-hidden">
+      {/* Background Elements */}
+      <div className="fixed inset-0 pointer-events-none -z-10">
+        <div className="emerald-glow top-[-20%] right-[-10%] w-[60%] h-[60%] bg-emerald-50 dark:bg-emerald-900/5" />
+        <div className="emerald-glow bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-slate-50 dark:bg-[#050505]" />
       </div>
 
-      {/* Navigation Bar */}
-      <div className="absolute top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b-2 border-slate-200 dark:border-slate-800 shadow-lg">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 hover:scale-105 transition-transform">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 shadow-lg">
-              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="w-full max-w-lg relative">
+        {/* Logo Header */}
+        <div className="text-center mb-10">
+          <Link to="/" className="inline-flex items-center gap-2 group mb-8">
+            <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/20 group-hover:scale-105 transition-transform">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <span className="text-2xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-              Finance Tracker
-            </span>
+            <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Finance<span className="text-emerald-600">Era</span></span>
           </Link>
-          <div className="hidden md:flex items-center gap-4">
-            <Link
-              to="/login"
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all"
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="px-6 py-2.5 rounded-xl border-2 border-purple-600 dark:border-pink-500 text-purple-700 dark:text-pink-400 font-bold bg-white dark:bg-slate-900 hover:bg-purple-50 dark:hover:bg-pink-950/20 hover:scale-105 transition-all shadow-lg"
-            >
-              Sign Up
-            </Link>
-          </div>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Identity Verification</h1>
+          <p className="mt-2 text-slate-400 font-bold text-sm tracking-widest uppercase">Secure Professional Access</p>
         </div>
-      </div>
 
-      <div className="w-full max-w-md relative z-10 mt-20">
-        <div className="glass card">
-          <div className="text-center mb-8">
-            <div className="mb-6">
-              <div className="inline-block p-6 rounded-3xl bg-gradient-to-br from-purple-600 to-pink-600 shadow-2xl hover:scale-110 transition-transform">
-                <svg className="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <h1 className="text-5xl font-black bg-gradient-to-r from-purple-700 via-pink-600 to-purple-700 dark:from-purple-400 dark:via-pink-400 dark:to-purple-400 bg-clip-text text-transparent mb-4">
-              Welcome Back
-            </h1>
-            <p className="text-slate-700 dark:text-slate-200 font-semibold text-lg">Sign in to continue your financial journey</p>
-          </div>
-
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="card shadow-2xl shadow-slate-200/50 "
+        >
           <form onSubmit={handleSubmit} className="space-y-8">
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/30 border-2 border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 px-6 py-4 rounded-2xl font-semibold text-center">
+              <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 p-4 rounded-2xl text-xs font-black uppercase text-center tracking-widest">
                 {error}
               </div>
             )}
 
-            <div>
-              <label className="block text-sm font-bold mb-3 text-slate-800 dark:text-slate-100">Email Address</label>
-              <div className="relative">
-                <FiMail className="absolute left-5 top-1/2 transform -translate-y-1/2 text-purple-600 dark:text-pink-400 text-xl" />
+            <div className="space-y-3">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Account Identifier</label>
+              <div className="relative group">
+                <FiMail className="absolute left-5 top-1/2 transform -translate-y-1/2 text-slate-300 group-focus-within:text-emerald-600 transition-colors" size={18} />
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full pl-14 pr-5 py-5 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold text-lg focus:outline-none focus:ring-4 focus:ring-purple-500/30 focus:border-purple-500 transition-all duration-200 placeholder-slate-500 dark:placeholder-slate-400 shadow-lg"
-                  placeholder="your@email.com"
+                  className="input-field pl-14"
+                  placeholder="professional@domain.com"
                   required
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-bold mb-3 text-slate-800 dark:text-slate-100">Password</label>
-              <div className="relative">
-                <FiLock className="absolute left-5 top-1/2 transform -translate-y-1/2 text-purple-600 dark:text-pink-400 text-xl" />
+            <div className="space-y-3">
+              <div className="flex justify-between items-end px-1">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Security Passkey</label>
+                <Link to="#" className="text-[10px] font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-700">Lost Key?</Link>
+              </div>
+              <div className="relative group">
+                <FiLock className="absolute left-5 top-1/2 transform -translate-y-1/2 text-slate-300 group-focus-within:text-emerald-600 transition-colors" size={18} />
                 <input
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-14 pr-5 py-5 rounded-2xl border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold text-lg focus:outline-none focus:ring-4 focus:ring-purple-500/30 focus:border-purple-500 transition-all duration-200 placeholder-slate-500 dark:placeholder-slate-400 shadow-lg"
-                  placeholder="••••••••"
+                  className="input-field pl-14"
+                  placeholder="••••••••••••"
                   required
                 />
               </div>
@@ -141,27 +116,40 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-700 hover:via-pink-700 hover:to-purple-700 text-white px-8 py-5 rounded-2xl font-bold text-xl transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-purple-500/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full btn-primary py-5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
             >
               {loading ? (
-                <div className="flex items-center justify-center gap-3">
-                  <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Signing In...</span>
-                </div>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                'Sign In'
+                <>
+                  <span>Authenticate Access</span>
+                  <FiArrowRight />
+                </>
               )}
             </button>
-
-            <div className="text-center pt-4">
-              <p className="text-slate-700 dark:text-slate-200 font-semibold text-lg">
-                Don't have an account?{' '}
-                <Link to="/register" className="text-purple-700 dark:text-pink-400 hover:text-purple-800 dark:hover:text-pink-300 font-bold hover:underline transition-colors">
-                  Create Account
-                </Link>
-              </p>
-            </div>
           </form>
+
+          <div className="mt-12 pt-10 border-t border-slate-50 dark:border-slate-800 text-center">
+            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-loose">
+              New to the platform? <br />
+              <Link to="/register" className="text-emerald-600 hover:text-emerald-700 transition-colors inline-flex items-center gap-2">
+                Establish New Account <FiArrowRight />
+              </Link>
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Security Footer */}
+        <div className="mt-12 flex justify-center items-center gap-10 opacity-30">
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500">
+            <div className="w-1 h-1 rounded-full bg-emerald-500" /> AES-256
+          </div>
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500">
+            <div className="w-1 h-1 rounded-full bg-emerald-500" /> SSL SECURE
+          </div>
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500">
+            <div className="w-1 h-1 rounded-full bg-emerald-500" /> PRIVATE
+          </div>
         </div>
       </div>
     </div>
@@ -169,4 +157,3 @@ const Login = () => {
 };
 
 export default Login;
-
