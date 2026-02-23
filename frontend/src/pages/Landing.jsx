@@ -3,409 +3,375 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
 
 import {
-  FiDollarSign,
-  FiPieChart,
-  FiTrendingUp,
-  FiBarChart2,
-  FiShield,
-  FiSmartphone,
-  FiZap,
   FiArrowRight,
   FiCheck,
   FiMenu,
   FiX
 } from 'react-icons/fi';
+import {
+  FcComboChart,
+  FcBullish,
+  FcIdea,
+  FcDataProtection,
+  FcCellPhone,
+  FcBarChart,
+  FcApproval,
+  FcPositiveDynamic,
+  FcLineChart,
+  FcPieChart
+} from 'react-icons/fc';
 
 const Landing = () => {
   const navigate = useNavigate();
   const heroRef = useRef(null);
   const featuresRef = useRef(null);
   const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const featuresInView = useInView(featuresRef, { once: true, amount: 0.2 });
-
-  const handleFeatureClick = () => {
-    navigate('/login');
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 100,
-        damping: 10
-      }
-    }
-  };
+  const featuresInView = useInView(featuresRef, { once: true, amount: 0.1 });
 
   const features = [
     {
-      icon: FiDollarSign,
-      title: 'Track Expenses',
-      description: 'Record and categorize every transaction with detailed history and smart categorization.',
-      color: 'from-emerald-500 to-teal-600',
-      bgColor: 'bg-emerald-50 dark:bg-emerald-950/30'
+      icon: FcComboChart,
+      title: 'Smart Analytics',
+      description: 'Real-time data visualization of your cash flow and spending patterns.',
+      accent: 'emerald'
     },
     {
-      icon: FiPieChart,
-      title: 'Budget Management',
-      description: 'Create monthly budgets by category with real-time tracking and smart alerts.',
-      color: 'from-purple-500 to-pink-600',
-      bgColor: 'bg-purple-50 dark:bg-purple-950/30'
+      icon: FcBullish,
+      title: 'Goal Tracking',
+      description: 'Define and monitor long-term financial milestones with precision.',
+      accent: 'emerald'
     },
     {
-      icon: FiTrendingUp,
-      title: 'Analytics & Insights',
-      description: 'Beautiful charts and graphs to visualize spending patterns and financial trends.',
-      color: 'from-blue-500 to-cyan-600',
-      bgColor: 'bg-blue-50 dark:bg-blue-950/30'
-    },
-    {
-      icon: FiBarChart2,
-      title: 'Budget History',
-      description: 'Complete archive of past budgets with performance analysis and comparisons.',
-      color: 'from-orange-500 to-red-600',
-      bgColor: 'bg-orange-50 dark:bg-orange-950/30'
-    },
-    {
-      icon: FiZap,
-      title: 'AI Assistant',
-      description: 'Get personalized financial advice and optimization tips from our AI chatbot.',
-      color: 'from-yellow-500 to-orange-600',
-      bgColor: 'bg-yellow-50 dark:bg-yellow-950/30'
-    },
-    {
-      icon: FiSmartphone,
-      title: 'Mobile Ready',
-      description: 'Fully responsive design that works perfectly on all devices and screen sizes.',
-      color: 'from-indigo-500 to-purple-600',
-      bgColor: 'bg-indigo-50 dark:bg-indigo-950/30'
+      icon: FcIdea,
+      title: 'AI Advisor',
+      description: 'Get automated insights and budget optimizations from our proprietary engine.',
+      accent: 'emerald'
     }
   ];
 
-  const benefits = [
-    'Free forever plan',
-    'Bank-level security',
-    'Real-time sync',
-    'Export data anytime',
-    '24/7 support',
-    'No credit card required'
+  const valueProps = [
+    {
+      title: 'Built for Security',
+      description: 'Your data is encrypted with bank-level protocols and never shared.',
+      icon: FcDataProtection
+    },
+    {
+      title: 'Universal Access',
+      description: 'Switch seamlessly between desktop and mobile with perfect sync.',
+      icon: FcCellPhone
+    },
+    {
+      title: 'Advanced Reporting',
+      description: 'Export deep-dive financial reports in PDF and CSV anytime.',
+      icon: FcBarChart
+    }
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-black font-sans selection:bg-emerald-100 selection:text-emerald-900">
+      {/* Premium Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className="emerald-glow top-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-100 dark:bg-emerald-900/10" />
+        <div className="emerald-glow bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-slate-100 dark:bg-[#050505]" />
+      </div>
+
       {/* Navigation */}
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b-2 border-slate-200 dark:border-slate-800 shadow-lg"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="flex items-center gap-3"
-          >
-            <div className="p-2 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 shadow-lg">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-black backdrop-blur-xl dark:backdrop-blur-none border-b border-slate-100 dark:border-white/10">
+        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/20 group-hover:scale-105 transition-transform">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <span className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Finance Tracker
-            </span>
-          </motion.div>
+            <span className="text-xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Finance<span className="text-emerald-600">Era</span></span>
+          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-4">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/login"
-                className="px-6 py-2.5 rounded-xl border-2 border-purple-600 dark:border-pink-500 text-purple-700 dark:text-pink-400 font-bold bg-white dark:bg-slate-900 hover:bg-purple-50 dark:hover:bg-pink-950/20 transition-all shadow-lg"
-              >
-                Login
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/register"
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold shadow-lg hover:shadow-xl transition-all"
-              >
-                Sign Up
-              </Link>
-            </motion.div>
+          <div className="hidden md:flex items-center gap-8">
+            <Link to="/login" className="text-sm font-bold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-widest">Sign In</Link>
+            <Link to="/register" className="btn-primary rounded-xl px-8 py-2.5">Get Started</Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <FiX className="w-6 h-6" /> : <FiMenu className="w-6 h-6" />}
+          <button className="md:hidden text-slate-900 dark:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         </div>
-      </motion.nav>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="fixed top-[73px] left-0 right-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden md:hidden"
-          >
-            <div className="p-4 flex flex-col gap-4">
-              <Link
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className="w-full text-center px-6 py-3 rounded-xl border-2 border-purple-600 dark:border-pink-500 text-purple-700 dark:text-pink-400 font-bold bg-white dark:bg-slate-900 hover:bg-purple-50 dark:hover:bg-pink-950/20 transition-all"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                onClick={() => setIsMenuOpen(false)}
-                className="w-full text-center px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold shadow-lg hover:shadow-xl transition-all"
-              >
-                Sign Up
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </nav>
 
       {/* Hero Section */}
-      <section ref={heroRef} className="relative pt-32 pb-20 md:pb-32 px-4 sm:px-6 overflow-hidden">
-        {/* Animated Background */}
-        <motion.div
-          style={{ y, opacity }}
-          className="parallax-bg absolute inset-0 -z-10"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-slate-950 dark:via-purple-950 dark:to-slate-950" />
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-purple-200 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20 animate-blob" />
-          <div className="absolute top-1/3 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-pink-200 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-2000" />
-          <div className="absolute bottom-1/4 left-1/3 w-64 h-64 md:w-96 md:h-96 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-4000" />
-        </motion.div>
-
-        <div className="max-w-7xl mx-auto text-center relative z-10">
-          {/* Icon */}
+      <section className="relative pt-32 pb-24 md:pt-40 md:pb-28 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="space-y-8 relative z-10">
           <motion.div
-            className="float-icon inline-block mb-6 md:mb-8"
-            whileHover={{ scale: 1.1, rotate: 360 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-purple-600 to-pink-600 shadow-2xl">
-              <svg className="w-16 h-16 md:w-24 md:h-24 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-          </motion.div>
-
-          {/* Title */}
-          <h1 className="hero-title text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
-            <motion.span
-              className="block bg-gradient-to-r from-purple-800 via-pink-600 to-purple-800 dark:from-purple-400 dark:via-pink-400 dark:to-purple-400 bg-clip-text text-transparent font-black"
-              style={{
-                opacity: 1,
-                WebkitTextFillColor: 'transparent',
-              }}
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 1 }}
-            >
-              Take Control
-            </motion.span>
-            <motion.span
-              className="block text-slate-900 dark:text-white mt-2 font-black"
-              style={{
-                opacity: 1,
-              }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 1 }}
-            >
-              Of Your Finances
-            </motion.span>
-          </h1>
-
-          {/* Subtitle */}
-          <motion.p
-            className="hero-subtitle text-lg sm:text-2xl md:text-3xl text-slate-800 dark:text-slate-200 mb-8 md:mb-12 max-w-3xl mx-auto font-bold px-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-          >
-            Track expenses, manage budgets, and achieve your financial goals with our powerful finance tracker.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            className="hero-cta flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
-          >
-            <motion.div className="w-full sm:w-auto" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/register"
-                className="block w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-base md:text-lg shadow-2xl hover:shadow-purple-500/50 transition-all"
-              >
-                Get Started Free
-              </Link>
-            </motion.div>
-            <motion.div className="w-full sm:w-auto" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <button
-                onClick={handleFeatureClick}
-                className="block w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 rounded-2xl border-2 border-purple-600 dark:border-pink-500 text-purple-700 dark:text-pink-400 font-bold text-base md:text-lg bg-white dark:bg-slate-900 hover:bg-purple-50 dark:hover:bg-pink-950/20 transition-all shadow-lg"
-              >
-                Explore Features
-              </button>
-            </motion.div>
-          </motion.div>
-
-          {/* Benefits */}
-          <motion.div
-            className="mt-12 md:mt-16 flex flex-wrap justify-center gap-4 md:gap-6 px-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400 text-xs font-black uppercase tracking-widest"
           >
-            {benefits.map((benefit, index) => (
+            <FcApproval size={16} /> Recognized by leading fintech analysts
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-slate-900 dark:text-white"
+          >
+            Master <span className="text-emerald-600">Your</span> <br /> Capital Flow
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-lg text-slate-500 font-medium leading-relaxed max-w-xl"
+          >
+            The professional standard for modern wealth management. Unify your assets, track every expense, and automate your financial future with AI.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 pt-4"
+          >
+            <Link to="/register" className="btn-primary px-6 py-3 text-base rounded-xl text-center shadow-2xl shadow-emerald-500/20">
+              Establish Portfolio
+            </Link>
+            <Link to="/login" className="btn-secondary px-6 py-3 text-base rounded-xl text-center shadow-sm">
+              Live Demonstration
+            </Link>
+          </motion.div>
+
+          {/* Social Proof */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="pt-12 opacity-40 grayscale flex items-center gap-8"
+          >
+            <span className="text-xl font-black">STRIPE</span>
+            <span className="text-xl font-black">REVOLUT</span>
+            <span className="text-xl font-black">DEEL</span>
+          </motion.div>
+        </div>
+
+        {/* Hero Interactive Chart / Graphic */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+          className="relative hidden lg:block"
+        >
+          <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-transparent blur-3xl -z-10 rounded-full" />
+          <div className="card p-2 bg-white/50 dark:bg-black backdrop-blur-2xl dark:backdrop-blur-none border border-white/20 dark:border-slate-800/50 shadow-2xl overflow-hidden rounded-3xl">
+            <img
+              src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80"
+              alt="Financial Trading Terminal"
+              className="w-full h-[500px] object-cover rounded-2xl grayscale opacity-90 contrast-125"
+            />
+            {/* Overlay floating element */}
+            <div className="absolute bottom-10 left-10 p-6 bg-white/90 dark:bg-[#050505] backdrop-blur-xl dark:backdrop-blur-none rounded-2xl shadow-2xl border border-white/20 dark:border-slate-800/50 w-72">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-sm">
+                  <FcLineChart size={24} />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest font-black text-slate-500">Net Capital Surplus</p>
+                  <p className="text-xl font-black tracking-tighter text-slate-900 dark:text-white">$142,500.00</p>
+                </div>
+              </div>
+              <div className="h-16 w-full opacity-60">
+                <FcPositiveDynamic className="w-full h-full drop-shadow-sm opacity-80" />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Features Grid with Photos */}
+      <section ref={featuresRef} className="py-24 md:py-40 bg-slate-50/50 dark:bg-[#0a0a0a]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {[
+              {
+                icon: FcComboChart,
+                title: 'Smart Analytics',
+                description: 'Real-time data visualization of your cash flow and spending patterns.',
+                photo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                icon: FcBullish,
+                title: 'Goal Tracking',
+                description: 'Define and monitor long-term financial milestones with precision.',
+                photo: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                icon: FcIdea,
+                title: 'AI Advisor',
+                description: 'Get automated insights and budget optimizations from our proprietary engine.',
+                photo: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?auto=format&fit=crop&w=800&q=80"
+              }
+            ].map((feature, i) => (
               <motion.div
-                key={index}
-                className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full border border-slate-200 dark:border-slate-700"
-                whileHover={{ scale: 1.1 }}
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                viewport={{ once: true, margin: "-100px" }}
+                className="group relative overflow-hidden rounded-3xl bg-white dark:bg-black shadow-xl shadow-slate-200/50  border border-slate-100 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-500"
               >
-                <FiCheck className="text-emerald-600 dark:text-emerald-400 text-sm md:text-base" />
-                <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300">{benefit}</span>
+                <div className="h-48 w-full overflow-hidden">
+                  <img
+                    src={feature.photo}
+                    alt={feature.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="p-8">
+                  <div className={`w-12 h-12 flex items-center justify-center rounded-2xl mb-6 bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 transition-colors shadow-sm`}>
+                    <feature.icon className="drop-shadow-sm" size={28} />
+                  </div>
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter group-hover:text-emerald-600 transition-colors">
+                    {feature.title}
+                  </h3>
+                  <p className="text-slate-500 font-medium leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section ref={featuresRef} className="py-16 md:py-24 px-4 sm:px-6 bg-slate-50 dark:bg-slate-900">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            className="text-center mb-12 md:mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            animate={featuresInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black mb-4 md:mb-6">
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Powerful Features
-              </span>
-            </h2>
-            <p className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto font-medium">
-              Everything you need to manage your finances effectively and achieve your goals
-            </p>
-          </motion.div>
+      {/* Value Props */}
+      <section className="py-24 md:py-40 container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+          <div className="space-y-12">
+            <div className="space-y-6">
+              <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900 dark:text-white">
+                Everything you need <br /> in <span className="text-emerald-600">one viewport.</span>
+              </h2>
+              <p className="text-lg text-slate-500 font-medium leading-relaxed max-w-lg">
+                We've combined decades of financial best practices into a single, high-performance interface.
+              </p>
+            </div>
 
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-            variants={containerVariants}
-            initial="hidden"
-            animate={featuresInView ? "visible" : "hidden"}
-          >
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  onClick={handleFeatureClick}
-                  className={`${feature.bgColor} p-6 md:p-8 rounded-3xl border-2 border-slate-200 dark:border-slate-700 cursor-pointer group shadow-lg hover:shadow-2xl transition-all`}
-                >
-                  <motion.div
-                    className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br ${feature.color} p-4 md:p-5 mb-6 shadow-xl`}
-                    whileHover={{ rotate: 360, scale: 1.1 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
-                  </motion.div>
-                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-slate-700 dark:text-slate-300 mb-6 text-base md:text-lg leading-relaxed">
-                    {feature.description}
-                  </p>
-                  <motion.div
-                    className="flex items-center text-purple-600 dark:text-pink-400 font-bold text-lg"
-                    whileHover={{ x: 10 }}
-                  >
-                    <span>Learn more</span>
-                    <FiArrowRight className="ml-2" />
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+            <div className="space-y-8">
+              {valueProps.map((prop, i) => (
+                <div key={i} className="flex gap-6">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm">
+                    <prop.icon size={26} className="drop-shadow-sm" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-black mb-1">{prop.title}</h4>
+                    <p className="text-sm text-slate-500 font-medium">{prop.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="aspect-square rounded-[3rem] bg-emerald-600/5 dark:bg-emerald-600/10 border border-emerald-600/10 relative overflow-hidden flex items-center justify-center">
+              <FcPieChart className="text-emerald-600/20 w-3/4 h-3/4 animate-pulse" />
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-t from-white dark:from-slate-950 to-transparent" />
+            </div>
+            {/* Floating Card UI Mock */}
+            <motion.div
+              animate={{ y: [0, -20, 0] }}
+              transition={{ repeat: Infinity, duration: 6 }}
+              className="absolute -top-10 -right-10 p-8 glass rounded-3xl shadow-2xl border-slate-200 dark:border-slate-800 max-w-[280px]"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-emerald-500" />
+                <div className="space-y-1">
+                  <div className="h-2 w-20 bg-slate-200 dark:bg-slate-700 rounded" />
+                  <div className="h-2 w-12 bg-slate-100 dark:bg-slate-800 rounded" />
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="h-2 w-full bg-emerald-100 dark:bg-emerald-950/30 rounded" />
+                <div className="h-2 w-3/4 bg-emerald-50 dark:bg-emerald-950/20 rounded" />
+              </div>
+              <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex justify-between">
+                <div className="h-4 w-12 bg-emerald-600/40 rounded" />
+                <div className="h-4 w-16 bg-emerald-600 rounded" />
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 bg-gradient-to-br from-purple-600 to-pink-600">
-        <motion.div
-          className="max-w-5xl mx-auto text-center"
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black mb-6 text-white">
-            Ready to Start?
-          </h2>
-          <p className="text-lg md:text-2xl text-white/90 mb-8 md:mb-12 font-medium">
-            Join thousands of users who are already taking control of their finances
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/register"
-                className="w-full sm:w-auto px-8 py-4 md:px-12 md:py-5 rounded-2xl bg-white text-purple-600 font-bold text-lg shadow-2xl hover:shadow-white/50 transition-all flex justify-center items-center"
-              >
-                Create Free Account
+      <section className="py-40 container mx-auto px-6">
+        <div className="bg-emerald-600 rounded-[3rem] md:rounded-[4rem] p-12 md:p-32 text-center text-white relative overflow-hidden shadow-2xl shadow-emerald-500/40">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-500 to-emerald-700 -z-10" />
+          <div className="relative z-10 space-y-10">
+            <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-tight">
+              Design Your <br /> Financial Freedom.
+            </h2>
+            <p className="text-xl md:text-2xl text-emerald-50 max-w-2xl mx-auto font-medium opacity-90">
+              Join our premium community of strategic investors and money masters. It takes less than 2 minutes.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
+              <Link to="/register" className="bg-white text-emerald-700 px-8 py-3 rounded-2xl font-black text-base hover:scale-105 transition-transform active:scale-95 shadow-xl">
+                Join Exclusive Beta
               </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/login"
-                className="w-full sm:w-auto px-8 py-4 md:px-12 md:py-5 rounded-2xl border-2 border-white text-white font-bold text-lg hover:bg-white/10 transition-all flex justify-center items-center"
-              >
-                Sign In
-              </Link>
-            </motion.div>
+            </div>
+            <div className="flex flex-wrap justify-center gap-8 pt-10 opacity-60">
+              <div className="flex items-center gap-2 text-sm font-bold"><FiCheck /> Fast Registration</div>
+              <div className="flex items-center gap-2 text-sm font-bold"><FiCheck /> Zero Platform Fees</div>
+              <div className="flex items-center gap-2 text-sm font-bold"><FiCheck /> Private & Secure</div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 md:py-12 px-6 border-t-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-slate-600 dark:text-slate-400 font-medium text-sm md:text-base">
-            © 2024 Finance Tracker. All rights reserved.
-          </p>
+      {/* Modern Footer */}
+      <footer className="py-24 container mx-auto px-6 border-t border-slate-100 dark:border-slate-900">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-20">
+          <div className="space-y-6 max-w-sm">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter">FinanceEra</span>
+            </Link>
+            <p className="text-sm text-slate-500 font-medium leading-relaxed">
+              Global wealth management empowered by AI. Redefining your financial literacy for the modern era.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-20">
+            <div className="space-y-4">
+              <h5 className="text-xs font-black uppercase tracking-widest text-slate-400">Platform</h5>
+              <ul className="space-y-3 text-sm font-bold text-slate-600 dark:text-slate-300">
+                <li><Link to="/advisor">Advisor</Link></li>
+                <li><Link to="/market">Markets</Link></li>
+                <li><Link to="/learn">Learning</Link></li>
+              </ul>
+            </div>
+            <div className="space-y-4">
+              <h5 className="text-xs font-black uppercase tracking-widest text-slate-400">Company</h5>
+              <ul className="space-y-3 text-sm font-bold text-slate-600 dark:text-slate-300">
+                <li>Privacy</li>
+                <li>Security</li>
+                <li>Contact</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="pt-24 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-xs font-bold text-slate-400">© 2024 FINANCEERA PLATFORM. ALL RIGHTS RESERVED.</p>
+          <div className="flex gap-6 text-xs font-bold text-slate-400">
+            <span className="hover:text-emerald-600 cursor-pointer">TWITTER</span>
+            <span className="hover:text-emerald-600 cursor-pointer">LINKEDIN</span>
+            <span className="hover:text-emerald-600 cursor-pointer">GITHUB</span>
+          </div>
         </div>
       </footer>
     </div>
