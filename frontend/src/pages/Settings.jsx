@@ -7,7 +7,7 @@ import { FiUser, FiLock, FiSettings, FiSave, FiBriefcase, FiActivity, FiMail, Fi
 const Settings = () => {
   const { user, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
-  
+
   // Profile Form State
   const [formData, setFormData] = useState({
     name: '',
@@ -73,7 +73,7 @@ const Settings = () => {
       setPwdMessage({ type: 'error', text: 'New password must be at least 6 characters' });
       return;
     }
-    
+
     try {
       setPwdLoading(true);
       const response = await authAPI.changePassword({
@@ -111,11 +111,10 @@ const Settings = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-                  activeTab === tab.id
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/30'
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${activeTab === tab.id
+                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30'
                     : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
-                }`}
+                  }`}
               >
                 <Icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-white' : 'text-slate-400'}`} />
                 <span className="font-medium text-sm">{tab.label}</span>
@@ -129,15 +128,14 @@ const Settings = () => {
           {activeTab === 'profile' && (
             <div className="glass card animate-fade-in">
               <h2 className="text-lg font-semibold mb-6 text-slate-800 dark:text-white flex items-center gap-2">
-                <FiUser className="text-purple-500" /> Personal Information
+                <FiUser className="text-emerald-500" /> Personal Information
               </h2>
-              
+
               {message.text && (
-                <div className={`p-4 rounded-lg mb-6 text-sm ${
-                  message.type === 'success' 
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' 
+                <div className={`p-4 rounded-lg mb-6 text-sm ${message.type === 'success'
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                     : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
-                }`}>
+                  }`}>
                   {message.text}
                 </div>
               )}
@@ -235,15 +233,14 @@ const Settings = () => {
           {activeTab === 'preferences' && (
             <div className="glass card animate-fade-in">
               <h2 className="text-lg font-semibold mb-6 text-slate-800 dark:text-white flex items-center gap-2">
-                <FiSettings className="text-purple-500" /> App Preferences
+                <FiSettings className="text-emerald-500" /> App Preferences
               </h2>
 
               {message.text && (
-                <div className={`p-4 rounded-lg mb-6 text-sm ${
-                  message.type === 'success' 
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' 
+                <div className={`p-4 rounded-lg mb-6 text-sm ${message.type === 'success'
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                     : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
-                }`}>
+                  }`}>
                   {message.text}
                 </div>
               )}
@@ -271,7 +268,7 @@ const Settings = () => {
                   <p className="mt-2 text-xs text-slate-500">
                     This symbol will be used throughout the application.
                   </p>
-                  
+
                   <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-700">
                     <p className="text-xs font-medium text-slate-500 mb-2">Preview</p>
                     <div className="flex items-center gap-4">
@@ -307,15 +304,14 @@ const Settings = () => {
           {activeTab === 'security' && (
             <div className="glass card animate-fade-in">
               <h2 className="text-lg font-semibold mb-6 text-slate-800 dark:text-white flex items-center gap-2">
-                <FiLock className="text-purple-500" /> Security Settings
+                <FiLock className="text-emerald-500" /> Security Settings
               </h2>
 
               {pwdMessage.text && (
-                <div className={`p-4 rounded-lg mb-6 text-sm ${
-                  pwdMessage.type === 'success' 
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' 
+                <div className={`p-4 rounded-lg mb-6 text-sm ${pwdMessage.type === 'success'
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                     : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
-                }`}>
+                  }`}>
                   {pwdMessage.text}
                 </div>
               )}
