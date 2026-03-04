@@ -7,7 +7,7 @@ let model = null;
 try {
   if (process.env.GOOGLE_AI_KEY) {
     genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY);
-    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     console.log('✅ Google Generative AI initialized');
   } else {
     console.log('⚠️ GOOGLE_AI_KEY not found in environment.');
@@ -114,20 +114,33 @@ const chatWithAI = async (req, res) => {
 
     // Create prompt for AI
     console.log('[DEBUG] AI Controller: Preparing prompt');
-    const prompt = `System Context: You are a helpful financial advisor interacting with ${user?.name || 'User'} (Currency: ${user?.currency || 'USD'}). 
-User's Current Month Data:
-- Income: ${financialData.income}
-- Expenses: ${financialData.expenses}
-- Savings: ${financialData.savings}
-- Number of Transactions: ${financialData.transactionCount}
-- Top expenses: ${Object.entries(financialData.categoryBreakdown).sort(([, a], [, b]) => b - a).slice(0, 3).map(([cat, amt]) => `${cat}: ${amt}`).join(', ')}
-- Budgets: ${financialData.budgets.map(b => `${b.category} (${((b.spent / b.amount) * 100).toFixed(0)}% used)`).join(', ')}
+    const prompt = `
+System Role: You are a professional, direct, and highly capable personal financial advisor named "FinanceTracker AI". Your tone is helpful, concise, and analytical. Do not be overly enthusiastic or patronizing.
 
-Instructions: Provide concise, actionable, and friendly financial advice answering the user's message below based on their data. Do NOT use markdown headers or lists unless absolutely necessary; keep it conversational.
+User Profile: 
+- Name: ${user?.name || 'User'}
+- Currency: ${user?.currency || 'USD'}
 
-User Message: "${message}"`;
+User's Financial Snapshot (Current Month):
+- Total Income: ${financialData.income}
+- Total Expenses: ${financialData.expenses}
+- Net Savings: ${financialData.savings}
+- Active Budgets: ${financialData.budgets.length > 0 ? financialData.budgets.map(b => `${b.category} (Limit: ${b.amount}, Spent: ${b.spent}, ${((b.spent / b.amount) * 100).toFixed(0)}% used)`).join(' | ') : 'No exact budgets set.'}
+- Top Expense Categories: ${Object.entries(financialData.categoryBreakdown).sort(([, a], [, b]) => b - a).slice(0, 3).map(([cat, amt]) => `${cat}: ${amt}`).join(', ')}
 
-    console.log('[DEBUG] AI Controller: Sending request to Gemini v1.5 Flash...');
+App Knowledge (Finance Tracker):
+- Exporting Data: Users can download their data as CSV or PDF directly from the Dashboard. The CSV and PDF download buttons are located at the top right of the Dashboard page, right next to the date range picker calendar.
+
+Your Guidance Rules:
+1. STRICT STRUCTURE: Your ENTIRE response MUST be a single list containing exactly 3 to 4 points. Do NOT include ANY introductory or concluding sentences. Only output the list.
+2. Formatting: Do NOT use numbered lists ("1.", "2.", "3."). You MUST format it point-wise using bullet points (e.g., "• "). Place a newline separating each bullet point so it reads clearly.
+3. Content & Tone: Be professional, practical, and highly direct. Avoid all fluff words. Provide actionable instructions or insights based on the user's data.
+
+User's Message: "${message}"
+`;
+
+
+    console.log('[DEBUG] AI Controller: Sending request to Gemini v2.5 Flash...');
     const result = await model.generateContent(prompt);
     console.log('[DEBUG] AI Controller: Gemini response received successfully');
     const aiResponse = result.response.text();

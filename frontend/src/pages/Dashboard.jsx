@@ -10,6 +10,8 @@ import CurrencyDisplay from '../components/CurrencyDisplay';
 import { motion } from 'framer-motion';
 import { portfolioHistory, cashFlowData, expenseCategories, recentTransactions as dummyTransactions } from '../utils/dummyData';
 import { transactionAPI, budgetAPI } from '../services/api';
+import { exportToCSV, exportToPDF } from '../utils/exportData';
+import { FiDownload } from 'react-icons/fi';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -95,7 +97,34 @@ const Dashboard = () => {
 
   const totalExpenseValue = pieData.reduce((sum, entry) => sum + entry.value, 0);
 
+  const handleExportPDF = async () => {
+    try {
+      // Fetch all transactions within the selected date range
+      const [allTransactionsRes, allBudgetsRes] = await Promise.all([
+        transactionAPI.getAll({ limit: 1000, startDate, endDate }),
+        budgetAPI.getAll({ startDate, endDate })
+      ]);
+      const fullTxs = allTransactionsRes.data.data || [];
+      const fullBudgets = allBudgetsRes.data.data || [];
+      exportToPDF(fullTxs, fullBudgets, user);
+    } catch (e) {
+      console.error("Failed to export PDF", e);
+    }
+  };
 
+  const handleExportCSV = async () => {
+    try {
+      const [allTransactionsRes, allBudgetsRes] = await Promise.all([
+        transactionAPI.getAll({ limit: 1000, startDate, endDate }),
+        budgetAPI.getAll({ startDate, endDate })
+      ]);
+      const fullTxs = allTransactionsRes.data.data || [];
+      const fullBudgets = allBudgetsRes.data.data || [];
+      exportToCSV(fullTxs, fullBudgets);
+    } catch (e) {
+      console.error("Failed to export CSV", e);
+    }
+  };
 
 
   if (loading) {
@@ -116,23 +145,43 @@ const Dashboard = () => {
           <p className="text-slate-500 font-bold text-xs tracking-wide uppercase">{format(new Date(), 'MMMM yyyy')} Overview</p>
         </div>
 
-        {/* Date Range Picker */}
-        <div className="flex items-center gap-3 bg-white dark:bg-[#050505] p-3 px-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
-          <FiCalendar className="text-emerald-600" size={18} />
-          <div className="flex items-center gap-3 text-sm font-black text-slate-900 dark:text-slate-100">
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="bg-transparent focus:outline-none cursor-pointer"
-            />
-            <span className="text-slate-300">/</span>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="bg-transparent focus:outline-none cursor-pointer"
-            />
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          {/* Export Buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportPDF}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-800/50 transition-colors border border-emerald-200 dark:border-emerald-800 text-sm font-bold shadow-sm"
+              title="Download PDF Report"
+            >
+              <FiDownload size={16} /> PDF
+            </button>
+            <button
+              onClick={handleExportCSV}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 text-sm font-bold shadow-sm"
+              title="Download CSV Data"
+            >
+              <FiDownload size={16} /> CSV
+            </button>
+          </div>
+
+          {/* Date Range Picker */}
+          <div className="flex items-center gap-3 bg-white dark:bg-[#050505] p-3 px-5 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+            <FiCalendar className="text-emerald-600" size={18} />
+            <div className="flex items-center gap-3 text-sm font-black text-slate-900 dark:text-slate-100">
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="bg-transparent focus:outline-none cursor-pointer"
+              />
+              <span className="text-slate-300">/</span>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="bg-transparent focus:outline-none cursor-pointer"
+              />
+            </div>
           </div>
         </div>
       </div>
