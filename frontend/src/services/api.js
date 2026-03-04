@@ -40,34 +40,34 @@ api.interceptors.response.use(
 );
 
 export const authAPI = {
-  register: (data) => api.post('/auth/register', data),
-  login: (data) => api.post('/auth/login', data),
-  getMe: () => api.get('/auth/me'),
-  updateProfile: (data) => api.put('/auth/profile', data),
-  changePassword: (data) => api.put('/auth/password', data),
+  register: (data) => api.post('/api/auth/register', data),
+  login: (data) => api.post('/api/auth/login', data),
+  getMe: () => api.get('/api/auth/me'),
+  updateProfile: (data) => api.put('/api/auth/profile', data),
+  changePassword: (data) => api.put('/api/auth/password', data),
 };
 
 export const transactionAPI = {
-  getAll: (params) => api.get('/transactions', { params }),
-  getOne: (id) => api.get(`/transactions/${id}`),
-  create: (data) => api.post('/transactions', data),
-  update: (id, data) => api.put(`/transactions/${id}`, data),
-  delete: (id) => api.delete(`/transactions/${id}`),
-  getAnalytics: (params) => api.get('/transactions/analytics', { params }),
+  getAll: (params) => api.get('/api/transactions', { params }),
+  getOne: (id) => api.get(`/api/transactions/${id}`),
+  create: (data) => api.post('/api/transactions', data),
+  update: (id, data) => api.put(`/api/transactions/${id}`, data),
+  delete: (id) => api.delete(`/api/transactions/${id}`),
+  getAnalytics: (params) => api.get('/api/transactions/analytics', { params }),
 };
 
 export const budgetAPI = {
-  getAll: (params) => api.get('/budgets', { params }),
-  getOne: (id) => api.get(`/budgets/${id}`),
-  create: (data) => api.post('/budgets', data),
-  update: (id, data) => api.put(`/budgets/${id}`, data),
-  delete: (id) => api.delete(`/budgets/${id}`),
-  archive: (id) => api.post(`/budgets/${id}/archive`),
-  getHistory: (params) => api.get('/budgets/history', { params }),
+  getAll: (params) => api.get('/api/budgets', { params }),
+  getOne: (id) => api.get(`/api/budgets/${id}`),
+  create: (data) => api.post('/api/budgets', data),
+  update: (id, data) => api.put(`/api/budgets/${id}`, data),
+  delete: (id) => api.delete(`/api/budgets/${id}`),
+  archive: (id) => api.post(`/api/budgets/${id}/archive`),
+  getHistory: (params) => api.get('/api/budgets/history', { params }),
 };
 
 export const aiAPI = {
-  chat: (message) => api.post('/ai/chat', { message }),
+  chat: (message) => api.post('/api/ai/chat', { message }),
 };
 
 export default api;
