@@ -112,8 +112,8 @@ const Settings = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${activeTab === tab.id
-                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30'
-                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
               >
                 <Icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-white' : 'text-slate-400'}`} />
@@ -133,8 +133,8 @@ const Settings = () => {
 
               {message.text && (
                 <div className={`p-4 rounded-lg mb-6 text-sm ${message.type === 'success'
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-                    : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
                   }`}>
                   {message.text}
                 </div>
@@ -238,8 +238,8 @@ const Settings = () => {
 
               {message.text && (
                 <div className={`p-4 rounded-lg mb-6 text-sm ${message.type === 'success'
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-                    : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
                   }`}>
                   {message.text}
                 </div>
@@ -248,15 +248,13 @@ const Settings = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Display Currency</label>
-                  <div className="relative max-w-md">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FiGlobe className="text-slate-400" />
-                    </div>
+                  <div className="relative max-w-md group">
+                    <FiGlobe className="absolute left-5 top-1/2 transform -translate-y-1/2 text-slate-300 group-focus-within:text-emerald-600 transition-colors" size={18} />
                     <select
                       name="currency"
                       value={formData.currency}
                       onChange={handleChange}
-                      className="input-field pl-10"
+                      className="input-field pl-14 appearance-none"
                     >
                       {currencies.map((c) => (
                         <option key={c.code} value={c.code}>
@@ -264,6 +262,11 @@ const Settings = () => {
                         </option>
                       ))}
                     </select>
+                    <div className="absolute right-5 top-1/2 transform -translate-y-1/2 pointer-events-none text-slate-300">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                   </div>
                   <p className="mt-2 text-xs text-slate-500">
                     This symbol will be used throughout the application.
@@ -309,8 +312,8 @@ const Settings = () => {
 
               {pwdMessage.text && (
                 <div className={`p-4 rounded-lg mb-6 text-sm ${pwdMessage.type === 'success'
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-                    : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
                   }`}>
                   {pwdMessage.text}
                 </div>

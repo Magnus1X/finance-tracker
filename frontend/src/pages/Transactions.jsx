@@ -119,7 +119,7 @@ const Transactions = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold mb-2">Transactions</h1>
           <p className="text-gray-600 dark:text-gray-400 text-sm">Manage your income and expenses</p>
@@ -130,7 +130,7 @@ const Transactions = () => {
             setEditingTransaction(null);
             setShowModal(true);
           }}
-          className="btn-primary py-3 px-6 flex items-center gap-2 shadow-emerald-500/20 text-sm tracking-widest uppercase font-black"
+          className="btn-primary py-3 px-6 flex items-center justify-center gap-2 shadow-emerald-500/20 text-sm tracking-widest uppercase font-black w-full md:w-auto"
         >
           <FiPlus size={18} /> New Entry
         </button>

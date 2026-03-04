@@ -70,7 +70,7 @@ const Landing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black font-sans selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="min-h-screen bg-white dark:bg-black font-sans selection:bg-emerald-100 selection:text-emerald-900 overflow-x-hidden w-full">
       {/* Premium Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="emerald-glow top-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-100 dark:bg-emerald-900/10" />

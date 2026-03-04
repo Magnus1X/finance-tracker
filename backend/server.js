@@ -8,6 +8,8 @@ const { connectDB, disconnectDB } = require('./config/database');
 const errorHandler = require('./middleware/errorHandler');
 
 dotenv.config();
+const passport = require('passport');
+require('./config/passport');
 
 const authRoutes = require('./routes/authRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
@@ -37,6 +39,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 app.get('/', (req, res) => {
   res.json({

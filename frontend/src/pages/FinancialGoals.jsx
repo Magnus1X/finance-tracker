@@ -22,14 +22,14 @@ const FinancialGoals = () => {
 
     return (
         <div className="max-w-6xl mx-auto space-y-10 pb-20">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Financial <span className="text-primary-600">Goals</span></h1>
                     <p className="text-slate-600 dark:text-slate-400 font-medium">Turn your dreams into achievable milestones.</p>
                 </div>
                 <button
                     onClick={() => setShowForm(true)}
-                    className="btn-primary flex items-center gap-2 px-6 py-3 rounded-2xl shadow-xl"
+                    className="btn-primary flex items-center justify-center gap-2 px-6 py-3 rounded-2xl shadow-xl w-full md:w-auto"
                 >
                     <FiPlus className="w-5 h-5" />
                     <span>Set New Goal</span>
