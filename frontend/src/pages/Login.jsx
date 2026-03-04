@@ -64,10 +64,10 @@ const Login = () => {
         <div className="emerald-glow bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-slate-50 dark:bg-[#050505]" />
       </div>
 
-      <div className="w-full max-w-lg relative">
+      <div className="w-full max-w-md relative">
         {/* Logo Header */}
-        <div className="text-center mb-10">
-          <Link to="/" className="inline-flex items-center gap-2 group mb-8">
+        <div className="text-center mb-6">
+          <Link to="/" className="inline-flex items-center gap-2 group mb-4">
             <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/20 group-hover:scale-105 transition-transform">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -82,16 +82,16 @@ const Login = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="card shadow-2xl shadow-slate-200/50 "
+          className="card shadow-2xl shadow-slate-200/50 p-6 md:p-8"
         >
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 p-4 rounded-2xl text-xs font-black uppercase text-center tracking-widest">
+              <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 p-3 rounded-2xl text-xs font-black uppercase text-center tracking-widest">
                 {error}
               </div>
             )}
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Account Identifier</label>
               <div className="relative group">
                 <FiMail className="absolute left-5 top-1/2 transform -translate-y-1/2 text-slate-300 group-focus-within:text-emerald-600 transition-colors" size={18} />
@@ -107,7 +107,7 @@ const Login = () => {
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               <div className="flex justify-between items-end px-1">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Security Passkey</label>
                 <Link to="#" className="text-[10px] font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-700">Lost Key?</Link>
@@ -129,7 +129,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading || loadingGoogle}
-              className="w-full btn-primary py-5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
+              className="w-full btn-primary py-3.5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -151,7 +151,7 @@ const Login = () => {
               type="button"
               onClick={handleGoogleOAuth}
               disabled={loading || loadingGoogle}
-              className="w-full py-5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-[#050505] hover:bg-slate-50 dark:hover:bg-slate-900 active:scale-[0.98] dark:text-white font-bold shadow-sm"
+              className="w-full py-3.5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-[#050505] hover:bg-slate-50 dark:hover:bg-slate-900 active:scale-[0.98] dark:text-white font-bold shadow-sm"
             >
               {loadingGoogle ? (
                 <div className="w-5 h-5 border-2 border-slate-300 dark:border-slate-600 border-t-emerald-600 rounded-full animate-spin" />
@@ -164,8 +164,8 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="mt-12 pt-10 border-t border-slate-50 dark:border-slate-800 text-center">
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-loose">
+          <div className="mt-8 pt-6 border-t border-slate-50 dark:border-slate-800 text-center">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-loose">
               New to the platform? <br />
               <Link to="/register" className="text-emerald-600 hover:text-emerald-700 transition-colors inline-flex items-center gap-2">
                 Establish New Account <FiArrowRight />
@@ -175,7 +175,7 @@ const Login = () => {
         </motion.div>
 
         {/* Security Footer */}
-        <div className="mt-12 flex justify-center items-center gap-10 opacity-30">
+        <div className="mt-8 flex justify-center items-center gap-8 opacity-30">
           <div className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500">
             <div className="w-1 h-1 rounded-full bg-emerald-500" /> AES-256
           </div>
