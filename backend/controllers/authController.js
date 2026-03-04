@@ -237,10 +237,21 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const googleAuthCallback = (req, res, next) => {
+  try {
+    const token = generateToken(req.user.id);
+    const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+    res.redirect(`${FRONTEND_URL}/dashboard?token=${token}`);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   getMe,
   updateProfile,
   changePassword,
+  googleAuthCallback,
 };

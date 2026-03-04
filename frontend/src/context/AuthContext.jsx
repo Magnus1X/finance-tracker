@@ -21,10 +21,20 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuth = async () => {
+    // Check for token in URL first (for OAuth redirects)
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenFromUrl = urlParams.get('token');
+
+    if (tokenFromUrl) {
+      localStorage.setItem('token', tokenFromUrl);
+      // Clean up the URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     const token = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
 
-    if (token && storedUser) {
+    if (token) {
       try {
         const response = await authAPI.getMe();
         const userData = response.data.data || response.data.user;
@@ -49,12 +59,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.login({ email, password });
       const { token, user } = response.data;
-      
+
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
       setIsAuthenticated(true);
-      
+
       return { success: true };
     } catch (error) {
       return {
@@ -68,12 +78,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.register({ name, email, password });
       const { token, user } = response.data;
-      
+
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
       setIsAuthenticated(true);
-      
+
       return { success: true };
     } catch (error) {
       return {

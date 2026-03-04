@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FiMail, FiLock, FiArrowRight } from 'react-icons/fi';
+import { FcGoogle } from 'react-icons/fc';
 import { motion } from 'framer-motion';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -41,6 +43,11 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleOAuth = () => {
+    setLoadingGoogle(true);
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
   };
 
   return (
@@ -88,7 +95,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   className="input-field pl-14"
-                  placeholder="professional@domain.com"
+                  placeholder="Enter your Email"
                   required
                 />
               </div>
@@ -107,7 +114,7 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className="input-field pl-14"
-                  placeholder="••••••••••••"
+                  placeholder="Enter your Password"
                   required
                 />
               </div>
@@ -115,7 +122,7 @@ const Login = () => {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || loadingGoogle}
               className="w-full btn-primary py-5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
             >
               {loading ? (
@@ -124,6 +131,28 @@ const Login = () => {
                 <>
                   <span>Authenticate Access</span>
                   <FiArrowRight />
+                </>
+              )}
+            </button>
+
+            <div className="relative flex items-center py-2">
+              <div className="flex-grow border-t border-slate-100 dark:border-slate-800"></div>
+              <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-black tracking-widest uppercase">Or</span>
+              <div className="flex-grow border-t border-slate-100 dark:border-slate-800"></div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogleOAuth}
+              disabled={loading || loadingGoogle}
+              className="w-full py-5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-[#050505] hover:bg-slate-50 dark:hover:bg-slate-900 active:scale-[0.98] dark:text-white font-bold shadow-sm"
+            >
+              {loadingGoogle ? (
+                <div className="w-5 h-5 border-2 border-slate-300 dark:border-slate-600 border-t-emerald-600 rounded-full animate-spin" />
+              ) : (
+                <>
+                  <FcGoogle size={24} />
+                  <span>Continue with Google</span>
                 </>
               )}
             </button>

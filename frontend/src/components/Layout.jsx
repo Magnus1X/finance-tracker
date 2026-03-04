@@ -190,8 +190,8 @@ const Layout = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <main className={`flex-1 transition-all duration-300 ease-in-out ${isMinimized ? 'ml-0 md:ml-24' : 'ml-0 md:ml-72'}`}>
-        <div className="max-w-[1600px] mx-auto p-6 md:p-12">
+      <main className={`flex-1 min-w-0 transition-all duration-300 ease-in-out ${isMinimized ? 'ml-0 md:ml-24' : 'ml-0 md:ml-72'}`}>
+        <div className="max-w-[1600px] mx-auto p-4 sm:p-6 md:p-12 overflow-x-hidden">
           {children}
         </div>
       </main>

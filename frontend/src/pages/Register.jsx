@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { currencies } from '../utils/currency';
 import { FiMail, FiLock, FiUser, FiDollarSign, FiArrowRight } from 'react-icons/fi';
+import { FcGoogle } from 'react-icons/fc';
 import { motion } from 'framer-motion';
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', avatar: '', currency: 'USD' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
   const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -53,6 +55,11 @@ const Register = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleOAuth = () => {
+    setLoadingGoogle(true);
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
   };
 
   return (
@@ -101,7 +108,7 @@ const Register = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className="input-field pl-14"
-                    placeholder="John Doe"
+                    placeholder="Enter your Name"
                     required
                   />
                 </div>
@@ -117,7 +124,7 @@ const Register = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className="input-field pl-14"
-                    placeholder="john@example.com"
+                    placeholder="Enter your Email"
                     required
                   />
                 </div>
@@ -133,7 +140,7 @@ const Register = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className="input-field pl-14"
-                    placeholder="••••••••••••"
+                    placeholder="Enter your Password"
                     required
                   />
                 </div>
@@ -149,7 +156,7 @@ const Register = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className="input-field pl-14"
-                    placeholder="••••••••••••"
+                    placeholder="Confirm your Password"
                     required
                   />
                 </div>
@@ -183,7 +190,7 @@ const Register = () => {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || loadingGoogle}
               className="w-full btn-primary py-5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
             >
               {loading ? (
@@ -192,6 +199,28 @@ const Register = () => {
                 <>
                   <span>Create Professional Account</span>
                   <FiArrowRight />
+                </>
+              )}
+            </button>
+
+            <div className="relative flex items-center py-2">
+              <div className="flex-grow border-t border-slate-100 dark:border-slate-800"></div>
+              <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-black tracking-widest uppercase">Or</span>
+              <div className="flex-grow border-t border-slate-100 dark:border-slate-800"></div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogleOAuth}
+              disabled={loading || loadingGoogle}
+              className="w-full py-5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-[#050505] hover:bg-slate-50 dark:hover:bg-slate-900 active:scale-[0.98] dark:text-white font-bold shadow-sm"
+            >
+              {loadingGoogle ? (
+                <div className="w-5 h-5 border-2 border-slate-300 dark:border-slate-600 border-t-emerald-600 rounded-full animate-spin" />
+              ) : (
+                <>
+                  <FcGoogle size={24} />
+                  <span>Continue with Google</span>
                 </>
               )}
             </button>

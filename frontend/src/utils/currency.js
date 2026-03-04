@@ -16,35 +16,37 @@ export const getCurrencySymbol = (code = 'INR') => {
 
 export const formatCurrency = (amount, code = 'INR') => {
   try {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: code,
+    const symbol = getCurrencySymbol(code);
+    const value = new Intl.NumberFormat('en-IN', {
+      style: 'decimal',
       minimumFractionDigits: 2,
     }).format(amount);
+    return `${symbol}${value}`;
   } catch (err) {
     const symbol = getCurrencySymbol(code);
-    return `${symbol}${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+    return `${symbol}${amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
   }
 };
 
 export const getCurrencyParts = (amount, code = 'INR') => {
   try {
+    const currencyDef = currencies.find(c => c.code === code);
+    const symbol = currencyDef ? currencyDef.symbol : getCurrencySymbol(code);
+
+    // We only need Intl.NumberFormat to format the number itself correctly with commas
     const parts = new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: code,
+      style: 'decimal',
       minimumFractionDigits: 2,
     }).formatToParts(amount);
 
     return {
-      symbol: parts.find(p => p.type === 'currency')?.value || '',
-      value: parts.filter(p => p.type !== 'currency').map(p => p.value).join('').trim(),
-      currencyPart: parts.find(p => p.type === 'currency'),
-      literalPart: parts.find(p => p.type === 'literal')
+      symbol: symbol,
+      value: parts.map(p => p.value).join('').trim(),
     };
   } catch (err) {
     return {
       symbol: getCurrencySymbol(code),
-      value: amount.toLocaleString(undefined, { minimumFractionDigits: 2 })
+      value: amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })
     };
   }
 };
