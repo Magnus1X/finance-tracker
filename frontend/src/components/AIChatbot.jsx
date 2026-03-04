@@ -93,11 +93,11 @@ const AIChatbot = () => {
               >
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-2 ${message.role === 'user'
-                      ? 'bg-primary-500 text-white'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
                     }`}
                 >
-                  <p className="text-sm">{message.content}</p>
+                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                 </div>
               </div>
             ))}
