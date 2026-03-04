@@ -6,7 +6,11 @@ import {
   FiArrowRight,
   FiCheck,
   FiMenu,
-  FiX
+  FiX,
+  FiTwitter,
+  FiLinkedin,
+  FiGithub,
+  FiInstagram
 } from 'react-icons/fi';
 import {
   FcComboChart,
@@ -101,12 +105,12 @@ const Landing = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 md:pt-40 md:pb-28 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div className="space-y-8 relative z-10">
+      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="space-y-3 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400 text-xs font-black uppercase tracking-widest"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400 text-xs font-black uppercase tracking-widest mb-2"
           >
             <FcApproval size={16} /> Recognized by leading fintech analysts
           </motion.div>
@@ -115,7 +119,7 @@ const Landing = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-slate-900 dark:text-white"
+            className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] text-slate-900 dark:text-white pb-1"
           >
             Master <span className="text-emerald-600">Your</span> <br /> Capital Flow
           </motion.h1>
@@ -124,7 +128,7 @@ const Landing = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-slate-500 font-medium leading-relaxed max-w-xl"
+            className="text-lg text-slate-500 font-medium leading-relaxed max-w-xl pb-3"
           >
             The professional standard for modern wealth management. Unify your assets, track every expense, and automate your financial future with AI.
           </motion.p>
@@ -133,7 +137,7 @@ const Landing = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 pt-4"
+            className="flex flex-col sm:flex-row gap-4"
           >
             <Link to="/register" className="btn-primary px-6 py-3 text-base rounded-xl text-center shadow-2xl shadow-emerald-500/20">
               Establish Portfolio
@@ -143,17 +147,7 @@ const Landing = () => {
             </Link>
           </motion.div>
 
-          {/* Social Proof */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="pt-12 opacity-40 grayscale flex items-center gap-8"
-          >
-            <span className="text-xl font-black">STRIPE</span>
-            <span className="text-xl font-black">REVOLUT</span>
-            <span className="text-xl font-black">DEEL</span>
-          </motion.div>
+
         </div>
 
         {/* Hero Interactive Chart / Graphic */}
@@ -190,7 +184,7 @@ const Landing = () => {
       </section>
 
       {/* Features Grid with Photos */}
-      <section ref={featuresRef} className="py-24 md:py-40 bg-slate-50/50 dark:bg-[#0a0a0a]">
+      <section ref={featuresRef} className="py-10 md:py-12 bg-slate-50/50 dark:bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {[
@@ -246,8 +240,8 @@ const Landing = () => {
       </section>
 
       {/* Value Props */}
-      <section className="py-24 md:py-40 container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+      <section className="py-10 md:py-12 container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-center">
           <div className="space-y-12">
             <div className="space-y-6">
               <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900 dark:text-white">
@@ -305,8 +299,8 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-40 container mx-auto px-6">
-        <div className="bg-emerald-600 rounded-[3rem] md:rounded-[4rem] p-12 md:p-32 text-center text-white relative overflow-hidden shadow-2xl shadow-emerald-500/40">
+      <section className="py-10 md:py-12 container mx-auto px-6">
+        <div className="bg-emerald-600 rounded-[3rem] p-8 md:p-16 text-center text-white relative overflow-hidden shadow-2xl shadow-emerald-500/40">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-500 to-emerald-700 -z-10" />
           <div className="relative z-10 space-y-10">
             <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-tight">
@@ -330,47 +324,60 @@ const Landing = () => {
       </section>
 
       {/* Modern Footer */}
-      <footer className="py-24 container mx-auto px-6 border-t border-slate-100 dark:border-slate-900">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-20">
-          <div className="space-y-6 max-w-sm">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <footer className="py-10 md:py-12 container mx-auto px-6 border-t border-slate-100 dark:border-slate-800/60 mt-10 relative z-10 w-full overflow-hidden">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-16 md:gap-20">
+          <div className="space-y-6 max-w-sm w-full">
+            <Link to="/" className="flex items-center gap-2 group w-fit">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/30 group-hover:scale-105 transition-transform">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter">FinanceEra</span>
+              <span className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Finance<span className="text-emerald-600">Era</span></span>
             </Link>
-            <p className="text-sm text-slate-500 font-medium leading-relaxed">
+            <p className="text-sm text-slate-500 font-medium leading-relaxed pr-4 md:pr-0">
               Global wealth management empowered by AI. Redefining your financial literacy for the modern era.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-20">
-            <div className="space-y-4">
-              <h5 className="text-xs font-black uppercase tracking-widest text-slate-400">Platform</h5>
-              <ul className="space-y-3 text-sm font-bold text-slate-600 dark:text-slate-300">
-                <li><Link to="/advisor">Advisor</Link></li>
-                <li><Link to="/market">Markets</Link></li>
-                <li><Link to="/learn">Learning</Link></li>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-20 w-full md:w-auto">
+            <div className="space-y-5">
+              <h5 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Platform</h5>
+              <ul className="space-y-4 text-sm font-bold text-slate-600 dark:text-slate-300">
+                <li><Link to="/advisor" className="hover:text-emerald-600 transition-colors">Advisor</Link></li>
+                <li><Link to="/market" className="hover:text-emerald-600 transition-colors">Markets</Link></li>
+                <li><Link to="/learn" className="hover:text-emerald-600 transition-colors">Learning</Link></li>
               </ul>
             </div>
-            <div className="space-y-4">
-              <h5 className="text-xs font-black uppercase tracking-widest text-slate-400">Company</h5>
-              <ul className="space-y-3 text-sm font-bold text-slate-600 dark:text-slate-300">
-                <li>Privacy</li>
-                <li>Security</li>
-                <li>Contact</li>
+            <div className="space-y-5">
+              <h5 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Company</h5>
+              <ul className="space-y-4 text-sm font-bold text-slate-600 dark:text-slate-300">
+                <li className="hover:text-emerald-600 transition-colors cursor-pointer">Privacy</li>
+                <li className="hover:text-emerald-600 transition-colors cursor-pointer">Security</li>
+                <li className="hover:text-emerald-600 transition-colors cursor-pointer">Contact</li>
               </ul>
             </div>
           </div>
         </div>
-        <div className="pt-24 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs font-bold text-slate-400">© 2024 FINANCEERA PLATFORM. ALL RIGHTS RESERVED.</p>
-          <div className="flex gap-6 text-xs font-bold text-slate-400">
-            <span className="hover:text-emerald-600 cursor-pointer">TWITTER</span>
-            <span className="hover:text-emerald-600 cursor-pointer">LINKEDIN</span>
-            <span className="hover:text-emerald-600 cursor-pointer">GITHUB</span>
+        <div className="mt-16 pt-8 border-t border-slate-100 dark:border-slate-800/60 flex flex-col md:flex-row justify-between items-center gap-8">
+          <p className="text-xs font-black tracking-widest text-slate-400 text-center md:text-left">
+            © {new Date().getFullYear()} FINANCEERA PLATFORM. ALL RIGHTS RESERVED.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-black dark:hover:bg-white dark:hover:text-black hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-500/20 transition-all duration-300">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#0A66C2] hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#0A66C2]/20 transition-all duration-300">
+              <FiLinkedin size={18} />
+            </a>
+            <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#333333] dark:hover:bg-white dark:hover:text-black hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-500/20 transition-all duration-300">
+              <FiGithub size={18} />
+            </a>
+            <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#dc2743]/20 transition-all duration-300">
+              <FiInstagram size={18} />
+            </a>
           </div>
         </div>
       </footer>
