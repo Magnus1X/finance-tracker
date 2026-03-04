@@ -59,7 +59,13 @@ const Register = () => {
 
   const handleGoogleOAuth = () => {
     setLoadingGoogle(true);
-    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+    let baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+    baseUrl = baseUrl.replace(/\/$/, ''); // Remove trailing slash
+    const authUrl = baseUrl.endsWith('/api')
+      ? `${baseUrl}/auth/google`
+      : `${baseUrl}/api/auth/google`;
+
+    window.location.href = authUrl;
   };
 
   return (
