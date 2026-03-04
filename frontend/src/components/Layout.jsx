@@ -1,8 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { FiMoon, FiSun, FiLogOut, FiMenu, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { FcComboChart, FcSettings, FcMoneyTransfer, FcBullish, FcLineChart, FcIdea, FcPieChart, FcClock, FcCurrencyExchange, FcAbout, FcDataRecovery } from 'react-icons/fc';
+import { FiMoon, FiSun, FiLogOut, FiMenu, FiX, FiChevronLeft, FiChevronRight, FiGrid, FiBookOpen, FiTrendingUp, FiTerminal, FiTarget, FiTool, FiBell, FiDollarSign, FiPieChart, FiClock, FiSettings, FiActivity } from 'react-icons/fi';
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -24,17 +23,17 @@ const Layout = ({ children }) => {
   };
 
   const navItems = [
-    { path: '/dashboard', icon: FcComboChart, label: 'Dashboard' },
-    { path: '/learn', icon: FcIdea, label: 'Learn Finance' },
-    { path: '/market', icon: FcLineChart, label: 'Market Trends' },
-    { path: '/advisor', icon: FcAbout, label: 'AI Advisor' },
-    { path: '/goals', icon: FcBullish, label: 'Financial Goals' },
-    { path: '/tools', icon: FcDataRecovery, label: 'Financial Tools' },
-    { path: '/alerts', icon: FcCurrencyExchange, label: 'Smart Alerts' },
-    { path: '/transactions', icon: FcMoneyTransfer, label: 'Transactions' },
-    { path: '/budgets', icon: FcPieChart, label: 'Budgets' },
-    { path: '/history', icon: FcClock, label: 'History' },
-    { path: '/settings', icon: FcSettings, label: 'Settings' },
+    { path: '/dashboard', icon: FiGrid, label: 'Dashboard' },
+    { path: '/learn', icon: FiBookOpen, label: 'Learn Finance' },
+    { path: '/market', icon: FiTrendingUp, label: 'Market Trends' },
+    { path: '/advisor', icon: FiTerminal, label: 'AI Advisor' },
+    { path: '/goals', icon: FiTarget, label: 'Financial Goals' },
+    { path: '/tools', icon: FiTool, label: 'Financial Tools' },
+    { path: '/alerts', icon: FiBell, label: 'Smart Alerts' },
+    { path: '/transactions', icon: FiDollarSign, label: 'Transactions' },
+    { path: '/budgets', icon: FiPieChart, label: 'Budgets' },
+    { path: '/history', icon: FiClock, label: 'History' },
+    { path: '/settings', icon: FiSettings, label: 'Settings' },
   ];
 
   return (
@@ -71,9 +70,7 @@ const Layout = ({ children }) => {
           <div className={`p-8 flex items-center ${isMinimized ? 'justify-center' : 'justify-between'}`}>
             <Link to="/" className="flex items-center gap-3 group overflow-hidden">
               <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/20 group-hover:scale-105 transition-transform duration-300 shrink-0">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <FiActivity className="w-6 h-6 text-white" strokeWidth={2.5} />
               </div>
               <AnimatePresence>
                 {!isMinimized && (
