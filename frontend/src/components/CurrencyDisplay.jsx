@@ -2,9 +2,12 @@ import React from 'react';
 import { getCurrencyParts } from '../utils/currency';
 import { useAuth } from '../context/AuthContext';
 
-const CurrencyDisplay = ({ amount, code = 'INR', className = "", symbolClassName = "", valueClassName = "" }) => {
+const CurrencyDisplay = ({ amount, code, className = "", symbolClassName = "", valueClassName = "" }) => {
     const { user } = useAuth();
-    const { symbol, value } = getCurrencyParts(amount || 0, code || user?.currency || 'INR');
+
+    // Check if an explicit code is provided, fallback to user's setting, then fallback to INR
+    const finalCode = code || user?.currency || 'INR';
+    const { symbol, value } = getCurrencyParts(amount || 0, finalCode);
 
     return (
         <span className={`inline-flex items-baseline ${className}`}>
