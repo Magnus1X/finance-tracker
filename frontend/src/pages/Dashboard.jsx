@@ -193,20 +193,23 @@ const Dashboard = () => {
           { label: 'Expenditure', value: analytics?.expenses, color: 'text-rose-600', icon: FcBearish },
           { label: 'Net Capital Surplus', value: analytics?.savings, color: analytics?.savings >= 0 ? 'text-emerald-600' : 'text-rose-600', icon: FcMoneyTransfer }
         ].map((stat, i) => (
-          <div key={i} className="card group relative overflow-hidden bg-white/70 dark:bg-[#050505] backdrop-blur-2xl dark:backdrop-blur-none border border-white/40 dark:border-slate-800 shadow-xl shadow-slate-200/50  hover:shadow-2xl hover:shadow-emerald-500/10 transition-all">
+          <div key={i} className="card group relative overflow-hidden bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl border border-white dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-none hover:-translate-y-1 transition-all duration-300">
             <div className="flex justify-between items-start mb-4 relative z-10">
               <span className="text-xs font-black text-slate-500 uppercase tracking-widest">{stat.label}</span>
+              <div className={`p-2 rounded-xl bg-slate-50 dark:bg-slate-800 group-hover:scale-110 transition-transform ${stat.color}`}>
+                <stat.icon size={20} />
+              </div>
             </div>
             <div className="flex items-baseline gap-1 relative z-10 w-full overflow-hidden">
               <CurrencyDisplay
                 amount={stat.value || 0}
                 className="text-slate-900 dark:text-white"
-                symbolClassName={`${stat.color} opacity-100`}
-                valueClassName="text-3xl md:text-4xl drop-shadow-sm"
+                symbolClassName={`${stat.color} opacity-80`}
+                valueClassName="text-3xl md:text-4xl font-financial drop-shadow-sm font-black"
               />
             </div>
             {/* Subtle glow effect behind numbers */}
-            <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-emerald-500/10 transition-all duration-700" />
+            <div className={`absolute -bottom-10 -right-10 w-32 h-32 rounded-full blur-[50px] pointer-events-none group-hover:scale-150 transition-transform duration-700 ${i === 1 ? 'bg-rose-500/10' : 'bg-emerald-500/10'}`} />
           </div>
         ))}
       </div>
@@ -463,42 +466,43 @@ const Dashboard = () => {
         </div>
 
         {/* Category breakdown (Donut) */}
-        <div className="lg:col-span-4 card flex flex-col justify-between h-full">
-          <div>
-            <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-6">Category Split</h2>
+        <div className="lg:col-span-4 card flex flex-col h-full bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl border border-white dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-none">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Category Split</h2>
+          </div>
 
-            <div className="relative w-full h-64 flex-shrink-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={75}
-                    outerRadius={100}
-                    paddingAngle={5}
-                    dataKey="value"
-                    stroke="none"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 900 }}
-                    itemStyle={{ fontSize: '12px' }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-              {/* Total value in the center */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none mb-1">Total</span>
-                <CurrencyDisplay
-                  amount={totalExpenseValue}
-                  className="text-lg text-slate-900 dark:text-white font-black"
-                  valueClassName="font-financial"
+          <div className="relative w-full aspect-square max-h-[260px] mx-auto mb-6 flex items-center justify-center">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius="65%"
+                  outerRadius="90%"
+                  paddingAngle={5}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -3px rgb(0 0 0 / 0.1)', fontWeight: 900 }}
+                  itemStyle={{ fontSize: '13px' }}
+                  formatter={(value) => `${getCurrencySymbol(user?.currency)}${value.toLocaleString()}`}
                 />
-              </div>
+              </PieChart>
+            </ResponsiveContainer>
+            {/* Total value in the center */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none mb-1">Total</span>
+              <CurrencyDisplay
+                amount={totalExpenseValue}
+                className="text-lg text-slate-900 dark:text-white font-black"
+                valueClassName="font-financial"
+              />
             </div>
           </div>
 
