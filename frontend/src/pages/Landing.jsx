@@ -186,6 +186,12 @@ const Landing = () => {
       {/* Features Grid with Photos */}
       <section ref={featuresRef} className="py-10 md:py-12 bg-slate-50/50 dark:bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white mb-3">
+              What We <span className="text-emerald-600">Offer</span>
+            </h2>
+            <p className="text-slate-500 font-medium text-lg">Everything you need to take control of your finances.</p>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {[
               {
