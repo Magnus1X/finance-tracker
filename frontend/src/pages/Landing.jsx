@@ -198,7 +198,7 @@ const Landing = () => {
                 icon: FcBullish,
                 title: 'Goal Tracking',
                 description: 'Define and monitor long-term financial milestones with precision.',
-                photo: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+                photo: "/goal-tracking.jpg"
               },
               {
                 icon: FcIdea,
@@ -219,7 +219,7 @@ const Landing = () => {
                   <img
                     src={feature.photo}
                     alt={feature.title}
-                    className={`w-full h-full transition-transform duration-700 group-hover:scale-105 ${feature.photo.startsWith('/smart') ? 'object-contain p-2' : 'object-cover'}`}
+                    className={`w-full h-full transition-transform duration-700 group-hover:scale-105 ${feature.photo.startsWith('/') ? 'object-contain p-2' : 'object-cover'}`}
                   />
                 </div>
                 <div className="p-8">
