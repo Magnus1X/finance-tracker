@@ -130,6 +130,11 @@ const FinancialTools = () => {
                                 </div>
                                 <input type="range" min="1" max="40" step="1" value={sipYears} onChange={e => setSipYears(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary-600" />
                             </div>
+                            <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <p className="text-[10px] text-slate-400 font-medium leading-relaxed">
+                                    * This calculator assumes investments are made at the <strong>beginning of each month</strong>. It uses the standard SIP formula: M = P × ([(1 + i)^n - 1] / i) × (1 + i) trusted by major banks and mutual funds.
+                                </p>
+                            </div>
                         </div>
 
                         {/* Visual Results */}
@@ -206,6 +211,11 @@ const FinancialTools = () => {
                                     <span className="text-primary-600 font-black text-lg">{emiYears}y</span>
                                 </div>
                                 <input type="range" min="1" max="30" step="1" value={emiYears} onChange={e => setEmiYears(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary-600" />
+                            </div>
+                            <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <p className="text-[10px] text-slate-400 font-medium leading-relaxed">
+                                    * This calculator uses the global banking standard amortization formula: E = P × r × (1 + r)^n / [(1 + r)^n - 1] to calculate precise monthly EMI deductions.
+                                </p>
                             </div>
                         </div>
 
