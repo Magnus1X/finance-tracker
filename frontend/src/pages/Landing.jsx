@@ -130,14 +130,14 @@ const Landing = () => {
             transition={{ delay: 0.2 }}
             className="text-lg text-slate-500 font-medium leading-relaxed max-w-xl pb-3"
           >
-            The professional standard for modern wealth management. Unify your assets, track every expense, and automate your financial future with AI.
+            Stop guessing, start growing. Track every rupee, crush your goals, and let AI do the heavy lifting — all in one powerful dashboard.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start"
           >
             <Link to="/register" className="btn-primary px-6 py-3 text-base rounded-xl text-center shadow-2xl shadow-emerald-500/20">
               Establish Portfolio
