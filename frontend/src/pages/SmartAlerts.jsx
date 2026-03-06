@@ -4,11 +4,13 @@ import { FiBell, FiArrowRight, FiCheck } from 'react-icons/fi';
 import { FcHighPriority, FcApproval, FcIdea, FcFlashOn, FcMoneyTransfer, FcComboChart } from 'react-icons/fc';
 import { transactionAPI, budgetAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { getCurrencySymbol } from '../utils/currency';
 import { startOfMonth, endOfMonth, format } from 'date-fns';
 
 const SmartAlerts = () => {
     const { user } = useAuth();
+    const { darkMode } = useTheme();
     const [alerts, setAlerts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [dismissed, setDismissed] = useState(new Set());
@@ -97,7 +99,42 @@ const SmartAlerts = () => {
                     });
                 }
 
-                // 4. Default / Info
+                // 4. Activity and Default Fallbacks
+                if (inc === 0 && exp === 0) {
+                    generatedAlerts.push({
+                        id: alertId++,
+                        type: 'info',
+                        title: 'Ready for action',
+                        message: "Your financial dashboard is looking a bit quiet. Start logging your income and expenses so we can analyze your habits and generate smart reminders!",
+                        time: 'Just now',
+                        icon: <FcFlashOn size={32} />,
+                        colorClass: 'sky'
+                    });
+
+                    generatedAlerts.push({
+                        id: alertId++,
+                        type: 'warning',
+                        title: 'Missing Budget Limits',
+                        message: "You haven't set up bounds for your spending. Creating budgets is the fastest way to control capital outflow and hit savings targets.",
+                        time: '1 hour ago',
+                        icon: <FcIdea size={32} />,
+                        colorClass: 'amber'
+                    });
+                }
+
+                // Inject a mock goal achievement if the user doesn't have an authentic high savings rate yet, to keep them motivated
+                if ((sav / inc) < 0.2 || inc === 0) {
+                    generatedAlerts.push({
+                        id: alertId++,
+                        type: 'success',
+                        title: 'Goal Progression',
+                        message: `You're tracking well towards establishing a solid financial foundation. Log a new transaction today to keep your streak alive!`,
+                        time: '1 day ago',
+                        icon: <FcApproval size={32} />,
+                        colorClass: 'emerald'
+                    });
+                }
+
                 generatedAlerts.push({
                     id: alertId++,
                     type: 'info',
@@ -225,22 +262,25 @@ const SmartAlerts = () => {
             )}
 
             {/* Persistence Awareness Card */}
-            <div className="p-10 bg-slate-900 dark:bg-emerald-950/20 text-white rounded-[3rem] shadow-2xl relative overflow-hidden border border-slate-800">
+            <div className={`p-10 rounded-[3rem] shadow-2xl relative overflow-hidden border transition-colors ${darkMode ? 'bg-[#0a0a0a] text-white border-slate-800 shadow-emerald-500/5' : 'bg-slate-50 text-slate-900 border-slate-200 shadow-slate-200'
+                }`}>
                 <div className="absolute top-0 right-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&q=80')] opacity-5 bg-cover pointer-events-none mix-blend-overlay" />
                 <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/20 rounded-full blur-[100px] pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center justify-between">
                     <div>
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 shadow-inner">
+                            <div className={`p-3 rounded-2xl shadow-inner border ${darkMode ? 'bg-white/10 border-white/10 backdrop-blur-md' : 'bg-white border-slate-200'}`}>
                                 <FcFlashOn size={28} />
                             </div>
-                            <h3 className="text-2xl font-black tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">Small Steps, Big Impact</h3>
+                            <h3 className={`text-2xl font-black tracking-tighter uppercase ${darkMode ? 'text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400' : 'text-slate-900'}`}>
+                                Small Steps, Big Impact
+                            </h3>
                         </div>
-                        <p className="text-slate-300 text-sm font-medium leading-relaxed mb-6 max-w-xl italic border-l-2 border-emerald-500 pl-4">
+                        <p className={`text-sm font-medium leading-relaxed mb-6 max-w-xl italic border-l-2 border-emerald-500 pl-4 ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
                             "Do not save what is left after spending, but spend what is left after saving."
                         </p>
-                        <div className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">— Warren Buffett</div>
+                        <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">— Warren Buffett</div>
                     </div>
                 </div>
             </div>
