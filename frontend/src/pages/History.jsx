@@ -47,29 +47,31 @@ const History = () => {
 
   const symbol = getCurrencySymbol(user?.currency);
 
-  // Histogram: group transactions by amount bins
-  const buildHistogram = () => {
+  // Timeline: group transactions over time
+  const buildTimeline = () => {
     if (transactions.length === 0) return [];
-    const amounts = transactions.map((t) => t.amount).filter(Boolean);
-    const maxAmt = Math.max(...amounts);
-    // Create ~8 equal-width bins
-    const binCount = 8;
-    const binSize = Math.ceil(maxAmt / binCount);
-    const bins = Array.from({ length: binCount }, (_, i) => ({
-      range: `${symbol}${(i * binSize).toLocaleString()}–${symbol}${((i + 1) * binSize).toLocaleString()}`,
-      income: 0,
-      expense: 0,
-      total: 0,
-    }));
-    transactions.forEach((t) => {
-      const idx = Math.min(Math.floor(t.amount / binSize), binCount - 1);
-      if (t.type === 'income') bins[idx].income += 1;
-      else bins[idx].expense += 1;
-      bins[idx].total += 1;
+
+    // Sort transactions chronologically
+    const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+    const dataMap = new Map();
+
+    sorted.forEach((t) => {
+      if (!t.date) return;
+      const d = new Date(t.date);
+      // Group by day if a specific month is selected, otherwise group by month
+      const key = selectedMonth ? format(d, 'dd MMM') : format(d, 'MMM yyyy');
+
+      if (!dataMap.has(key)) {
+        dataMap.set(key, { name: key, income: 0, expense: 0 });
+      }
+      const entry = dataMap.get(key);
+      if (t.type === 'income') entry.income += t.amount;
+      else entry.expense += t.amount;
     });
-    return bins.filter((b) => b.total > 0);
+
+    return Array.from(dataMap.values());
   };
-  const histogramData = buildHistogram();
+  const chartData = buildTimeline();
 
   const totalIncome = transactions.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
   const totalExpense = transactions.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
@@ -178,39 +180,39 @@ const History = () => {
         </div>
       </div>
 
-      {/* Histogram */}
-      {!loading && histogramData.length > 0 && (
+      {/* Chart */}
+      {!loading && chartData.length > 0 && (
         <div className={`card shadow-xl relative overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-100'
           }`}>
           <div className="absolute -top-32 -left-32 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none" />
           <div className="flex items-center justify-between mb-8 relative z-10 flex-wrap gap-3">
             <h2 className={`text-xl font-black uppercase tracking-tighter flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'
               }`}>
-              <span className="w-2 h-6 bg-emerald-500 rounded-full" /> Amount Distribution
+              <span className="w-2 h-6 bg-emerald-500 rounded-full" /> Cash Flow Timeline
             </h2>
             <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl border ${darkMode ? 'border-slate-700 text-slate-400 bg-slate-800' : 'border-slate-200 text-slate-500 bg-slate-50'
-              }`}>Histogram · {transactions.length} transactions</span>
+              }`}>Over Time</span>
           </div>
           <div className="relative z-10">
             <ResponsiveContainer width="100%" height={340}>
-              <BarChart data={histogramData} margin={{ top: 10, right: 20, left: 10, bottom: 60 }} barGap={0} barCategoryGap="0%">
+              <BarChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }} barGap={4} barCategoryGap="20%">
                 <defs>
-                  <linearGradient id="histIncome" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="chartIncome" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#10b981" stopOpacity={0.95} />
-                    <stop offset="100%" stopColor="#059669" stopOpacity={0.7} />
+                    <stop offset="100%" stopColor="#059669" stopOpacity={0.6} />
                   </linearGradient>
-                  <linearGradient id="histExpense" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="chartExpense" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.95} />
-                    <stop offset="100%" stopColor="#e11d48" stopOpacity={0.7} />
+                    <stop offset="100%" stopColor="#e11d48" stopOpacity={0.6} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="4 4" vertical={false} stroke={darkMode ? '#1e293b' : '#f1f5f9'} />
-                <XAxis dataKey="range" axisLine={false} tickLine={false} tick={{ fill: darkMode ? '#64748b' : '#94a3b8', fontSize: 10, fontWeight: 'bold' }} interval={0} angle={-35} textAnchor="end" height={60} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: darkMode ? '#64748b' : '#94a3b8', fontSize: 11, fontWeight: 'bold' }} allowDecimals={false} label={{ value: 'Count', angle: -90, position: 'insideLeft', fill: darkMode ? '#475569' : '#cbd5e1', fontSize: 11, fontWeight: 'bold' }} />
-                <Tooltip cursor={false} contentStyle={{ backgroundColor: darkMode ? '#0f172a' : '#ffffff', border: `1px solid ${darkMode ? '#1e293b' : '#e2e8f0'}`, borderRadius: '14px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15)', color: darkMode ? '#fff' : '#0f172a', fontWeight: 'bold', fontSize: '12px' }} formatter={(value, name) => [value + ' txns', name]} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={darkMode ? '#1e293b' : '#f1f5f9'} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: darkMode ? '#64748b' : '#94a3b8', fontSize: 11, fontWeight: 'bold' }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: darkMode ? '#64748b' : '#94a3b8', fontSize: 11, fontWeight: 'bold' }} tickFormatter={(v) => `${symbol}${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v}`} />
+                <Tooltip cursor={{ fill: darkMode ? '#1e293b' : '#f8fafc', opacity: 0.8 }} contentStyle={{ backgroundColor: darkMode ? '#0f172a' : '#ffffff', border: `1px solid ${darkMode ? '#1e293b' : '#e2e8f0'}`, borderRadius: '14px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15)', color: darkMode ? '#fff' : '#0f172a', fontWeight: 'bold', fontSize: '13px' }} formatter={(value) => [`${symbol}${value.toLocaleString()}`]} />
                 <Legend wrapperStyle={{ fontSize: '11px', fontWeight: 'bold', paddingTop: '8px' }} formatter={(value) => <span style={{ color: darkMode ? '#94a3b8' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{value}</span>} />
-                <Bar dataKey="income" stackId="a" fill="url(#histIncome)" name="Income" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="expense" stackId="a" fill="url(#histExpense)" name="Expense" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="income" fill="url(#chartIncome)" name="Income" radius={[6, 6, 0, 0]} maxBarSize={40} />
+                <Bar dataKey="expense" fill="url(#chartExpense)" name="Expense" radius={[6, 6, 0, 0]} maxBarSize={40} />
               </BarChart>
             </ResponsiveContainer>
           </div>
