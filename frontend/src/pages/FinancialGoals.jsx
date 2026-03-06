@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiTarget, FiPlus, FiTrash2, FiFlag, FiTrendingUp, FiClock } from 'react-icons/fi';
+import { useAuth } from '../context/AuthContext';
+import { getCurrencySymbol } from '../utils/currency';
 
 const FinancialGoals = () => {
+    const { user } = useAuth();
+    const sym = getCurrencySymbol(user?.currency);
     const [goals, setGoals] = useState([
         { id: 1, title: 'Emergency Fund', target: 100000, current: 45000, deadline: '2026-12-31', icon: '🛡️' },
         { id: 2, title: 'New Laptop', target: 80000, current: 20000, deadline: '2026-06-30', icon: '💻' },
@@ -116,7 +120,7 @@ const FinancialGoals = () => {
                                 <div className="flex justify-between items-end">
                                     <div className="space-y-1">
                                         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Progress</p>
-                                        <p className="text-2xl font-black text-slate-900 dark:text-white">₹{goal.current.toLocaleString()} <span className="text-slate-400 text-lg font-bold">/ ₹{goal.target.toLocaleString()}</span></p>
+                                        <p className="text-2xl font-black text-slate-900 dark:text-white">{sym}{goal.current.toLocaleString()} <span className="text-slate-400 text-lg font-bold">/ {sym}{goal.target.toLocaleString()}</span></p>
                                     </div>
                                     <span className={`px-4 py-1 rounded-full text-xs font-black ${progress > 75 ? 'bg-emerald-50 text-emerald-600' : 'bg-primary-50 text-primary-600'
                                         }`}>
@@ -135,7 +139,7 @@ const FinancialGoals = () => {
                                 <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 flex items-center gap-3">
                                     <FiTrendingUp className="text-amber-600" />
                                     <p className="text-xs text-amber-700 dark:text-amber-400 font-bold">
-                                        You need to save ₹{amountPerMonth.toLocaleString()} / month for the next {monthsLeft} month{monthsLeft !== 1 ? 's' : ''} to reach this goal.
+                                        You need to save {sym}{amountPerMonth.toLocaleString()} / month for the next {monthsLeft} month{monthsLeft !== 1 ? 's' : ''} to reach this goal.
                                     </p>
                                 </div>
                             </div>

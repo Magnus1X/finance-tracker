@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FcCalculator, FcMoneyTransfer, FcComboChart, FcCurrencyExchange } from 'react-icons/fc';
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from 'recharts';
+import { useAuth } from '../context/AuthContext';
+import { getCurrencySymbol } from '../utils/currency';
 
 const FinancialTools = () => {
+    const { user } = useAuth();
+    const sym = getCurrencySymbol(user?.currency);
     const [activeTab, setActiveTab] = useState('SIP');
 
     // SIP Calculator State
@@ -108,7 +112,7 @@ const FinancialTools = () => {
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center pr-2">
                                     <label className="text-sm font-bold text-slate-500 uppercase tracking-widest pl-1">I can invest...</label>
-                                    <span className="text-primary-600 font-black text-lg">₹{sipMonthly.toLocaleString()}</span>
+                                    <span className="text-primary-600 font-black text-lg">{sym}{sipMonthly.toLocaleString()}</span>
                                 </div>
                                 <input type="range" min="500" max="100000" step="500" value={sipMonthly} onChange={e => setSipMonthly(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary-600" />
                             </div>
@@ -141,7 +145,7 @@ const FinancialTools = () => {
                                             </linearGradient>
                                         </defs>
                                         <Tooltip
-                                            formatter={(value) => `₹${value.toLocaleString()}`}
+                                            formatter={(value) => `${sym}${value.toLocaleString()}`}
                                             contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                                         />
                                         <Area type="monotone" dataKey="Maturity" stroke="#059669" strokeWidth={3} fillOpacity={1} fill="url(#colorMaturity)" />
@@ -152,18 +156,18 @@ const FinancialTools = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="card p-6 bg-slate-50 dark:bg-[#050505] border border-slate-200 dark:border-slate-800 shadow-sm">
                                     <p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-1">Invested Amount</p>
-                                    <p className="text-2xl font-black text-slate-900 dark:text-white">₹{sipResult.invested.toLocaleString()}</p>
+                                    <p className="text-2xl font-black text-slate-900 dark:text-white">{sym}{sipResult.invested.toLocaleString()}</p>
                                 </div>
                                 <div className="card p-6 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50 shadow-sm">
                                     <p className="text-xs font-black uppercase tracking-widest mb-1 opacity-80">Est. Returns</p>
-                                    <p className="text-2xl font-black">₹{sipResult.returns.toLocaleString()}</p>
+                                    <p className="text-2xl font-black">{sym}{sipResult.returns.toLocaleString()}</p>
                                 </div>
                             </div>
                             <div className="card p-8 bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-xl shadow-emerald-500/20 relative overflow-hidden">
                                 <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
                                     <div>
                                         <p className="text-sm font-black uppercase tracking-widest opacity-80 mb-2">You Could Have</p>
-                                        <p className="text-5xl font-black drop-shadow-sm">₹{sipResult.maturity.toLocaleString()}</p>
+                                        <p className="text-5xl font-black drop-shadow-sm">{sym}{sipResult.maturity.toLocaleString()}</p>
                                     </div>
                                     <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-md dark:backdrop-blur-none border border-white/20 shadow-inner">
                                         <FcMoneyTransfer size={32} />
@@ -185,7 +189,7 @@ const FinancialTools = () => {
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center pr-2">
                                     <label className="text-sm font-bold text-slate-500 uppercase tracking-widest pl-1">I need a loan for...</label>
-                                    <span className="text-primary-600 font-black text-lg">₹{emiPrincipal.toLocaleString()}</span>
+                                    <span className="text-primary-600 font-black text-lg">{sym}{emiPrincipal.toLocaleString()}</span>
                                 </div>
                                 <input type="range" min="100000" max="10000000" step="50000" value={emiPrincipal} onChange={e => setEmiPrincipal(Number(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary-600" />
                             </div>
@@ -218,7 +222,7 @@ const FinancialTools = () => {
                                             </linearGradient>
                                         </defs>
                                         <Tooltip
-                                            formatter={(value) => `₹${value.toLocaleString()}`}
+                                            formatter={(value) => `${sym}${value.toLocaleString()}`}
                                             contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                                         />
                                         <Area type="monotone" dataKey="Balance" stroke="#f43f5e" strokeWidth={3} fillOpacity={1} fill="url(#colorBalance)" />
@@ -229,7 +233,7 @@ const FinancialTools = () => {
                                 <div className="relative z-10 flex justify-between items-center">
                                     <div>
                                         <p className="text-sm font-black uppercase tracking-widest opacity-80 mb-1">Your Monthly Payment</p>
-                                        <p className="text-5xl font-black text-rose-400">₹{emiResult.emi.toLocaleString()}</p>
+                                        <p className="text-5xl font-black text-rose-400">{sym}{emiResult.emi.toLocaleString()}</p>
                                     </div>
                                     <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-md dark:backdrop-blur-none border border-white/10 shadow-inner">
                                         <FcCurrencyExchange size={32} />
@@ -240,11 +244,11 @@ const FinancialTools = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="card p-6 bg-slate-50 dark:bg-[#050505] border border-slate-200 dark:border-slate-800 shadow-sm">
                                     <p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-1">Total Loan Repayable</p>
-                                    <p className="text-2xl font-black text-slate-900 dark:text-white">₹{emiResult.total.toLocaleString()}</p>
+                                    <p className="text-2xl font-black text-slate-900 dark:text-white">{sym}{emiResult.total.toLocaleString()}</p>
                                 </div>
                                 <div className="card p-6 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-900/50 shadow-sm">
                                     <p className="text-xs font-black uppercase tracking-widest mb-1 opacity-80">Total Interest Payable</p>
-                                    <p className="text-2xl font-black">₹{emiResult.interest.toLocaleString()}</p>
+                                    <p className="text-2xl font-black">{sym}{emiResult.interest.toLocaleString()}</p>
                                 </div>
                             </div>
                         </div>
