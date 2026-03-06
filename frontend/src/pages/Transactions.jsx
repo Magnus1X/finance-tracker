@@ -111,7 +111,11 @@ const Transactions = () => {
     });
   };
 
-  const categories = ['Food', 'Rent', 'Transport', 'Entertainment', 'Shopping', 'Bills', 'Healthcare', 'Education', 'Other'];
+  const INCOME_CATEGORIES = ['Salary', 'Business', 'Farming', 'Investment', 'Freelance', 'Other'];
+  const EXPENSE_CATEGORIES = ['Food', 'Rent', 'Transport', 'Entertainment', 'Shopping', 'Bills', 'Healthcare', 'Education', 'Other'];
+
+  const filterCategories = filters.type === 'income' ? INCOME_CATEGORIES : filters.type === 'expense' ? EXPENSE_CATEGORIES : [...new Set([...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES])].sort();
+  const formCategories = formData.type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
 
   const COLORS = ['#10b981', '#f43f5e'];
   const summaryData = [
@@ -192,7 +196,7 @@ const Transactions = () => {
               className="input-field"
             >
               <option value="">All Categories</option>
-              {categories.map((cat) => (
+              {filterCategories.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>
@@ -307,7 +311,7 @@ const Transactions = () => {
                   <label className="block text-sm font-medium mb-2">Type</label>
                   <select
                     value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value, category: '' })}
                     className="input-field"
                     required
                   >
@@ -324,7 +328,7 @@ const Transactions = () => {
                     required
                   >
                     <option value="">Select category</option>
-                    {categories.map((cat) => (
+                    {formCategories.map((cat) => (
                       <option key={cat} value={cat}>
                         {cat}
                       </option>
