@@ -90,6 +90,13 @@ const createTransaction = async (req, res, next) => {
       });
     }
 
+    if (date && new Date(date) > new Date()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Transaction date cannot be in the future',
+      });
+    }
+
     const transaction = await prisma.transaction.create({
       data: {
         userId: req.user.id,
@@ -130,6 +137,13 @@ const updateTransaction = async (req, res, next) => {
       return res.status(404).json({
         success: false,
         message: 'Transaction not found',
+      });
+    }
+
+    if (date && new Date(date) > new Date()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Transaction date cannot be in the future',
       });
     }
 
