@@ -20,6 +20,14 @@ const FinancialGoals = () => {
 
     const deleteGoal = (id) => setGoals(goals.filter(g => g.id !== id));
 
+    const getMonthsLeft = (deadline) => {
+        if (!deadline) return 1;
+        const d = new Date(deadline);
+        const now = new Date();
+        const months = (d.getFullYear() - now.getFullYear()) * 12 + (d.getMonth() - now.getMonth());
+        return months > 0 ? months : 1;
+    };
+
     return (
         <div className="max-w-6xl mx-auto space-y-10 pb-20">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -77,6 +85,8 @@ const FinancialGoals = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {goals.map((goal) => {
                     const progress = (goal.current / goal.target) * 100;
+                    const monthsLeft = getMonthsLeft(goal.deadline);
+                    const amountPerMonth = Math.round((goal.target - goal.current) / monthsLeft);
                     return (
                         <motion.div
                             key={goal.id}
@@ -125,7 +135,7 @@ const FinancialGoals = () => {
                                 <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 flex items-center gap-3">
                                     <FiTrendingUp className="text-amber-600" />
                                     <p className="text-xs text-amber-700 dark:text-amber-400 font-bold">
-                                        You need to save ₹{Math.round((goal.target - goal.current) / 10).toLocaleString()} / month to reach this goal.
+                                        You need to save ₹{amountPerMonth.toLocaleString()} / month for the next {monthsLeft} month{monthsLeft !== 1 ? 's' : ''} to reach this goal.
                                     </p>
                                 </div>
                             </div>
