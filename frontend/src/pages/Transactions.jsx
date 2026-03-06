@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { transactionAPI } from '../services/api';
-import { FiPlus, FiEdit, FiTrash2, FiFilter, FiSearch } from 'react-icons/fi';
-import { FcPlus, FcMinus, FcOk, FcHighPriority, FcMoneyTransfer } from 'react-icons/fc';
+import { FiPlus, FiEdit, FiTrash2, FiFilter, FiSearch, FiArrowUpRight, FiArrowDownRight, FiClock } from 'react-icons/fi';
+import { FcPlus, FcMinus, FcOk, FcHighPriority, FcMoneyTransfer, FcComboChart, FcIdea } from 'react-icons/fc';
 import { format } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { getCurrencySymbol, formatCurrency } from '../utils/currency';
 import CurrencyDisplay from '../components/CurrencyDisplay';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 
 const Transactions = () => {
   const { user } = useAuth();
+  const { darkMode } = useTheme();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -137,53 +139,34 @@ const Transactions = () => {
       </div>
 
       {/* Analytics Summary */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 card relative overflow-hidden bg-slate-900 text-white border-0 shadow-2xl flex flex-col justify-center">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className={`lg:col-span-1 card relative overflow-hidden border-0 shadow-2xl flex flex-col justify-center ${darkMode ? 'bg-slate-900 text-white' : 'bg-emerald-900 text-white'
+          }`}>
           <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
             <FcMoneyTransfer size={160} className="drop-shadow-2xl" />
           </div>
           <h2 className="text-xl font-black uppercase tracking-tighter mb-6 relative z-10 text-emerald-400">Cash Flow</h2>
-          <div className="flex gap-4 mb-4 relative z-10">
-            <div className="flex-1 p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Inflow</p>
-              <CurrencyDisplay amount={summary.income} className="text-xl text-emerald-400" valueClassName="font-financial" />
+          <div className="flex flex-col gap-4 mb-4 relative z-10">
+            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-200/60 mb-1">Inflow</p>
+              <CurrencyDisplay amount={summary.income} className="text-2xl text-emerald-400 drop-shadow-sm" valueClassName="font-financial" />
             </div>
-            <div className="flex-1 p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Outflow</p>
-              <CurrencyDisplay amount={summary.expense} className="text-xl text-rose-400" valueClassName="font-financial" />
+            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-200/60 mb-1">Outflow</p>
+              <CurrencyDisplay amount={summary.expense} className="text-2xl text-rose-400 drop-shadow-sm" valueClassName="font-financial" />
             </div>
-          </div>
-          <div className="h-32 w-full relative z-10">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={summaryData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={30}
-                  outerRadius={50}
-                  paddingAngle={5}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {summaryData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', backgroundColor: '#1e293b', color: '#fff' }} itemStyle={{ color: '#fff', fontWeight: 'bold' }} />
-              </PieChart>
-            </ResponsiveContainer>
           </div>
           <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px]" />
         </div>
 
         {/* Filters */}
-        <div className="lg:col-span-2 glass card flex flex-col justify-center">
+        <div className="lg:col-span-3 card flex flex-col justify-center border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-sky-500" />
           <div className="flex items-center gap-3 mb-6">
             <FiFilter className="text-emerald-500" size={20} />
             <h3 className="text-lg font-black uppercase tracking-tighter text-slate-900 dark:text-white">Ledger Filters</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="relative">
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
@@ -237,32 +220,36 @@ const Transactions = () => {
             {transactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="group relative overflow-hidden bg-white dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+                className="group relative overflow-hidden bg-white dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-3xl p-5 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-6"
               >
-                <div className="flex items-center gap-5 relative z-10 w-full sm:w-auto">
-                  <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center shadow-inner border border-slate-100 dark:border-slate-700">
-                    {transaction.type === 'income' ? <FcPlus size={28} /> : <FcMinus size={28} />}
+                <div className="flex items-center gap-4 min-w-0 flex-1">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-inner border border-white/20 dark:border-white/5 ${transaction.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'bg-rose-50 dark:bg-rose-950/30'
+                    }`}>
+                    {transaction.type === 'income' ? <FiArrowUpRight className="text-emerald-600" size={24} /> : <FiArrowDownRight className="text-rose-500" size={24} />}
                   </div>
-                  <div>
-                    <h4 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-tight group-hover:text-emerald-600 transition-colors">
-                      {transaction.category}
+                  <div className="min-w-0">
+                    <h4 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-tight truncate">
+                      {transaction.description || transaction.category}
                     </h4>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{format(new Date(transaction.date), 'dd MMM yyyy')}</span>
-                      {transaction.description && (
-                        <>
-                          <span className="text-slate-300 dark:text-slate-700">•</span>
-                          <span className="text-xs font-bold text-slate-500 truncate max-w-[200px]">{transaction.description}</span>
-                        </>
-                      )}
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{transaction.category}</span>
+                      <span className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-700" />
+                      <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                        <FiClock size={10} />
+                        {format(new Date(transaction.date), 'dd MMM yyyy')}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-6 relative z-10 w-full sm:w-auto mt-4 sm:mt-0 pt-4 sm:pt-0 border-t border-slate-100 dark:border-slate-800 sm:border-0">
-                  <div className={`text-xl ${transaction.type === 'income' ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}`}>
-                    <span>{transaction.type === 'income' ? '+' : '-'}</span>
-                    <CurrencyDisplay amount={transaction.amount} valueClassName="font-financial" />
+                <div className="flex items-center justify-between sm:justify-end gap-6 relative z-10 w-full sm:w-auto mt-2 sm:mt-0 pt-4 sm:pt-0 border-t border-slate-100 dark:border-slate-800 sm:border-0">
+                  <div className={`text-right ${transaction.type === 'income' ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}`}>
+                    <div className="text-xl font-black font-financial flex justify-end items-center gap-1">
+                      <span>{transaction.type === 'income' ? '+' : '-'}</span>
+                      <CurrencyDisplay amount={transaction.amount} />
+                    </div>
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md inline-block mt-1 ${transaction.type === 'income' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30' : 'bg-rose-50 text-rose-500 dark:bg-rose-950/30'
+                      }`}>{transaction.type}</span>
                   </div>
 
                   <div className="flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
@@ -287,17 +274,19 @@ const Transactions = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500 mb-4">No transactions found</p>
+          <div className="py-20 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] flex flex-col items-center justify-center text-center px-6 bg-slate-50/50 dark:bg-[#050505] card shadow-sm">
+            <FcIdea className="mb-6 drop-shadow-md grayscale opacity-50" size={64} />
+            <h3 className="text-xl font-black text-slate-800 dark:text-slate-200 uppercase tracking-tighter mb-2">No Transactions Found</h3>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-relaxed mb-8">It's quiet in here.<br />Time to log your first transaction.</p>
             <button
               onClick={() => {
                 resetForm();
                 setEditingTransaction(null);
                 setShowModal(true);
               }}
-              className="btn-primary inline-flex items-center gap-2"
+              className="btn-primary py-3 px-8 shadow-xl flex items-center gap-2 text-sm tracking-widest uppercase font-black"
             >
-              <FiPlus /> Add your first transaction
+              <FiPlus size={18} /> New Entry
             </button>
           </div>
         )}
