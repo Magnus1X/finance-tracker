@@ -45,13 +45,29 @@ const History = () => {
     }
   };
 
-  // Group by category for chart
-  const chartData = CATEGORIES.map((cat) => {
-    const catTxns = transactions.filter((t) => t.category === cat);
-    const income = catTxns.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-    const expense = catTxns.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-    return { name: cat, income, expense };
-  }).filter((d) => d.income > 0 || d.expense > 0);
+  // Histogram: group transactions by amount bins
+  const buildHistogram = () => {
+    if (transactions.length === 0) return [];
+    const amounts = transactions.map((t) => t.amount).filter(Boolean);
+    const maxAmt = Math.max(...amounts);
+    // Create ~8 equal-width bins
+    const binCount = 8;
+    const binSize = Math.ceil(maxAmt / binCount);
+    const bins = Array.from({ length: binCount }, (_, i) => ({
+      range: `${symbol}${(i * binSize).toLocaleString()}–${symbol}${((i + 1) * binSize).toLocaleString()}`,
+      income: 0,
+      expense: 0,
+      total: 0,
+    }));
+    transactions.forEach((t) => {
+      const idx = Math.min(Math.floor(t.amount / binSize), binCount - 1);
+      if (t.type === 'income') bins[idx].income += 1;
+      else bins[idx].expense += 1;
+      bins[idx].total += 1;
+    });
+    return bins.filter((b) => b.total > 0);
+  };
+  const histogramData = buildHistogram();
 
   const totalIncome = transactions.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
   const totalExpense = transactions.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
@@ -161,67 +177,45 @@ const History = () => {
         </div>
       </div>
 
-      {/* Chart */}
-      {!loading && chartData.length > 0 && (
+      {/* Histogram */}
+      {!loading && histogramData.length > 0 && (
         <div className={`card shadow-xl relative overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-100'
           }`}>
           <div className="absolute -top-32 -left-32 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none" />
-          <h2 className={`text-xl font-black uppercase tracking-tighter mb-8 relative z-10 flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'
-            }`}>
-            <span className="w-2 h-6 bg-emerald-500 rounded-full" /> Spending by Category
-          </h2>
+          <div className="flex items-center justify-between mb-8 relative z-10 flex-wrap gap-3">
+            <h2 className={`text-xl font-black uppercase tracking-tighter flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'
+              }`}>
+              <span className="w-2 h-6 bg-emerald-500 rounded-full" /> Amount Distribution
+            </h2>
+            <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl border ${darkMode ? 'border-slate-700 text-slate-400 bg-slate-800' : 'border-slate-200 text-slate-500 bg-slate-50'
+              }`}>Histogram · {transactions.length} transactions</span>
+          </div>
           <div className="relative z-10">
             <ResponsiveContainer width="100%" height={340}>
-              <BarChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }} barGap={0} barCategoryGap="0%">
+              <BarChart data={histogramData} margin={{ top: 10, right: 20, left: 10, bottom: 60 }} barGap={0} barCategoryGap="0%">
                 <defs>
-                  <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={1} />
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.7} />
+                  <linearGradient id="histIncome" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="#059669" stopOpacity={0.7} />
                   </linearGradient>
-                  <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f43f5e" stopOpacity={1} />
-                    <stop offset="95%" stopColor="#f43f5e" stopOpacity={0.7} />
+                  <linearGradient id="histExpense" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="#e11d48" stopOpacity={0.7} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  vertical={false}
-                  stroke={darkMode ? '#1e293b' : '#f1f5f9'}
-                />
-                <XAxis
-                  dataKey="name"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: darkMode ? '#64748b' : '#94a3b8', fontSize: 11, fontWeight: 'bold' }}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: darkMode ? '#64748b' : '#94a3b8', fontSize: 11, fontWeight: 'bold' }}
-                  tickFormatter={(v) => `${symbol}${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v}`}
-                />
-                <Tooltip
-                  cursor={false}
-                  contentStyle={{
-                    backgroundColor: darkMode ? '#0f172a' : '#ffffff',
-                    border: `1px solid ${darkMode ? '#1e293b' : '#e2e8f0'}`,
-                    borderRadius: '16px',
-                    boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15)',
-                    color: darkMode ? '#fff' : '#0f172a',
-                    fontWeight: 'bold',
-                  }}
-                />
-                <Legend
-                  wrapperStyle={{ fontSize: '11px', fontWeight: 'bold', paddingTop: '16px' }}
-                  formatter={(value) => <span style={{ color: darkMode ? '#94a3b8' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{value}</span>}
-                />
-                <Bar dataKey="income" fill="url(#colorIncome)" name="Income" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="expense" fill="url(#colorExpense)" name="Expense" radius={[4, 4, 0, 0]} />
+                <CartesianGrid strokeDasharray="4 4" vertical={false} stroke={darkMode ? '#1e293b' : '#f1f5f9'} />
+                <XAxis dataKey="range" axisLine={false} tickLine={false} tick={{ fill: darkMode ? '#64748b' : '#94a3b8', fontSize: 10, fontWeight: 'bold' }} interval={0} angle={-35} textAnchor="end" height={60} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: darkMode ? '#64748b' : '#94a3b8', fontSize: 11, fontWeight: 'bold' }} allowDecimals={false} label={{ value: 'Count', angle: -90, position: 'insideLeft', fill: darkMode ? '#475569' : '#cbd5e1', fontSize: 11, fontWeight: 'bold' }} />
+                <Tooltip cursor={false} contentStyle={{ backgroundColor: darkMode ? '#0f172a' : '#ffffff', border: `1px solid ${darkMode ? '#1e293b' : '#e2e8f0'}`, borderRadius: '14px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15)', color: darkMode ? '#fff' : '#0f172a', fontWeight: 'bold', fontSize: '12px' }} formatter={(value, name) => [value + ' txns', name]} />
+                <Legend wrapperStyle={{ fontSize: '11px', fontWeight: 'bold', paddingTop: '8px' }} formatter={(value) => <span style={{ color: darkMode ? '#94a3b8' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{value}</span>} />
+                <Bar dataKey="income" stackId="a" fill="url(#histIncome)" name="Income" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="expense" stackId="a" fill="url(#histExpense)" name="Expense" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
       )}
+
 
       {/* Transaction List */}
       {loading ? (
