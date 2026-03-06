@@ -247,11 +247,7 @@ const Dashboard = () => {
                     title: 'Welcome to your Dashboard',
                     desc: 'Start logging your income and expenses to unlock personalized financial insights.'
                   });
-                  return insights;
-                }
-
-                // Case 2: Spending
-                if (exp > inc && inc > 0) {
+                } else if (exp > inc && inc > 0) {
                   insights.push({
                     type: 'alert',
                     icon: FcHighPriority,
