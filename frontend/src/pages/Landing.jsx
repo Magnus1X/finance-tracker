@@ -106,7 +106,7 @@ const Landing = () => {
 
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div className="space-y-3 relative z-10">
+        <div className="space-y-3 relative z-10 pl-4 md:pl-10 lg:pl-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -137,7 +137,7 @@ const Landing = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start"
+            className="flex flex-col sm:flex-row gap-4"
           >
             <Link to="/register" className="btn-primary px-6 py-3 text-base rounded-xl text-center shadow-2xl shadow-emerald-500/20">
               Establish Portfolio
