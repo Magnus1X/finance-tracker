@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiBell, FiArrowRight, FiCheck } from 'react-icons/fi';
 import { FcHighPriority, FcApproval, FcIdea, FcFlashOn, FcMoneyTransfer, FcComboChart } from 'react-icons/fc';
@@ -11,6 +12,7 @@ import { startOfMonth, endOfMonth, format } from 'date-fns';
 const SmartAlerts = () => {
     const { user } = useAuth();
     const { darkMode } = useTheme();
+    const navigate = useNavigate();
     const [alerts, setAlerts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [dismissed, setDismissed] = useState(new Set());
@@ -45,7 +47,8 @@ const SmartAlerts = () => {
                         message: `Your spending this month (${sym}${exp.toLocaleString()}) has exceeded your income by ${sym}${Math.abs(sav).toLocaleString()}. It's time to pause non-essential purchases.`,
                         time: 'Just now',
                         icon: <FcHighPriority size={32} />,
-                        colorClass: 'rose'
+                        colorClass: 'rose',
+                        actionLink: '/'
                     });
                 }
 
@@ -58,7 +61,8 @@ const SmartAlerts = () => {
                         message: `Awesome job! You've secured ${sym}${sav.toLocaleString()} in surplus this month. You are firmly on track to hit your year-end financial goals.`,
                         time: '2 hours ago',
                         icon: <FcApproval size={32} />,
-                        colorClass: 'emerald'
+                        colorClass: 'emerald',
+                        actionLink: '/goals'
                     });
                 }
 
@@ -77,7 +81,8 @@ const SmartAlerts = () => {
                         message: `You've used over 90% of your ${b.category} budget. You have ${sym}${((b.budgetedAmount ?? b.amount) - (b.spentAmount ?? b.spent)).toLocaleString()} left for the rest of the month.`,
                         time: '5 hours ago',
                         icon: <FcComboChart size={32} />,
-                        colorClass: 'amber'
+                        colorClass: 'amber',
+                        actionLink: '/budgets'
                     });
                 }
 
@@ -95,7 +100,8 @@ const SmartAlerts = () => {
                         message: `You've overspent your ${b.category} budget by ${sym}${((b.spentAmount ?? b.spent) - (b.budgetedAmount ?? b.amount)).toLocaleString()}. Try to compensate by saving in other categories.`,
                         time: '1 day ago',
                         icon: <FcMoneyTransfer size={32} />,
-                        colorClass: 'rose'
+                        colorClass: 'rose',
+                        actionLink: '/budgets'
                     });
                 }
 
@@ -108,7 +114,8 @@ const SmartAlerts = () => {
                         message: "Your financial dashboard is looking a bit quiet. Start logging your income and expenses so we can analyze your habits and generate smart reminders!",
                         time: 'Just now',
                         icon: <FcFlashOn size={32} />,
-                        colorClass: 'sky'
+                        colorClass: 'sky',
+                        actionLink: '/transactions'
                     });
 
                     generatedAlerts.push({
@@ -118,7 +125,8 @@ const SmartAlerts = () => {
                         message: "You haven't set up bounds for your spending. Creating budgets is the fastest way to control capital outflow and hit savings targets.",
                         time: '1 hour ago',
                         icon: <FcIdea size={32} />,
-                        colorClass: 'amber'
+                        colorClass: 'amber',
+                        actionLink: '/budgets'
                     });
                 }
 
@@ -131,7 +139,8 @@ const SmartAlerts = () => {
                         message: `You're tracking well towards establishing a solid financial foundation. Log a new transaction today to keep your streak alive!`,
                         time: '1 day ago',
                         icon: <FcApproval size={32} />,
-                        colorClass: 'emerald'
+                        colorClass: 'emerald',
+                        actionLink: '/goals'
                     });
                 }
 
@@ -142,7 +151,8 @@ const SmartAlerts = () => {
                     message: "Did you know that investing the cost of a daily coffee could turn into hundreds of thousands over a decade? Every small choice compounds!",
                     time: '1 day ago',
                     icon: <FcIdea size={32} />,
-                    colorClass: 'sky'
+                    colorClass: 'sky',
+                    actionLink: '/learn'
                 });
 
                 setAlerts(generatedAlerts);
@@ -237,7 +247,10 @@ const SmartAlerts = () => {
                                             {alert.message}
                                         </p>
                                         <div className="flex gap-3 pt-6 border-t border-slate-100 dark:border-slate-800/50">
-                                            <button className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-2 ${btnColors[alert.colorClass]}`}>
+                                            <button
+                                                onClick={() => navigate(alert.actionLink)}
+                                                className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-2 ${btnColors[alert.colorClass]}`}
+                                            >
                                                 Take Action <FiArrowRight />
                                             </button>
                                             <button onClick={() => handleDismiss(alert.id)} className="px-5 py-2.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xs font-black uppercase tracking-widest transition-all bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
