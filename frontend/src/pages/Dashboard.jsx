@@ -463,51 +463,57 @@ const Dashboard = () => {
         </div>
 
         {/* Category breakdown (Donut) */}
-        <div className="lg:col-span-4 card flex flex-col">
-          <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-8 shadow-sm">Category Split</h2>
-          <div className="flex-1 min-h-[300px] flex items-center justify-center relative">
-            <ResponsiveContainer width="100%" height="100%" className="-mt-8">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={70}
-                  outerRadius={90}
-                  paddingAngle={8}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 900 }}
-                  itemStyle={{ fontSize: '12px' }}
+        <div className="lg:col-span-4 card flex flex-col justify-between h-full">
+          <div>
+            <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-6">Category Split</h2>
+
+            <div className="relative w-full h-64 flex-shrink-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={75}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                    stroke="none"
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 900 }}
+                    itemStyle={{ fontSize: '12px' }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              {/* Total value in the center */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none mb-1">Total</span>
+                <CurrencyDisplay
+                  amount={totalExpenseValue}
+                  className="text-lg text-slate-900 dark:text-white font-black"
+                  valueClassName="font-financial"
                 />
-              </PieChart>
-            </ResponsiveContainer>
-            {/* Total value in the center */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2 lg:-mt-8">
-              <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none mb-1">Total</span>
-              <CurrencyDisplay
-                amount={totalExpenseValue}
-                className="text-xl text-slate-900 dark:text-white font-black"
-                valueClassName="font-financial"
-              />
+              </div>
             </div>
           </div>
-          <div className="space-y-2 mt-8">
+
+          <div className="space-y-3 mt-8">
             {pieData.map((entry, i) => (
-              <div key={i} className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+              <div key={i} className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/30 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors border border-slate-100 dark:border-slate-800/50">
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
-                  <span className="text-[11px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-tight">{entry.name}</span>
+                  <div className="w-3.5 h-3.5 rounded-full shadow-sm border-2 border-white dark:border-slate-900" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+                  <span className="text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-tight">{entry.name}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-bold text-slate-400">{Math.round((entry.value / totalExpenseValue) * 100)}%</span>
-                  <CurrencyDisplay amount={entry.value} className="text-sm text-slate-900 dark:text-white font-bold" valueClassName="font-financial" />
+                  <span className="text-[10px] font-bold text-slate-500 bg-white dark:bg-slate-900 px-2 py-1 rounded-md shadow-sm border border-slate-100 dark:border-slate-800">
+                    {Math.round((entry.value / totalExpenseValue) * 100)}%
+                  </span>
+                  <CurrencyDisplay amount={entry.value} className="text-sm text-slate-900 dark:text-white font-bold ml-1" valueClassName="font-financial" />
                 </div>
               </div>
             ))}
