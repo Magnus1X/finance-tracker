@@ -235,7 +235,7 @@ const History = () => {
         <div className="space-y-3">
           <p className="text-xs font-black uppercase tracking-widest text-slate-400">{transactions.length} transaction{transactions.length !== 1 ? 's' : ''} found</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {transactions.map((txn) => (
+            {[...transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).map((txn) => (
               <div
                 key={txn.id}
                 className="group bg-white dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-4"
