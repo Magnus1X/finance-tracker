@@ -465,8 +465,8 @@ const Dashboard = () => {
         {/* Category breakdown (Donut) */}
         <div className="lg:col-span-4 card flex flex-col">
           <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-8 shadow-sm">Category Split</h2>
-          <div className="flex-1 min-h-[250px] relative">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="flex-1 min-h-[300px] flex items-center justify-center relative">
+            <ResponsiveContainer width="100%" height="100%" className="-mt-8">
               <PieChart>
                 <Pie
                   data={pieData}
@@ -489,7 +489,7 @@ const Dashboard = () => {
               </PieChart>
             </ResponsiveContainer>
             {/* Total value in the center */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-2">
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2 lg:-mt-8">
               <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none mb-1">Total</span>
               <CurrencyDisplay
                 amount={totalExpenseValue}
