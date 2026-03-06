@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
 
 import {
   FiArrowRight,
@@ -10,7 +11,9 @@ import {
   FiTwitter,
   FiLinkedin,
   FiGithub,
-  FiInstagram
+  FiInstagram,
+  FiSun,
+  FiMoon
 } from 'react-icons/fi';
 import {
   FcComboChart,
@@ -31,6 +34,7 @@ const Landing = () => {
   const featuresRef = useRef(null);
   const { scrollYProgress } = useScroll();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { darkMode, toggleTheme } = useTheme();
 
   const featuresInView = useInView(featuresRef, { once: true, amount: 0.1 });
 
@@ -93,14 +97,31 @@ const Landing = () => {
             <span className="text-xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Finance<span className="text-emerald-600">Era</span></span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors"
+              title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {darkMode ? <FiSun className="text-emerald-500" size={18} /> : <FiMoon className="text-emerald-600" size={18} />}
+            </button>
+            <div className="w-px h-6 bg-slate-200 dark:bg-slate-800" />
             <Link to="/login" className="text-sm font-bold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-widest">Sign In</Link>
             <Link to="/register" className="btn-primary rounded-xl px-8 py-2.5">Get Started</Link>
           </div>
 
-          <button className="md:hidden text-slate-900 dark:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-          </button>
+          <div className="flex md:hidden items-center gap-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-slate-500"
+              title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {darkMode ? <FiSun className="text-emerald-500" size={20} /> : <FiMoon className="text-emerald-600" size={20} />}
+            </button>
+            <button className="text-slate-900 dark:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            </button>
+          </div>
         </div>
       </nav>
 
