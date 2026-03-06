@@ -213,7 +213,7 @@ const Landing = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
                 viewport={{ once: true, margin: "-100px" }}
-                className="group relative overflow-hidden rounded-3xl bg-white dark:bg-black shadow-xl shadow-slate-200/50  border border-slate-100 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-500"
+                className="group relative overflow-hidden rounded-none bg-white dark:bg-black shadow-xl shadow-slate-200/50  border border-slate-100 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-500"
               >
                 <div className="h-48 w-full overflow-hidden bg-white dark:bg-white">
                   <img
