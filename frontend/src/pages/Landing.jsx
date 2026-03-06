@@ -112,7 +112,7 @@ const Landing = () => {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400 text-xs font-black uppercase tracking-widest mb-2"
           >
-            <FcApproval size={16} /> Recognized by leading fintech analysts
+            <FcApproval size={16} /> Your Money. Your Rules. Your Future.
           </motion.div>
 
           <motion.h1
