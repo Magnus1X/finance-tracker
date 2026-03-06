@@ -220,7 +220,6 @@ const Landing = () => {
                     src={feature.photo}
                     alt={feature.title}
                     className={`w-full h-full transition-transform duration-700 group-hover:scale-105 ${feature.photo.startsWith('/') ? 'object-contain p-2' : 'object-cover'}`}
-                    style={feature.photo.startsWith('/smart') ? { mixBlendMode: 'multiply' } : {}}
                   />
                 </div>
                 <div className="p-8">
