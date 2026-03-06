@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { FiCalendar, FiArrowRight } from 'react-icons/fi';
-import { FcIdea, FcHighPriority, FcOk, FcLineChart, FcBullish, FcBearish, FcMoneyTransfer, FcPlus, FcMinus } from 'react-icons/fc';
+import { FiCalendar, FiArrowRight, FiZap, FiAlertCircle, FiCheckCircle, FiTrendingUp, FiTrendingDown, FiDollarSign, FiPieChart } from 'react-icons/fi';
 import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol, formatCurrency } from '../utils/currency';
@@ -189,9 +188,9 @@ const Dashboard = () => {
       {/* Summary Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-          { label: 'Total Revenue', value: analytics?.income, color: 'text-emerald-600', icon: FcBullish },
-          { label: 'Expenditure', value: analytics?.expenses, color: 'text-rose-600', icon: FcBearish },
-          { label: 'Net Capital Surplus', value: analytics?.savings, color: analytics?.savings >= 0 ? 'text-emerald-600' : 'text-rose-600', icon: FcMoneyTransfer }
+          { label: 'Total Revenue', value: analytics?.income, color: 'text-emerald-600', icon: FiTrendingUp },
+          { label: 'Expenditure', value: analytics?.expenses, color: 'text-rose-600', icon: FiTrendingDown },
+          { label: 'Net Capital Surplus', value: analytics?.savings, color: analytics?.savings >= 0 ? 'text-emerald-600' : 'text-rose-600', icon: FiDollarSign }
         ].map((stat, i) => (
           <div key={i} className="card group relative overflow-hidden bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl border border-white dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-none hover:-translate-y-1 transition-all duration-300">
             <div className="flex justify-between items-start mb-4 relative z-10">
@@ -224,8 +223,8 @@ const Dashboard = () => {
           <div className="relative z-10 p-8 h-full flex flex-col">
             <div className="flex justify-between items-start mb-8">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center shadow-sm border border-slate-200">
-                  <FcIdea size={32} />
+                <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center shadow-sm border border-slate-200 text-amber-500">
+                  <FiZap size={32} />
                 </div>
                 <h2 className="text-2xl font-black text-slate-800 uppercase tracking-tighter">Your Financial Insights</h2>
               </div>
@@ -244,7 +243,7 @@ const Dashboard = () => {
                 if (inc === 0 && exp === 0) {
                   insights.push({
                     type: 'neutral',
-                    icon: FcIdea,
+                    icon: FiZap,
                     color: 'text-slate-500',
                     bgHover: 'bg-slate-500/10',
                     title: 'Welcome to your Dashboard',
@@ -253,7 +252,7 @@ const Dashboard = () => {
                 } else if (exp > inc && inc > 0) {
                   insights.push({
                     type: 'alert',
-                    icon: FcHighPriority,
+                    icon: FiAlertCircle,
                     color: 'text-rose-600',
                     bgHover: 'bg-rose-500/10',
                     title: 'Spending Alert',
@@ -262,7 +261,7 @@ const Dashboard = () => {
                 } else if (exp > inc && inc === 0) {
                   insights.push({
                     type: 'alert',
-                    icon: FcHighPriority,
+                    icon: FiAlertCircle,
                     color: 'text-rose-600',
                     bgHover: 'bg-rose-500/10',
                     title: 'High Burn Rate',
@@ -274,7 +273,7 @@ const Dashboard = () => {
                 if (savRate >= 50 && inc > 0) {
                   insights.push({
                     type: 'success',
-                    icon: FcOk,
+                    icon: FiCheckCircle,
                     color: 'text-emerald-600',
                     bgHover: 'bg-emerald-500/10',
                     title: 'Stellar Savings',
@@ -283,7 +282,7 @@ const Dashboard = () => {
                 } else if (savRate >= 20 && inc > 0) {
                   insights.push({
                     type: 'success',
-                    icon: FcOk,
+                    icon: FiCheckCircle,
                     color: 'text-emerald-600',
                     bgHover: 'bg-emerald-500/10',
                     title: 'Healthy Cash Flow',
@@ -292,7 +291,7 @@ const Dashboard = () => {
                 } else if (savRate > 0 && savRate < 20 && inc > 0) {
                   insights.push({
                     type: 'warning',
-                    icon: FcIdea,
+                    icon: FiZap,
                     color: 'text-amber-600',
                     bgHover: 'bg-amber-500/10',
                     title: 'Tight Margin',
@@ -310,7 +309,7 @@ const Dashboard = () => {
                   if (overBudgets.length > 0) {
                     insights.push({
                       type: 'warning',
-                      icon: FcHighPriority,
+                      icon: FiAlertCircle,
                       color: 'text-amber-600',
                       bgHover: 'bg-amber-500/10',
                       title: 'Budget Alert',
@@ -327,7 +326,7 @@ const Dashboard = () => {
                     if (catPercent > 40) {
                       insights.push({
                         type: 'info',
-                        icon: FcLineChart,
+                        icon: FiPieChart,
                         color: 'text-sky-600',
                         bgHover: 'bg-sky-500/10',
                         title: 'Spending Concentration',
@@ -341,7 +340,7 @@ const Dashboard = () => {
                 if (insights.length < 2 && inc > 0 && exp > 0) {
                   insights.push({
                     type: 'info',
-                    icon: FcLineChart,
+                    icon: FiPieChart,
                     color: 'text-sky-600',
                     bgHover: 'bg-sky-500/10',
                     title: 'Looking Ahead',
@@ -402,7 +401,7 @@ const Dashboard = () => {
               );
             }) : (
               <div className="py-16 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] flex flex-col items-center justify-center text-center px-6 bg-slate-50/50 dark:bg-[#050505]">
-                <FcIdea className="mb-6 drop-shadow-md grayscale opacity-50" size={56} />
+                <FiZap className="mb-6 drop-shadow-md opacity-50 text-slate-400" size={56} />
                 <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-relaxed">No primary budget models identified. <br /> Establish a monitoring threshold.</p>
               </div>
             )}
