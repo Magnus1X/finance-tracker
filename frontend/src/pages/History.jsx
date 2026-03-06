@@ -1,215 +1,248 @@
 import { useState, useEffect } from 'react';
-import { budgetAPI } from '../services/api';
+import { transactionAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { getCurrencySymbol, formatCurrency } from '../utils/currency';
+import { getCurrencySymbol } from '../utils/currency';
 import CurrencyDisplay from '../components/CurrencyDisplay';
 import { format } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { FcClock, FcComboChart, FcIdea } from 'react-icons/fc';
+import { FiArrowUpRight, FiArrowDownRight, FiFilter, FiClock } from 'react-icons/fi';
+import { FcComboChart, FcIdea } from 'react-icons/fc';
+
+const CATEGORIES = ['Food', 'Rent', 'Transport', 'Entertainment', 'Shopping', 'Bills', 'Healthcare', 'Education', 'Other'];
 
 const History = () => {
   const { user } = useAuth();
-  const [history, setHistory] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedType, setSelectedType] = useState('');
 
   useEffect(() => {
     fetchHistory();
-  }, [selectedMonth, selectedYear, selectedCategory]);
+  }, [selectedMonth, selectedYear, selectedCategory, selectedType]);
 
   const fetchHistory = async () => {
+    setLoading(true);
     try {
-      const params = {};
+      const params = { limit: 200 };
       if (selectedMonth) params.month = selectedMonth;
       if (selectedYear) params.year = selectedYear;
       if (selectedCategory) params.category = selectedCategory;
+      if (selectedType) params.type = selectedType;
 
-      const response = await budgetAPI.getHistory(params).catch(() => ({ data: { data: [] } }));
-      setHistory(response.data.data);
+      const response = await transactionAPI.getAll(params);
+      const data = response.data?.data || response.data?.transactions || [];
+      setTransactions(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching history:', error);
-      setHistory([]);
+      setTransactions([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const chartData = history.map((item) => ({
-    name: item.category,
-    budgeted: item.budgetedAmount,
-    spent: item.spentAmount,
-    utilization: item.utilizationPercentage,
-  }));
+  // Group by category for chart
+  const chartData = CATEGORIES.map((cat) => {
+    const catTxns = transactions.filter((t) => t.category === cat);
+    const income = catTxns.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+    const expense = catTxns.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+    return { name: cat, income, expense };
+  }).filter((d) => d.income > 0 || d.expense > 0);
 
-  const getStatusBadge = (status) => {
-    const colors = {
-      under: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400',
-      over: 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400',
-      met: 'bg-amber-500/10 border-amber-500/20 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400',
-    };
-    return (
-      <span className={`px-4 py-1.5 rounded-xl border text-[10px] font-black tracking-widest uppercase ${colors[status]}`}>
-        {status === 'under' ? 'Surplus' : status === 'over' ? 'Deficit' : 'Met'}
-      </span>
-    );
-  };
-
-  const categories = ['Food', 'Rent', 'Transport', 'Entertainment', 'Shopping', 'Bills', 'Healthcare', 'Education', 'Other'];
+  const totalIncome = transactions.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+  const totalExpense = transactions.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+  const net = totalIncome - totalExpense;
+  const symbol = getCurrencySymbol(user?.currency);
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center gap-4 mb-8">
         <div className="w-16 h-16 rounded-2xl bg-white/50 dark:bg-slate-800 shadow-inner flex items-center justify-center border border-white/60 dark:border-slate-700">
           <FcComboChart size={36} className="drop-shadow-md" />
         </div>
         <div>
-          <h1 className="text-3xl font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none">Intelligence Report</h1>
-          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">Macro-level Expenditure Performance</p>
+          <h1 className="text-3xl font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none">Transaction History</h1>
+          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">Your complete financial record</p>
         </div>
       </div>
 
+      {/* Summary Stats */}
+      {!loading && transactions.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="card shadow-sm flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center shrink-0">
+              <FiArrowUpRight className="text-emerald-600" size={22} />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Total Income</p>
+              <p className="text-xl font-black text-emerald-600">{symbol}{totalIncome.toLocaleString()}</p>
+            </div>
+          </div>
+          <div className="card shadow-sm flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/30 flex items-center justify-center shrink-0">
+              <FiArrowDownRight className="text-rose-500" size={22} />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Total Expenses</p>
+              <p className="text-xl font-black text-rose-500">{symbol}{totalExpense.toLocaleString()}</p>
+            </div>
+          </div>
+          <div className="card shadow-sm flex items-center gap-4">
+            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${net >= 0 ? 'bg-sky-50 dark:bg-sky-950/30' : 'bg-amber-50 dark:bg-amber-950/30'}`}>
+              <FiFilter className={net >= 0 ? 'text-sky-500' : 'text-amber-500'} size={20} />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Net Balance</p>
+              <p className={`text-xl font-black ${net >= 0 ? 'text-sky-500' : 'text-amber-500'}`}>{net >= 0 ? '+' : ''}{symbol}{net.toLocaleString()}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Filters */}
-      <div className="glass card flex flex-col justify-center border-0 shadow-lg">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="relative">
-            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Target Cycle</label>
+      <div className="card shadow-sm border-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Month</label>
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
               className="w-full bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20"
             >
-              <option value="">Aggregate Lifespan</option>
-              {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                <option key={month} value={month}>
-                  {format(new Date(2000, month - 1), 'MMMM')}
-                </option>
+              <option value="">All Months</option>
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                <option key={m} value={m}>{format(new Date(2000, m - 1), 'MMMM')}</option>
               ))}
             </select>
           </div>
-          <div className="relative">
-            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Fiscal Year</label>
+          <div>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Year</label>
             <select
               value={selectedYear}
-              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+              onChange={(e) => setSelectedYear(e.target.value)}
               className="w-full bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20"
             >
-              {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
+              <option value="">All Years</option>
+              {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map((y) => (
+                <option key={y} value={y}>{y}</option>
               ))}
             </select>
           </div>
-          <div className="relative">
-            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Vector</label>
+          <div>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Category</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20"
             >
-              <option value="">All Vectors</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+              <option value="">All Categories</option>
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
               ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Type</label>
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="w-full bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20"
+            >
+              <option value="">All Types</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
             </select>
           </div>
         </div>
       </div>
 
       {/* Chart */}
-      {history.length > 0 && (
+      {!loading && chartData.length > 0 && (
         <div className="card bg-slate-950 border border-slate-800 shadow-2xl relative overflow-hidden">
           <div className="absolute -top-32 -left-32 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-sky-500/5 rounded-full blur-[100px] pointer-events-none" />
-
           <h2 className="text-xl font-black uppercase tracking-tighter text-white mb-8 relative z-10 flex items-center gap-3">
-            <span className="w-2 h-6 bg-emerald-500 rounded-full" /> Volume Render
+            <span className="w-2 h-6 bg-emerald-500 rounded-full" /> Spending by Category
           </h2>
-
           <div className="relative z-10">
-            <ResponsiveContainer width="100%" height={380}>
-              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }} barGap={6}>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }} barGap={4}>
                 <defs>
-                  <linearGradient id="colorBudgeted" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0ea5e9" stopOpacity={1} />
-                    <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0.6} />
+                  <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={1} />
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.6} />
                   </linearGradient>
-                  <linearGradient id="colorSpent" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={1} />
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.6} />
+                  <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#f43f5e" stopOpacity={1} />
+                    <stop offset="95%" stopColor="#f43f5e" stopOpacity={0.6} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11, fontWeight: 'bold' }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11, fontWeight: 'bold' }} tickFormatter={(val) => `${getCurrencySymbol(user?.currency)}${val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val}`} />
-                <Tooltip cursor={{ fill: '#1e293b', opacity: 0.4 }} contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '16px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)', color: '#fff' }} />
-                <Bar dataKey="budgeted" fill="url(#colorBudgeted)" name="Allocated" radius={[6, 6, 0, 0]} maxBarSize={40} />
-                <Bar dataKey="spent" fill="url(#colorSpent)" name="Executed" radius={[6, 6, 0, 0]} maxBarSize={40} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11, fontWeight: 'bold' }} tickFormatter={(v) => `${symbol}${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v}`} />
+                <Tooltip cursor={{ fill: '#1e293b', opacity: 0.4 }} contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '16px', color: '#fff' }} />
+                <Bar dataKey="income" fill="url(#colorIncome)" name="Income" radius={[6, 6, 0, 0]} maxBarSize={36} />
+                <Bar dataKey="expense" fill="url(#colorExpense)" name="Expense" radius={[6, 6, 0, 0]} maxBarSize={36} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
       )}
 
-      {history.length === 0 && !loading && (
+      {/* Transaction List */}
+      {loading ? (
+        <div className="flex items-center justify-center p-20 card">
+          <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin" />
+        </div>
+      ) : transactions.length === 0 ? (
         <div className="py-20 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] flex flex-col items-center justify-center text-center px-6 bg-slate-50/50 dark:bg-[#050505] card shadow-sm">
           <FcIdea className="mb-6 drop-shadow-md grayscale opacity-50" size={64} />
-          <h3 className="text-xl font-black text-slate-800 dark:text-slate-200 uppercase tracking-tighter mb-2">Null Dataset</h3>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-relaxed">No telemetry found for the selected temporal metrics.<br />Adjust filters to extrapolate.</p>
+          <h3 className="text-xl font-black text-slate-800 dark:text-slate-200 uppercase tracking-tighter mb-2">No Transactions Found</h3>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-relaxed">No transactions match the selected filters.<br />Try adjusting or clearing the filters.</p>
         </div>
-      )}
-
-      {/* History List */}
-      <div className="space-y-4">
-        {loading ? (
-          <div className="flex items-center justify-center p-20 card">
-            <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin" />
-          </div>
-        ) : history.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {history.map((item) => (
+      ) : (
+        <div className="space-y-3">
+          <p className="text-xs font-black uppercase tracking-widest text-slate-400">{transactions.length} transaction{transactions.length !== 1 ? 's' : ''} found</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            {transactions.map((txn) => (
               <div
-                key={item.id}
-                className="group relative overflow-hidden bg-white dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none transition-all flex flex-col justify-between"
+                key={txn.id}
+                className="group bg-white dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-4"
               >
-                <div className="flex items-start justify-between mb-8 relative z-10 w-full">
-                  <div className="flex items-center gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center shadow-inner border border-slate-100 dark:border-slate-700">
-                      <FcClock size={24} />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-tight">{item.category}</h3>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                        {format(new Date(item.year, item.month - 1), 'MMMM yyyy')} Log
-                      </p>
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${txn.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'bg-rose-50 dark:bg-rose-950/30'}`}>
+                    {txn.type === 'income'
+                      ? <FiArrowUpRight className="text-emerald-600" size={20} />
+                      : <FiArrowDownRight className="text-rose-500" size={20} />
+                    }
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-black text-sm text-slate-900 dark:text-white truncate">{txn.description || txn.category}</p>
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{txn.category}</span>
+                      <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+                      <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                        <FiClock size={10} />
+                        {txn.date ? format(new Date(txn.date), 'dd MMM yyyy') : '—'}
+                      </span>
                     </div>
                   </div>
-                  {getStatusBadge(item.status)}
                 </div>
-
-                <div className="grid grid-cols-3 gap-2 relative z-10">
-                  <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Allocated</p>
-                    <CurrencyDisplay amount={item.budgetedAmount} className="text-sm text-slate-900 dark:text-white" valueClassName="font-financial" />
-                  </div>
-                  <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Executed</p>
-                    <CurrencyDisplay amount={item.spentAmount} className="text-sm text-slate-900 dark:text-white" valueClassName="font-financial" />
-                  </div>
-                  <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col justify-center">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Velocity</p>
-                    <p className={`text-sm font-black ${item.utilizationPercentage > 100 ? 'text-rose-600' : 'text-emerald-600'}`}>{item.utilizationPercentage.toFixed(1)}%</p>
-                  </div>
+                <div className="text-right shrink-0">
+                  <p className={`text-base font-black ${txn.type === 'income' ? 'text-emerald-600' : 'text-rose-500'}`}>
+                    {txn.type === 'income' ? '+' : '-'}{symbol}{txn.amount?.toLocaleString()}
+                  </p>
+                  <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-lg ${txn.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600' : 'bg-rose-50 dark:bg-rose-950/30 text-rose-500'}`}>
+                    {txn.type}
+                  </span>
                 </div>
               </div>
             ))}
           </div>
-        ) : null}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
