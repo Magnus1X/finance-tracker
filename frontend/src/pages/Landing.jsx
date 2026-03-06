@@ -228,8 +228,8 @@ const Landing = () => {
                     className={`w-full h-full transition-transform duration-700 group-hover:scale-105 ${feature.photo.startsWith('/') ? 'object-contain p-2' : 'object-cover'}`}
                   />
                 </div>
-                <div className="p-8">
-                  <div className={`w-12 h-12 flex items-center justify-center rounded-2xl mb-6 bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 transition-colors shadow-sm`}>
+                <div className="p-8 text-center">
+                  <div className={`w-12 h-12 flex items-center justify-center rounded-2xl mb-6 bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 transition-colors shadow-sm mx-auto`}>
                     <feature.icon className="drop-shadow-sm" size={28} />
                   </div>
                   <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter group-hover:text-emerald-600 transition-colors">
