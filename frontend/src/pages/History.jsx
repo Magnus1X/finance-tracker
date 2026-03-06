@@ -45,6 +45,8 @@ const History = () => {
     }
   };
 
+  const symbol = getCurrencySymbol(user?.currency);
+
   // Histogram: group transactions by amount bins
   const buildHistogram = () => {
     if (transactions.length === 0) return [];
@@ -72,7 +74,6 @@ const History = () => {
   const totalIncome = transactions.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0);
   const totalExpense = transactions.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
   const net = totalIncome - totalExpense;
-  const symbol = getCurrencySymbol(user?.currency);
 
   return (
     <div className="space-y-6">
