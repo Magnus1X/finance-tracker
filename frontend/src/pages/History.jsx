@@ -172,7 +172,7 @@ const History = () => {
           </h2>
           <div className="relative z-10">
             <ResponsiveContainer width="100%" height={340}>
-              <BarChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }} barGap={6} barCategoryGap="30%">
+              <BarChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }} barGap={0} barCategoryGap="0%">
                 <defs>
                   <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#10b981" stopOpacity={1} />
@@ -201,7 +201,7 @@ const History = () => {
                   tickFormatter={(v) => `${symbol}${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v}`}
                 />
                 <Tooltip
-                  cursor={{ fill: darkMode ? '#1e293b' : '#f8fafc', opacity: 0.8 }}
+                  cursor={false}
                   contentStyle={{
                     backgroundColor: darkMode ? '#0f172a' : '#ffffff',
                     border: `1px solid ${darkMode ? '#1e293b' : '#e2e8f0'}`,
@@ -215,8 +215,8 @@ const History = () => {
                   wrapperStyle={{ fontSize: '11px', fontWeight: 'bold', paddingTop: '16px' }}
                   formatter={(value) => <span style={{ color: darkMode ? '#94a3b8' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{value}</span>}
                 />
-                <Bar dataKey="income" fill="url(#colorIncome)" name="Income" radius={[8, 8, 0, 0]} maxBarSize={60} />
-                <Bar dataKey="expense" fill="url(#colorExpense)" name="Expense" radius={[8, 8, 0, 0]} maxBarSize={60} />
+                <Bar dataKey="income" fill="url(#colorIncome)" name="Income" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="expense" fill="url(#colorExpense)" name="Expense" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
