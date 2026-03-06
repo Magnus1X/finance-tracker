@@ -160,9 +160,9 @@ const Landing = () => {
           <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-transparent blur-3xl -z-10 rounded-full" />
           <div className="card p-2 bg-white/50 dark:bg-black backdrop-blur-2xl dark:backdrop-blur-none border border-white/20 dark:border-slate-800/50 shadow-2xl overflow-hidden rounded-3xl">
             <img
-              src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80"
-              alt="Financial Trading Terminal"
-              className="w-full h-[500px] object-cover rounded-2xl grayscale opacity-90 contrast-125"
+              src="/finance-hero.jpg"
+              alt="Finance Illustration"
+              className="w-full h-[500px] object-contain rounded-2xl"
             />
             {/* Overlay floating element */}
             <div className="absolute bottom-10 left-10 p-6 bg-white/90 dark:bg-[#050505] backdrop-blur-xl dark:backdrop-blur-none rounded-2xl shadow-2xl border border-white/20 dark:border-slate-800/50 w-72">
