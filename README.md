@@ -106,8 +106,8 @@ The client will be running at `http://localhost:3000`.
 If the database is pre-seeded or if you wish to try the application immediately without creating a new user, you may use the following testing credentials (assuming a mock user has been created in your local database with these details, or you can register a new account on the landing page using them):
 
 **Dummy Credentials for Reviewers:**
-- **Email:** testuser@example.com
-- **Password:** password123
+- **Email:** abcde@gmail.com
+- **Password:** abcde@123
 
 *Note: If these credentials do not work upon first initialization, please utilize the Register page to instantiate a new account profile.*
 
