@@ -204,7 +204,7 @@ const Landing = () => {
                 icon: FcIdea,
                 title: 'AI Advisor',
                 description: 'Get automated insights and budget optimizations from our proprietary engine.',
-                photo: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?auto=format&fit=crop&w=800&q=80"
+                photo: "/ai-advisor.png"
               }
             ].map((feature, i) => (
               <motion.div
