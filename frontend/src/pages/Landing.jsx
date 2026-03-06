@@ -192,7 +192,7 @@ const Landing = () => {
                 icon: FcComboChart,
                 title: 'Smart Analytics',
                 description: 'Real-time data visualization of your cash flow and spending patterns.',
-                photo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80"
+                photo: "/smart-analytics.png"
               },
               {
                 icon: FcBullish,
@@ -215,11 +215,11 @@ const Landing = () => {
                 viewport={{ once: true, margin: "-100px" }}
                 className="group relative overflow-hidden rounded-3xl bg-white dark:bg-black shadow-xl shadow-slate-200/50  border border-slate-100 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-500"
               >
-                <div className="h-48 w-full overflow-hidden">
+                <div className="h-48 w-full overflow-hidden bg-white dark:bg-white">
                   <img
                     src={feature.photo}
                     alt={feature.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className={`w-full h-full transition-transform duration-700 group-hover:scale-105 ${feature.photo.startsWith('/smart') ? 'object-contain p-2' : 'object-cover'}`}
                   />
                 </div>
                 <div className="p-8">
