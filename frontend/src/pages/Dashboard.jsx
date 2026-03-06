@@ -229,45 +229,142 @@ const Dashboard = () => {
             </div>
 
             <div className="space-y-4 flex-1">
-              {analytics?.expenses > analytics?.income ? (
-                <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-md dark:backdrop-blur-none border border-white/10 shadow-2xl relative overflow-hidden group">
-                  <div className="absolute inset-0 bg-rose-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="flex items-start gap-5 relative z-10">
-                    <FcHighPriority className="mt-1 drop-shadow-sm" size={32} />
-                    <div>
-                      <h4 className="text-sm font-black text-rose-600 uppercase mb-2 tracking-widest">Spending Alert</h4>
-                      <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                        You've spent <CurrencyDisplay amount={Math.abs(analytics?.savings)} className="text-rose-700 font-financial" /> more than you earned this month. Let's look at your budget to find some savings.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-md dark:backdrop-blur-none border border-white/10 shadow-2xl relative overflow-hidden group">
-                  <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="flex items-start gap-5 relative z-10">
-                    <FcOk className="mt-1 drop-shadow-sm" size={32} />
-                    <div>
-                      <h4 className="text-sm font-black text-emerald-600 uppercase mb-2 tracking-widest">Great job saving!</h4>
-                      <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                        You're saving <strong className="text-emerald-700">{((analytics?.savings / analytics?.income) * 100).toFixed(1)}%</strong> of your income right now. Consider moving this surplus into an investment to grow your wealth.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {(() => {
+                const insights = [];
+                const inc = analytics?.income || 0;
+                const exp = analytics?.expenses || 0;
+                const sav = analytics?.savings || 0;
+                const savRate = inc > 0 ? (sav / inc) * 100 : 0;
+                const sym = getCurrencySymbol(user?.currency);
 
-              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 shadow-sm relative overflow-hidden">
-                <div className="flex items-start gap-5 relative z-10">
-                  <FcLineChart className="mt-1 drop-shadow-sm" size={32} />
-                  <div>
-                    <h4 className="text-sm font-black text-sky-600 uppercase mb-2 tracking-widest">Looking ahead</h4>
-                    <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                      You have enough balance to cover your upcoming bills this week. You're doing great!
-                    </p>
+                // Case 1: No data
+                if (inc === 0 && exp === 0) {
+                  insights.push({
+                    type: 'neutral',
+                    icon: FcIdea,
+                    color: 'text-slate-500',
+                    bgHover: 'bg-slate-500/10',
+                    title: 'Welcome to your Dashboard',
+                    desc: 'Start logging your income and expenses to unlock personalized financial insights.'
+                  });
+                  return insights;
+                }
+
+                // Case 2: Spending
+                if (exp > inc && inc > 0) {
+                  insights.push({
+                    type: 'alert',
+                    icon: FcHighPriority,
+                    color: 'text-rose-600',
+                    bgHover: 'bg-rose-500/10',
+                    title: 'Spending Alert',
+                    desc: <>You've spent <span className="text-rose-700 font-financial font-bold">{sym}{Math.abs(sav).toLocaleString()}</span> more than you earned. Let's look at your budget to find some savings.</>
+                  });
+                } else if (exp > inc && inc === 0) {
+                  insights.push({
+                    type: 'alert',
+                    icon: FcHighPriority,
+                    color: 'text-rose-600',
+                    bgHover: 'bg-rose-500/10',
+                    title: 'High Burn Rate',
+                    desc: <>You have expenses of <span className="font-financial font-bold">{sym}{exp.toLocaleString()}</span> with no recorded income. Ensure your income is fully tracked.</>
+                  });
+                }
+
+                // Case 3: Savings
+                if (savRate >= 50 && inc > 0) {
+                  insights.push({
+                    type: 'success',
+                    icon: FcOk,
+                    color: 'text-emerald-600',
+                    bgHover: 'bg-emerald-500/10',
+                    title: 'Stellar Savings',
+                    desc: <>Amazing! You're saving <strong className="text-emerald-700">{savRate.toFixed(1)}%</strong> of your income. Consider investing the surplus to accelerate wealth growth.</>
+                  });
+                } else if (savRate >= 20 && inc > 0) {
+                  insights.push({
+                    type: 'success',
+                    icon: FcOk,
+                    color: 'text-emerald-600',
+                    bgHover: 'bg-emerald-500/10',
+                    title: 'Healthy Cash Flow',
+                    desc: <>You're saving <strong className="text-emerald-700">{savRate.toFixed(1)}%</strong> of your income, which is right on track for healthy financial growth.</>
+                  });
+                } else if (savRate > 0 && savRate < 20 && inc > 0) {
+                  insights.push({
+                    type: 'warning',
+                    icon: FcIdea,
+                    color: 'text-amber-600',
+                    bgHover: 'bg-amber-500/10',
+                    title: 'Tight Margin',
+                    desc: <>You're saving <strong className="text-amber-700">{savRate.toFixed(1)}%</strong> of your income. Consider looking for small expenses to trim to boost your savings rate.</>
+                  });
+                }
+
+                // Case 4: Budget Alerts
+                if (budgets && budgets.length > 0) {
+                  const overBudgets = budgets.filter(b => {
+                    const spent = b.spentAmount ?? b.spent ?? 0;
+                    const limit = b.budgetedAmount ?? b.amount ?? 1;
+                    return (spent / limit) > 0.9;
+                  });
+                  if (overBudgets.length > 0) {
+                    insights.push({
+                      type: 'warning',
+                      icon: FcHighPriority,
+                      color: 'text-amber-600',
+                      bgHover: 'bg-amber-500/10',
+                      title: 'Budget Alert',
+                      desc: `You are nearing or exceeding your limit in ${overBudgets.length} categor${overBudgets.length > 1 ? 'ies' : 'y'}: ${overBudgets.map(b => b.category).join(', ')}.`
+                    });
+                  }
+                }
+
+                // Case 5: Highest spending category
+                if (pieData && pieData.length > 0) {
+                  const maxCat = [...pieData].sort((a, b) => b.value - a.value)[0];
+                  if (maxCat && maxCat.value > 0 && exp > 0) {
+                    const catPercent = (maxCat.value / exp) * 100;
+                    if (catPercent > 40) {
+                      insights.push({
+                        type: 'info',
+                        icon: FcLineChart,
+                        color: 'text-sky-600',
+                        bgHover: 'bg-sky-500/10',
+                        title: 'Spending Concentration',
+                        desc: <><strong className="text-sky-700">{maxCat.name}</strong> makes up {catPercent.toFixed(1)}% of your total expenses. Ensure this aligns with your priorities.</>
+                      });
+                    }
+                  }
+                }
+
+                // Always have a fallback insight if we only have < 2 insights
+                if (insights.length < 2 && inc > 0 && exp > 0) {
+                  insights.push({
+                    type: 'info',
+                    icon: FcLineChart,
+                    color: 'text-sky-600',
+                    bgHover: 'bg-sky-500/10',
+                    title: 'Looking Ahead',
+                    desc: "Your baseline spending seems consistent. You have enough cash flow to cover your upcoming bills this week."
+                  });
+                }
+
+                return insights.slice(0, 3).map((insight, idx) => (
+                  <div key={idx} className="p-6 rounded-3xl bg-white/5 backdrop-blur-md dark:backdrop-blur-none border border-white/10 shadow-2xl relative overflow-hidden group">
+                    <div className={`absolute inset-0 ${insight.bgHover} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    <div className="flex items-start gap-5 relative z-10">
+                      <insight.icon className="mt-1 drop-shadow-sm shrink-0" size={32} />
+                      <div>
+                        <h4 className={`text-sm font-black ${insight.color} uppercase mb-2 tracking-widest`}>{insight.title}</h4>
+                        <p className="text-sm text-slate-600 font-medium leading-relaxed">
+                          {insight.desc}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                ));
+              })()}
             </div>
           </div>
         </div>
