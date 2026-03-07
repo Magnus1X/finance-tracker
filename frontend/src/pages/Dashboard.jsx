@@ -138,10 +138,18 @@ const Dashboard = () => {
   return (
     <div className="space-y-8 pb-8">
       {/* Header Section */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-slate-900 dark:text-white mb-1 uppercase text-center lg:text-left">Dashboard</h1>
-          <p className="text-slate-500 font-bold text-xs tracking-wide uppercase">{format(new Date(), 'MMMM yyyy')} Overview</p>
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 relative">
+        <div className="flex flex-col sm:flex-row items-center gap-4 text-center lg:text-left z-10">
+          <img src="/finance-doodle.png" alt="Finance Doodle" className="w-20 h-20 sm:w-16 sm:h-16 object-contain hidden sm:block mix-blend-darken dark:invert dark:mix-blend-lighten opacity-80 shrink-0 drop-shadow-sm hover:scale-105 transition-transform" />
+          <div>
+            <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-slate-900 dark:text-white mb-1 uppercase flex flex-col sm:flex-row items-center gap-2 justify-center lg:justify-start">
+              <span className="sm:hidden w-16 h-16 inline-block mb-1">
+                <img src="/finance-doodle.png" alt="Finance Doodle" className="w-full h-full object-contain mix-blend-darken dark:invert dark:mix-blend-lighten opacity-90 drop-shadow-sm" />
+              </span>
+              Dashboard
+            </h1>
+            <p className="text-slate-500 font-bold text-xs tracking-wide uppercase">{format(new Date(), 'MMMM yyyy')} Overview</p>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-end gap-4 w-full lg:w-auto">
@@ -216,9 +224,11 @@ const Dashboard = () => {
       {/* Smart Insights & Budget Health */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Smart Insights Card */}
-        <div className="card relative overflow-hidden shadow-xl p-0 border-0 bg-white dark:bg-white">
-          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Data Abstract" className="absolute inset-0 w-full h-full object-cover opacity-5 contrast-100 grayscale mix-blend-multiply" />
-          <div className="absolute inset-0 bg-gradient-to-br from-white/95 to-slate-50/95" />
+        <div className="card relative overflow-hidden shadow-xl p-0 border-0 bg-white dark:bg-[#050505]">
+          <div className="absolute inset-0 right-0 w-full h-full lg:w-1/2 lg:left-1/2 lg:translate-x-10 object-cover opacity-10 dark:opacity-5 pointer-events-none">
+            <img src="/finance-doodle.png" alt="Finance Elements" className="w-full h-full object-contain" />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-br from-white/95 to-slate-50/95 dark:from-[#050505]/95 dark:to-[#0a0a0a]/95 mix-blend-multiply" />
 
           <div className="relative z-10 p-8 h-full flex flex-col">
             <div className="flex justify-between items-start mb-8">
