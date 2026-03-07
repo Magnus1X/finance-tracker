@@ -426,9 +426,9 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="h-[350px] w-full">
+          <div className="h-[280px] sm:h-[350px] w-full min-h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={lineChartData}>
+              <AreaChart data={lineChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorNetWorth" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#059669" stopOpacity={0.15} />
@@ -470,7 +470,7 @@ const Dashboard = () => {
             <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Category Split</h2>
           </div>
 
-          <div className="relative w-full aspect-square max-h-[260px] mx-auto mb-6 flex items-center justify-center">
+          <div className="relative w-full aspect-square max-h-[260px] mx-auto mb-6 flex items-center justify-center min-h-[200px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
