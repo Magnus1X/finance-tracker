@@ -140,11 +140,11 @@ const Dashboard = () => {
       {/* Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 relative">
         <div className="flex flex-col sm:flex-row items-center gap-4 text-center lg:text-left z-10">
-          <img src="/finance-doodle.png" alt="Finance Doodle" className="w-20 h-20 sm:w-16 sm:h-16 object-contain hidden sm:block mix-blend-darken dark:invert dark:mix-blend-lighten opacity-80 shrink-0 drop-shadow-sm hover:scale-105 transition-transform" />
+          <img src="/finance-insights.png" alt="Finance Doodle" className="w-20 h-20 sm:w-16 sm:h-16 object-contain hidden sm:block mix-blend-darken dark:invert dark:mix-blend-lighten opacity-80 shrink-0 drop-shadow-sm hover:scale-105 transition-transform" />
           <div>
             <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-slate-900 dark:text-white mb-1 uppercase flex flex-col sm:flex-row items-center gap-2 justify-center lg:justify-start">
               <span className="sm:hidden w-16 h-16 inline-block mb-1">
-                <img src="/finance-doodle.png" alt="Finance Doodle" className="w-full h-full object-contain mix-blend-darken dark:invert dark:mix-blend-lighten opacity-90 drop-shadow-sm" />
+                <img src="/finance-insights.png" alt="Finance Doodle" className="w-full h-full object-contain mix-blend-darken dark:invert dark:mix-blend-lighten opacity-90 drop-shadow-sm" />
               </span>
               Dashboard
             </h1>
@@ -226,7 +226,7 @@ const Dashboard = () => {
         {/* Smart Insights Card */}
         <div className="card relative overflow-hidden shadow-xl p-0 border-0 bg-white dark:bg-[#050505]">
           <div className="absolute inset-0 right-0 w-full h-full lg:w-1/2 lg:left-1/2 lg:translate-x-10 object-cover opacity-10 dark:opacity-5 pointer-events-none">
-            <img src="/finance-doodle.png" alt="Finance Elements" className="w-full h-full object-contain" />
+            <img src="/finance-insights.png" alt="Finance Elements" className="w-full h-full object-contain" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-br from-white/95 to-slate-50/95 dark:from-[#050505]/95 dark:to-[#0a0a0a]/95 mix-blend-multiply" />
 
