@@ -470,7 +470,7 @@ const Dashboard = () => {
             <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Category Split</h2>
           </div>
 
-          <div className="relative w-full aspect-square max-h-[260px] mx-auto mb-6 flex items-center justify-center min-h-[200px]">
+          <div className="relative w-full aspect-square max-h-[260px] mx-auto mb-6 flex items-center justify-center min-h-[220px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
