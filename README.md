@@ -1,6 +1,8 @@
 # Finance Awareness Platform
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/Magnus1X/finance-tracker)
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB) ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=flat&logo=express&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat&logo=mongodb&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=flat&logo=Prisma&logoColor=white)
+
 ## Project Overview
 Finance Awareness Platform is a comprehensive, beginner-friendly web application designed to educate users about personal finance, money management, investing basics, and market awareness. The platform serves as a modern tool for users who wish to track their daily transactions while simultaneously learning how to use their money wisely and grow their wealth.
 
