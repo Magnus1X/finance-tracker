@@ -39,7 +39,16 @@ const Learn = () => {
         }
     ];
 
+    const totalLessons = roadmap.reduce((acc, level) => acc + level.lessons.length, 0);
+    const progressPercentage = Math.round((completedLessons.length / totalLessons) * 100) || 0;
 
+    const toggleLessonCompletion = (lessonId) => {
+        setCompletedLessons(prev =>
+            prev.includes(lessonId)
+                ? prev.filter(id => id !== lessonId)
+                : [...prev, lessonId]
+        );
+    };
 
     return (
         <div className="space-y-10 pb-20">
@@ -49,14 +58,14 @@ const Learn = () => {
                     <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">Financial<span className="text-emerald-600">Mastery</span></h1>
                     <p className="text-slate-500 font-bold text-sm tracking-wide uppercase mt-1">Structured Curriculum • Advanced Performance</p>
                 </div>
-                <div className="flex gap-4">
-                    <div className="p-4 bg-white dark:bg-[#050505] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                <div className="flex gap-4 w-full md:w-auto">
+                    <div className="flex-1 md:flex-none p-4 bg-white dark:bg-[#050505] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm text-center md:text-left">
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Progress</p>
-                        <p className="text-xl font-black text-emerald-600">12%</p>
+                        <p className="text-xl font-black text-emerald-600">{progressPercentage}%</p>
                     </div>
-                    <div className="p-4 bg-white dark:bg-[#050505] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Lessons Done</p>
-                        <p className="text-xl font-black text-slate-900 dark:text-white">0/9</p>
+                    <div className="flex-1 md:flex-none p-4 bg-white dark:bg-[#050505] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm text-center md:text-left">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Chapters Read</p>
+                        <p className="text-xl font-black text-slate-900 dark:text-white">{completedLessons.length}/{totalLessons}</p>
                     </div>
                 </div>
             </div>
@@ -87,7 +96,9 @@ const Learn = () => {
                                         deadline={lesson.deadline}
                                         multiplier={lesson.multiplier}
                                         progress={lesson.points}
-                                        onAction={() => console.log('Action', lesson.id)}
+                                        isCompleted={completedLessons.includes(lesson.id)}
+                                        onToggleCompletion={() => toggleLessonCompletion(lesson.id)}
+                                        onAction={() => console.log('Read Chapter', lesson.id)}
                                     />
                                 </div>
                             ))}

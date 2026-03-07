@@ -9,6 +9,8 @@ const CourseCard = ({
     image,
     deadline,
     multiplier = "2x",
+    isCompleted = false,
+    onToggleCompletion,
     onAction
 }) => {
     return (
@@ -32,7 +34,14 @@ const CourseCard = ({
                 {/* Content Section */}
                 <div className="flex-1 flex flex-col gap-3">
                     <div className="flex items-center justify-between">
-                        <span className="text-[9px] font-black text-emerald-600 uppercase tracking-[0.15em] bg-emerald-50 dark:bg-emerald-950/30 px-2.5 py-1 rounded-md">{status}</span>
+                        <span className={`text-[9px] font-black uppercase tracking-[0.15em] px-2.5 py-1 rounded-md ${isCompleted ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/30' : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30'}`}>
+                            {isCompleted ? 'Completed' : status}
+                        </span>
+                        {isCompleted && (
+                            <span className="text-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 p-1 rounded-full">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                            </span>
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -58,12 +67,18 @@ const CourseCard = ({
                 </div>
 
                 {/* Footer Area */}
-                <div className="mt-6 pt-6 border-t border-slate-50 dark:border-slate-800">
+                <div className="mt-6 pt-6 border-t border-slate-50 dark:border-slate-800 flex flex-col gap-2">
                     <button
                         onClick={onAction}
                         className="w-full py-4 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white rounded-xl font-black text-[11px] uppercase tracking-[0.2em] hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-600 transition-all active:scale-95 border border-slate-100 dark:border-slate-700/50"
                     >
-                        Enroll Now
+                        Read Chapter
+                    </button>
+                    <button
+                        onClick={onToggleCompletion}
+                        className={`w-full py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.2em] transition-all active:scale-95 border ${isCompleted ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 border-indigo-200 dark:border-indigo-800/50 hover:bg-slate-50 hover:text-slate-600' : 'bg-transparent text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                    >
+                        {isCompleted ? 'Mark Unread' : 'Mark as Read'}
                     </button>
                 </div>
             </div>
