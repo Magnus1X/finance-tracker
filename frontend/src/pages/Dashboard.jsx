@@ -138,25 +138,25 @@ const Dashboard = () => {
   return (
     <div className="space-y-8 pb-8">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-slate-900 dark:text-white mb-1 uppercase">Dashboard</h1>
+          <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-slate-900 dark:text-white mb-1 uppercase text-center lg:text-left">Dashboard</h1>
           <p className="text-slate-500 font-bold text-xs tracking-wide uppercase">{format(new Date(), 'MMMM yyyy')} Overview</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-end gap-4 w-full lg:w-auto">
           {/* Export Buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center gap-2 w-full sm:w-auto">
             <button
               onClick={handleExportPDF}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-800/50 transition-colors border border-emerald-200 dark:border-emerald-800 text-sm font-bold shadow-sm"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-800/50 transition-colors border border-emerald-200 dark:border-emerald-800 text-sm font-bold shadow-sm"
               title="Download PDF Report"
             >
               <FiDownload size={16} /> PDF
             </button>
             <button
               onClick={handleExportCSV}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 text-sm font-bold shadow-sm"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 text-sm font-bold shadow-sm"
               title="Download CSV Data"
             >
               <FiDownload size={16} /> CSV
@@ -164,8 +164,8 @@ const Dashboard = () => {
           </div>
 
           {/* Date Range Picker */}
-          <div className="flex items-center gap-3 bg-white dark:bg-[#050505] p-3 px-5 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
-            <FiCalendar className="text-emerald-600" size={18} />
+          <div className="flex items-center justify-center gap-3 bg-white dark:bg-[#050505] p-3 px-5 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 w-full sm:w-auto overflow-x-auto scrollbar-hide">
+            <FiCalendar className="text-emerald-600 flex-shrink-0" size={18} />
             <div className="flex items-center gap-3 text-sm font-black text-slate-900 dark:text-slate-100">
               <input
                 type="date"
@@ -426,9 +426,9 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="h-[350px] w-full">
+          <div className="h-[280px] sm:h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={lineChartData}>
+              <AreaChart data={lineChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorNetWorth" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#059669" stopOpacity={0.15} />
@@ -525,15 +525,15 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity Table */}
-      <div className="card overflow-hidden">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Recent Audit Log</h2>
-          <Link to="/transactions" className="btn-secondary py-2 px-6 text-[10px] tracking-widest flex items-center gap-2">
+      <div className="card overflow-hidden p-0 sm:p-5 md:p-8 relative">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pt-6 sm:pt-0 px-6 sm:px-0">
+          <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter text-center sm:text-left">Recent Audit Log</h2>
+          <Link to="/transactions" className="btn-secondary py-2 px-6 text-[10px] tracking-widest flex items-center gap-2 whitespace-nowrap">
             Full Ledger <FiArrowRight />
           </Link>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div className="overflow-x-auto scrollbar-hide px-6 sm:px-0 pb-6 sm:pb-0">
+          <table className="w-full min-w-[550px]">
             <thead>
               <tr className="text-left border-b-2 border-slate-100 dark:border-slate-800">
                 <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Transaction Vector</th>
