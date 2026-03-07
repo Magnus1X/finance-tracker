@@ -138,33 +138,25 @@ const Dashboard = () => {
   return (
     <div className="space-y-8 pb-8">
       {/* Header Section */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 relative">
-        <div className="flex flex-col sm:flex-row items-center gap-4 text-center lg:text-left z-10">
-          <img src="/finance-insights.png" alt="Finance Doodle" className="w-20 h-20 sm:w-16 sm:h-16 object-contain hidden sm:block mix-blend-darken dark:invert dark:mix-blend-lighten opacity-80 shrink-0 drop-shadow-sm hover:scale-105 transition-transform" />
-          <div>
-            <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-slate-900 dark:text-white mb-1 uppercase flex flex-col sm:flex-row items-center gap-2 justify-center lg:justify-start">
-              <span className="sm:hidden w-16 h-16 inline-block mb-1">
-                <img src="/finance-insights.png" alt="Finance Doodle" className="w-full h-full object-contain mix-blend-darken dark:invert dark:mix-blend-lighten opacity-90 drop-shadow-sm" />
-              </span>
-              Dashboard
-            </h1>
-            <p className="text-slate-500 font-bold text-xs tracking-wide uppercase">{format(new Date(), 'MMMM yyyy')} Overview</p>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <div>
+          <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-slate-900 dark:text-white mb-1 uppercase">Dashboard</h1>
+          <p className="text-slate-500 font-bold text-xs tracking-wide uppercase">{format(new Date(), 'MMMM yyyy')} Overview</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-end gap-4 w-full lg:w-auto">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
           {/* Export Buttons */}
-          <div className="flex items-center justify-center gap-2 w-full sm:w-auto">
+          <div className="flex items-center gap-2">
             <button
               onClick={handleExportPDF}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-800/50 transition-colors border border-emerald-200 dark:border-emerald-800 text-sm font-bold shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-800/50 transition-colors border border-emerald-200 dark:border-emerald-800 text-sm font-bold shadow-sm"
               title="Download PDF Report"
             >
               <FiDownload size={16} /> PDF
             </button>
             <button
               onClick={handleExportCSV}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 text-sm font-bold shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700 text-sm font-bold shadow-sm"
               title="Download CSV Data"
             >
               <FiDownload size={16} /> CSV
@@ -172,8 +164,8 @@ const Dashboard = () => {
           </div>
 
           {/* Date Range Picker */}
-          <div className="flex items-center justify-center gap-3 bg-white dark:bg-[#050505] p-3 px-5 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 w-full sm:w-auto overflow-x-auto scrollbar-hide">
-            <FiCalendar className="text-emerald-600 flex-shrink-0" size={18} />
+          <div className="flex items-center gap-3 bg-white dark:bg-[#050505] p-3 px-5 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+            <FiCalendar className="text-emerald-600" size={18} />
             <div className="flex items-center gap-3 text-sm font-black text-slate-900 dark:text-slate-100">
               <input
                 type="date"
@@ -224,11 +216,9 @@ const Dashboard = () => {
       {/* Smart Insights & Budget Health */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Smart Insights Card */}
-        <div className="card relative overflow-hidden shadow-xl p-0 border-0 bg-white dark:bg-[#050505]">
-          <div className="absolute inset-0 right-0 w-full h-full lg:w-1/2 lg:left-1/2 lg:translate-x-10 object-cover opacity-10 dark:opacity-5 pointer-events-none">
-            <img src="/finance-insights.png" alt="Finance Elements" className="w-full h-full object-contain" />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-br from-white/95 to-slate-50/95 dark:from-[#050505]/95 dark:to-[#0a0a0a]/95 mix-blend-multiply" />
+        <div className="card relative overflow-hidden shadow-xl p-0 border-0 bg-white dark:bg-white">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Data Abstract" className="absolute inset-0 w-full h-full object-cover opacity-5 contrast-100 grayscale mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-br from-white/95 to-slate-50/95" />
 
           <div className="relative z-10 p-8 h-full flex flex-col">
             <div className="flex justify-between items-start mb-8">
@@ -436,9 +426,9 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="h-[280px] sm:h-[350px] w-full">
+          <div className="h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={lineChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <AreaChart data={lineChartData}>
                 <defs>
                   <linearGradient id="colorNetWorth" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#059669" stopOpacity={0.15} />
@@ -535,15 +525,15 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity Table */}
-      <div className="card overflow-hidden p-0 sm:p-5 md:p-8 relative">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pt-6 sm:pt-0 px-6 sm:px-0">
-          <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter text-center sm:text-left">Recent Audit Log</h2>
-          <Link to="/transactions" className="btn-secondary py-2 px-6 text-[10px] tracking-widest flex items-center gap-2 whitespace-nowrap">
+      <div className="card overflow-hidden">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Recent Audit Log</h2>
+          <Link to="/transactions" className="btn-secondary py-2 px-6 text-[10px] tracking-widest flex items-center gap-2">
             Full Ledger <FiArrowRight />
           </Link>
         </div>
-        <div className="overflow-x-auto scrollbar-hide px-6 sm:px-0 pb-6 sm:pb-0">
-          <table className="w-full min-w-[550px]">
+        <div className="overflow-x-auto">
+          <table className="w-full">
             <thead>
               <tr className="text-left border-b-2 border-slate-100 dark:border-slate-800">
                 <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Transaction Vector</th>
