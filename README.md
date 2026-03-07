@@ -1,5 +1,6 @@
 # Finance Awareness Platform
 
+![GitHub last commit](https://img.shields.io/github/last-commit/Magnus1X/finance-tracker)
 ## Project Overview
 Finance Awareness Platform is a comprehensive, beginner-friendly web application designed to educate users about personal finance, money management, investing basics, and market awareness. The platform serves as a modern tool for users who wish to track their daily transactions while simultaneously learning how to use their money wisely and grow their wealth.
 
