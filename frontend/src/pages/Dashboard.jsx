@@ -524,50 +524,37 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Recent Activity Table */}
-      <div className="card overflow-hidden">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Recent Audit Log</h2>
-          <Link to="/transactions" className="btn-secondary py-2 px-6 text-[10px] tracking-widest flex items-center gap-2">
+      {/* Recent Activity List */}
+      <div className="card">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+          <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter text-center sm:text-left">Recent Audit Log</h2>
+          <Link to="/transactions" className="btn-secondary py-2 px-6 text-[10px] tracking-widest flex items-center gap-2 w-full sm:w-auto justify-center">
             Full Ledger <FiArrowRight />
           </Link>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="text-left border-b-2 border-slate-100 dark:border-slate-800">
-                <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Transaction Vector</th>
-                <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Execution Date</th>
-                <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Net Volume</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-50 dark:divide-slate-800/50">
-              {recentTransactions.map((transaction) => (
-                <tr key={transaction.id} className="group hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-                  <td className="py-6">
-                    <div className="flex items-center gap-5">
-                      <div>
-                        <p className="font-black text-slate-900 dark:text-white text-base tracking-tight leading-tight">{transaction.category}</p>
-                        <p className="text-xs font-bold text-slate-400 truncate max-w-[250px] mt-0.5">{transaction.description || 'System generated entry'}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-6 text-center">
-                    <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg">{format(new Date(transaction.date), 'dd MMM yyyy')}</span>
-                  </td>
-                  <td className="py-6 text-right">
-                    <div className="text-right">
-                      <div className={`text-sm ${transaction.type === 'income' ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}`}>
-                        <span>{transaction.type === 'income' ? '+' : '-'}</span>
-                        <CurrencyDisplay amount={transaction.amount} valueClassName="font-financial" />
-                      </div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{transaction.category}</p>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="flex flex-col gap-3">
+          {recentTransactions.map((transaction) => (
+            <div key={transaction.id} className="flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/30 border border-slate-100 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all group">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex shrink-0 items-center justify-center shadow-sm ${transaction.type === 'income' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>
+                  {transaction.type === 'income' ? <FiTrendingUp size={18} /> : <FiTrendingDown size={18} />}
+                </div>
+                <div className="min-w-0">
+                  <p className="font-black text-slate-900 dark:text-white text-sm sm:text-base tracking-tight leading-tight truncate">{transaction.category}</p>
+                  <p className="text-[10px] sm:text-xs font-bold text-slate-400 truncate max-w-[120px] sm:max-w-xs mt-0.5">{transaction.description || 'System generated entry'}</p>
+                </div>
+              </div>
+              <div className="text-right flex flex-col items-end gap-1.5 shrink-0 pl-2">
+                <div className={`text-sm sm:text-base font-black flex items-center gap-0.5 ${transaction.type === 'income' ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}`}>
+                  <span>{transaction.type === 'income' ? '+' : '-'}</span>
+                  <CurrencyDisplay amount={transaction.amount} valueClassName="font-financial" />
+                </div>
+                <span className="text-[9px] sm:text-[10px] font-black text-slate-500 uppercase tracking-widest bg-white dark:bg-black border border-slate-200 dark:border-slate-700 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md shadow-sm whitespace-nowrap">
+                  {format(new Date(transaction.date), 'dd MMM')}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
