@@ -391,18 +391,18 @@ const Landing = () => {
             © {new Date().getFullYear()} FINANCEERA PLATFORM. ALL RIGHTS RESERVED.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-black dark:hover:bg-white dark:hover:text-black hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-500/20 transition-all duration-300">
+            <a href="https://x.com/SauravK75745218" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-black dark:hover:bg-white dark:hover:text-black hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-500/20 transition-all duration-300">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#0A66C2] hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#0A66C2]/20 transition-all duration-300">
+            <a href="https://www.linkedin.com/in/saurav-kumar-b7b87b338/" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#0A66C2] hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#0A66C2]/20 transition-all duration-300">
               <FiLinkedin size={18} />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#333333] dark:hover:bg-white dark:hover:text-black hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-500/20 transition-all duration-300">
+            <a href="https://github.com/Magnus1X" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#333333] dark:hover:bg-white dark:hover:text-black hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-500/20 transition-all duration-300">
               <FiGithub size={18} />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#dc2743]/20 transition-all duration-300">
+            <a href="https://www.instagram.com/saurav.jadhab/" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 hover:text-white hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#dc2743]/20 transition-all duration-300">
               <FiInstagram size={18} />
             </a>
           </div>
