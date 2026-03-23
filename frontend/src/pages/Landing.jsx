@@ -185,21 +185,7 @@ const Landing = () => {
               alt="Finance Illustration"
               className="w-full h-[500px] object-contain rounded-2xl"
             />
-            {/* Overlay floating element */}
-            <div className="absolute bottom-10 left-10 p-6 bg-white/90 dark:bg-[#050505] backdrop-blur-xl dark:backdrop-blur-none rounded-2xl shadow-2xl border border-white/20 dark:border-slate-800/50 w-72">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-sm">
-                  <FcLineChart size={24} />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest font-black text-slate-500">Net Capital Surplus</p>
-                  <p className="text-xl font-black tracking-tighter text-slate-900 dark:text-white">$142,500.00</p>
-                </div>
-              </div>
-              <div className="h-16 w-full opacity-60">
-                <FcPositiveDynamic className="w-full h-full drop-shadow-sm opacity-80" />
-              </div>
-            </div>
+
           </div>
         </motion.div>
       </section>
