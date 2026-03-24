@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiArrowRight } from 'react-icons/fi';
-import { FcIdea, FcPieChart, FcApproval, FcHighPriority, FcPrivacy, FcPositiveDynamic } from 'react-icons/fc';
+import { FiShield, FiZap, FiPieChart, FiCheckCircle } from 'react-icons/fi';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { getCurrencySymbol, formatCurrency } from '../utils/currency';
 import CurrencyDisplay from '../components/CurrencyDisplay';
@@ -77,7 +77,7 @@ const AIAdvisor = () => {
                         <p className="text-emerald-100 font-bold text-sm tracking-wide mt-2 opacity-80">Simple, personalized financial guidance.</p>
                     </div>
                     <div className="bg-white/10 backdrop-blur-md dark:backdrop-blur-none px-6 py-3 rounded-2xl border border-white/20 shadow-xl flex items-center gap-3 text-emerald-300">
-                        <FcPrivacy size={20} />
+                        <FiShield size={20} className="text-emerald-500" />
                         <span className="text-xs font-black uppercase tracking-widest text-white shadow-sm">100% Private</span>
                     </div>
                 </div>
@@ -126,7 +126,7 @@ const AIAdvisor = () => {
                                 disabled={!formData.income || !formData.expenses}
                                 className="w-full btn-primary py-5 text-base rounded-2xl flex items-center justify-center gap-3 transition-all disabled:opacity-30 disabled:grayscale shadow-xl shadow-emerald-500/20"
                             >
-                                <FcIdea size={24} />
+                                <FiZap size={24} className="text-emerald-500" />
                                 <span className="font-black tracking-wide shadow-sm">Get My Plan</span>
                             </button>
                         </div>
@@ -178,7 +178,7 @@ const AIAdvisor = () => {
                             {/* Strategic Allocation Bars */}
                             <div className="lg:col-span-12 xl:col-span-7 card p-10 shadow-xl shadow-slate-200/40  border border-slate-200 dark:border-slate-800">
                                 <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-10 flex items-center gap-3">
-                                    <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm"><FcPieChart size={24} /></div>
+                                    <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm"><FiPieChart size={24} className="text-slate-600 dark:text-slate-300" /></div>
                                     How You Should Budget
                                 </h3>
                                 <div className="space-y-10">
@@ -204,12 +204,12 @@ const AIAdvisor = () => {
                         {/* Recommendation Engine */}
                         <div className="card p-8 md:p-12 bg-white dark:bg-black border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50  min-h-[300px]">
                             <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter mb-10 flex items-center gap-4">
-                                <div className="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl border border-emerald-100 dark:border-emerald-800 shadow-sm"><FcApproval size={32} /></div>
+                                <div className="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl border border-emerald-100 dark:border-emerald-800 shadow-sm"><FiCheckCircle size={32} className="text-emerald-600" /></div>
                                 Your Personalized Tips
                             </h2>
                             {loading ? (
                                 <div className="flex flex-col items-center justify-center py-10 opacity-50 animate-pulse">
-                                    <FcIdea size={48} className="mb-4" />
+                                    <FiZap size={48} className="mb-4 text-emerald-500 opacity-80" />
                                     <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Analyzing Your Finances...</p>
                                 </div>
                             ) : (

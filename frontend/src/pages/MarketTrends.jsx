@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, ResponsiveContainer, YAxis, XAxis, Tooltip, CartesianGrid } from 'recharts';
 import { FiArrowRight } from 'react-icons/fi';
-import { FcGlobe, FcPositiveDynamic, FcNegativeDynamic, FcNews, FcLineChart, FcIdea, FcApproval, FcInfo } from 'react-icons/fc';
+import { FiGlobe, FiTrendingUp, FiTrendingDown, FiFileText, FiActivity, FiZap, FiCheckCircle, FiInfo } from 'react-icons/fi';
 import axios from 'axios';
 import { aiAPI } from '../services/api';
 
@@ -131,7 +131,7 @@ const MarketTrends = () => {
                     <p className="text-slate-500 font-bold text-sm tracking-wide uppercase mt-2">Global Economic Flow • Simulated Terminal Data</p>
                 </div>
                 <div className="flex items-center gap-3 px-6 py-2 rounded-full bg-slate-50 dark:bg-[#050505] border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-xs font-black uppercase tracking-widest shadow-sm">
-                    <FcGlobe size={18} className="animate-spin-slow" />
+                    <FiGlobe size={18} className="text-emerald-500 animate-spin-slow" />
                     <span>Real-time Terminal Active</span>
                 </div>
             </div>
@@ -147,7 +147,7 @@ const MarketTrends = () => {
                                 <div className="flex justify-between items-start mb-2">
                                     <p className="text-xs font-black text-slate-500 uppercase tracking-widest">{h.label}</p>
                                     <div className={`px-2 py-1 rounded-full text-[10px] font-black flex items-center gap-1 border ${h.up ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:border-emerald-800 dark:bg-emerald-950/50' : 'bg-rose-50 text-rose-700 border-rose-200 dark:border-rose-800 dark:bg-rose-950/50'}`}>
-                                        {h.up ? <FcPositiveDynamic size={14} /> : <FcNegativeDynamic size={14} />}
+                                        {h.up ? <FiTrendingUp size={14} className="text-emerald-500" /> : <FiTrendingDown size={14} className="text-rose-500" />}
                                         {h.change}
                                     </div>
                                 </div>
@@ -226,7 +226,7 @@ const MarketTrends = () => {
                 <div className="lg:col-span-8 space-y-8">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm">
-                            <FcNews size={22} />
+                            <FiFileText size={22} className="text-sky-500" />
                         </div>
                         <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Verified Intelligence Flow</h3>
                     </div>
@@ -247,7 +247,7 @@ const MarketTrends = () => {
                                     <img src={item.image} alt="News" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-900 group-hover:scale-105 transition-transform duration-700">
-                                        <FcNews size={48} className="opacity-50" />
+                                        <FiFileText size={48} className="opacity-50 text-slate-400" />
                                     </div>
                                 )}
                                 <div className="absolute top-4 left-4">
@@ -259,7 +259,7 @@ const MarketTrends = () => {
                             <div className="p-8 md:w-2/3 flex flex-col justify-center">
                                 <div className="flex justify-between items-start mb-4">
                                     <span className="text-xs font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2">
-                                        <FcLineChart size={16} /> {item.source}
+                                        <FiActivity size={16} className="text-emerald-500" /> {item.source}
                                     </span>
                                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                                         {new Date(item.datetime * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -283,20 +283,20 @@ const MarketTrends = () => {
                 <div className="lg:col-span-4 space-y-8">
                     <div className="card p-10 bg-slate-900 text-white shadow-2xl relative overflow-hidden">
                         <div className="relative z-10 space-y-8">
-                            <FcIdea size={44} />
+                            <FiZap size={44} className="text-amber-500" />
                             <h3 className="text-2xl font-black tracking-tighter uppercase leading-tight">Strategic <br /> Awareness</h3>
                             <p className="text-slate-400 text-sm font-bold leading-relaxed">
                                 Market intelligence allows for the synchronization of personal assets with global economic shifts. Professional awareness prevents capital erosion by inflation.
                             </p>
                             <div className="pt-4 space-y-4">
                                 <div className="flex items-center gap-3 text-xs font-black uppercase text-emerald-400">
-                                    <FcApproval size={18} /> Asset Allocation
+                                    <FiCheckCircle size={18} className="text-emerald-500" /> Asset Allocation
                                 </div>
                                 <div className="flex items-center gap-3 text-xs font-black uppercase text-emerald-400">
-                                    <FcApproval size={18} /> Risk Assessment
+                                    <FiCheckCircle size={18} className="text-emerald-500" /> Risk Assessment
                                 </div>
                                 <div className="flex items-center gap-3 text-xs font-black uppercase text-emerald-400">
-                                    <FcApproval size={18} /> Inflation Guard
+                                    <FiCheckCircle size={18} className="text-emerald-500" /> Inflation Guard
                                 </div>
                             </div>
                             <button onClick={handleTerminalBasics} className="w-full btn-primary py-4 text-xs tracking-[0.2em] shadow-none ring-1 ring-white/10 mt-8 disabled:opacity-50" disabled={aiLoading}>
@@ -308,7 +308,7 @@ const MarketTrends = () => {
 
                     <div className="card p-8 border-slate-100 dark:border-slate-800 bg-sky-50/20">
                         <div className="flex items-center gap-4 mb-4">
-                            <FcInfo size={40} />
+                            <FiInfo size={40} className="text-sky-500" />
                             <div>
                                 <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Smart Investing Flow</h5>
                                 <h4 className="text-lg font-black text-slate-900 dark:text-white tracking-tighter leading-tight mt-1">Want to grow your wealth?</h4>
@@ -348,7 +348,7 @@ const MarketTrends = () => {
                     <div className="glass card w-full max-w-2xl max-h-[80vh] overflow-y-auto">
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-400 dark:from-emerald-400 dark:to-emerald-200 bg-clip-text text-transparent flex items-center gap-2">
-                                <FcIdea size={28} /> Terminal Basics
+                                <FiZap size={28} className="text-emerald-500" /> Terminal Basics
                             </h2>
                             <button onClick={() => setShowAiModal(false)} className="text-slate-400 hover:text-rose-500 transition-colors text-sm font-bold uppercase tracking-widest">
                                 Close

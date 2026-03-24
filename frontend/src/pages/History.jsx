@@ -7,7 +7,7 @@ import CurrencyDisplay from '../components/CurrencyDisplay';
 import { format } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { FiArrowUpRight, FiArrowDownRight, FiFilter, FiClock } from 'react-icons/fi';
-import { FcComboChart, FcIdea } from 'react-icons/fc';
+import { FiBarChart2, FiInbox } from 'react-icons/fi';
 
 const CATEGORIES = ['Food', 'Rent', 'Transport', 'Entertainment', 'Shopping', 'Bills', 'Healthcare', 'Education', 'Other'];
 
@@ -78,60 +78,60 @@ const History = () => {
   const net = totalIncome - totalExpense;
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-5xl mx-auto space-y-6 pb-16">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <div className="w-16 h-16 rounded-2xl bg-white/50 dark:bg-slate-800 shadow-inner flex items-center justify-center border border-white/60 dark:border-slate-700">
-          <FcComboChart size={36} className="drop-shadow-md" />
+      <div className="flex items-center gap-4 mb-6">
+        <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center border border-slate-200 dark:border-slate-800">
+          <FiBarChart2 size={24} className="text-emerald-600" />
         </div>
         <div>
-          <h1 className="text-3xl font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none">Transaction History</h1>
-          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">Your complete financial record</p>
+          <h1 className="text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">Transaction History</h1>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Your complete financial record</p>
         </div>
       </div>
 
       {/* Summary Stats */}
       {!loading && transactions.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="card shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center shrink-0">
-              <FiArrowUpRight className="text-emerald-600" size={22} />
+          <div className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-800/50">
+              <FiArrowUpRight className="text-emerald-600" size={18} />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Total Income</p>
-              <p className="text-xl font-black text-emerald-600">{symbol}{totalIncome.toLocaleString()}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Total Income</p>
+              <p className="text-lg font-bold text-emerald-600">{symbol}{totalIncome.toLocaleString()}</p>
             </div>
           </div>
-          <div className="card shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/30 flex items-center justify-center shrink-0">
-              <FiArrowDownRight className="text-rose-500" size={22} />
+          <div className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-rose-50 dark:bg-rose-900/20 flex items-center justify-center shrink-0 border border-rose-100 dark:border-rose-800/50">
+              <FiArrowDownRight className="text-rose-500" size={18} />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Total Expenses</p>
-              <p className="text-xl font-black text-rose-500">{symbol}{totalExpense.toLocaleString()}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Total Expenses</p>
+              <p className="text-lg font-bold text-rose-500">{symbol}{totalExpense.toLocaleString()}</p>
             </div>
           </div>
-          <div className="card shadow-sm flex items-center gap-4">
-            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${net >= 0 ? 'bg-sky-50 dark:bg-sky-950/30' : 'bg-amber-50 dark:bg-amber-950/30'}`}>
-              <FiFilter className={net >= 0 ? 'text-sky-500' : 'text-amber-500'} size={20} />
+          <div className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-4">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border ${net >= 0 ? 'bg-sky-50 border-sky-100 dark:border-sky-800/50 dark:bg-sky-900/20' : 'bg-amber-50 border-amber-100 dark:border-amber-800/50 dark:bg-amber-900/20'}`}>
+              <FiFilter className={net >= 0 ? 'text-sky-500' : 'text-amber-500'} size={18} />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Net Balance</p>
-              <p className={`text-xl font-black ${net >= 0 ? 'text-sky-500' : 'text-amber-500'}`}>{net >= 0 ? '+' : ''}{symbol}{net.toLocaleString()}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Net Balance</p>
+              <p className={`text-lg font-bold ${net >= 0 ? 'text-sky-500' : 'text-amber-500'}`}>{net >= 0 ? '+' : ''}{symbol}{net.toLocaleString()}</p>
             </div>
           </div>
         </div>
       )}
 
       {/* Filters */}
-      <div className="card shadow-sm border-0">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Month</label>
+            <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">Month</label>
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-medium focus:outline-none focus:border-emerald-500 transition-colors"
             >
               <option value="">All Months</option>
               {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
@@ -140,11 +140,11 @@ const History = () => {
             </select>
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Year</label>
+            <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">Year</label>
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-medium focus:outline-none focus:border-emerald-500 transition-colors"
             >
               <option value="">All Years</option>
               {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map((y) => (
@@ -153,11 +153,11 @@ const History = () => {
             </select>
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Category</label>
+            <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">Category</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-medium focus:outline-none focus:border-emerald-500 transition-colors"
             >
               <option value="">All Categories</option>
               {CATEGORIES.map((cat) => (
@@ -166,11 +166,11 @@ const History = () => {
             </select>
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Type</label>
+            <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">Type</label>
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-medium focus:outline-none focus:border-emerald-500 transition-colors"
             >
               <option value="">All Types</option>
               <option value="income">Income</option>
@@ -182,15 +182,15 @@ const History = () => {
 
       {/* Chart */}
       {!loading && chartData.length > 0 && (
-        <div className={`card shadow-xl relative overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-100'
+        <div className={`p-5 rounded-2xl shadow-sm border relative overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
           }`}>
-          <div className="absolute -top-32 -left-32 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none" />
-          <div className="flex items-center justify-between mb-8 relative z-10 flex-wrap gap-3">
-            <h2 className={`text-xl font-black uppercase tracking-tighter flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'
+          <div className="absolute -top-32 -left-32 w-64 h-64 bg-emerald-500/5 rounded-full blur-[80px] pointer-events-none" />
+          <div className="flex items-center justify-between mb-6 relative z-10 flex-wrap gap-3">
+            <h2 className={`text-sm font-bold uppercase tracking-widest flex items-center gap-2 ${darkMode ? 'text-white' : 'text-slate-900'
               }`}>
-              <span className="w-2 h-6 bg-emerald-500 rounded-full" /> Cash Flow Timeline
+              <span className="w-1.5 h-4 bg-emerald-500 rounded-full" /> Cash Flow Timeline
             </h2>
-            <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl border ${darkMode ? 'border-slate-700 text-slate-400 bg-slate-800' : 'border-slate-200 text-slate-500 bg-slate-50'
+            <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md border ${darkMode ? 'border-slate-700 text-slate-400 bg-slate-800' : 'border-slate-200 text-slate-500 bg-slate-50'
               }`}>Over Time</span>
           </div>
           <div className="relative z-10">
@@ -222,37 +222,37 @@ const History = () => {
 
       {/* Transaction List */}
       {loading ? (
-        <div className="flex items-center justify-center p-20 card">
-          <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin" />
+        <div className="flex items-center justify-center p-20 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
+          <div className="w-8 h-8 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin" />
         </div>
       ) : transactions.length === 0 ? (
-        <div className="py-20 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] flex flex-col items-center justify-center text-center px-6 bg-slate-50/50 dark:bg-[#050505] card shadow-sm">
-          <FcIdea className="mb-6 drop-shadow-md grayscale opacity-50" size={64} />
-          <h3 className="text-xl font-black text-slate-800 dark:text-slate-200 uppercase tracking-tighter mb-2">No Transactions Found</h3>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-relaxed">No transactions match the selected filters.<br />Try adjusting or clearing the filters.</p>
+        <div className="py-16 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center text-center px-6 bg-slate-50 dark:bg-slate-900/50 shadow-sm">
+          <FiInbox className="mb-4 text-slate-300 dark:text-slate-600" size={48} />
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">No Transactions Found</h3>
+          <p className="text-xs text-slate-500 font-medium leading-relaxed">No transactions match the selected filters.<br />Try adjusting or clearing the filters.</p>
         </div>
       ) : (
         <div className="space-y-3">
-          <p className="text-xs font-black uppercase tracking-widest text-slate-400">{transactions.length} transaction{transactions.length !== 1 ? 's' : ''} found</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{transactions.length} transaction{transactions.length !== 1 ? 's' : ''} found</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             {[...transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).map((txn) => (
               <div
                 key={txn.id}
-                className="group bg-white dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-4"
+                className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-4"
               >
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${txn.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'bg-rose-50 dark:bg-rose-950/30'}`}>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-700/50 ${txn.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-rose-50 dark:bg-rose-900/20'}`}>
                     {txn.type === 'income'
-                      ? <FiArrowUpRight className="text-emerald-600" size={20} />
-                      : <FiArrowDownRight className="text-rose-500" size={20} />
+                      ? <FiArrowUpRight className="text-emerald-600" size={18} />
+                      : <FiArrowDownRight className="text-rose-500" size={18} />
                     }
                   </div>
                   <div className="min-w-0">
-                    <p className="font-black text-sm text-slate-900 dark:text-white truncate">{txn.description || txn.category}</p>
+                    <p className="font-bold text-sm text-slate-900 dark:text-white truncate">{txn.description || txn.category}</p>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{txn.category}</span>
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500">{txn.category}</span>
                       <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
-                      <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                      <span className="text-[10px] font-medium text-slate-500 flex items-center gap-1">
                         <FiClock size={10} />
                         {txn.date ? format(new Date(txn.date), 'dd MMM yyyy') : '—'}
                       </span>
@@ -260,10 +260,10 @@ const History = () => {
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className={`text-base font-black ${txn.type === 'income' ? 'text-emerald-600' : 'text-rose-500'}`}>
+                  <p className={`text-sm font-bold font-financial ${txn.type === 'income' ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}`}>
                     {txn.type === 'income' ? '+' : '-'}{symbol}{txn.amount?.toLocaleString()}
                   </p>
-                  <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-lg ${txn.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600' : 'bg-rose-50 dark:bg-rose-950/30 text-rose-500'}`}>
+                  <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 mt-1 inline-block rounded-md ${txn.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600' : 'bg-rose-50 dark:bg-rose-900/20 text-rose-500'}`}>
                     {txn.type}
                   </span>
                 </div>

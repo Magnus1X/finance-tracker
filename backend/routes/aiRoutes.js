@@ -1,11 +1,14 @@
 const express = require('express');
-const { chatWithAI } = require('../controllers/aiController');
+const { chatWithAI, generateCourse } = require('../controllers/aiController');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
 // POST /api/ai/chat - Chat with AI assistant
 router.post('/chat', protect, chatWithAI);
+
+// GET /api/ai/course - Generate dynamic course content
+router.get('/course', protect, generateCourse);
 
 // GET /api/ai/test - Test AI connection
 router.get('/test', (req, res) => {

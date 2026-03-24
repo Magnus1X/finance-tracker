@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { currencies } from '../utils/currency';
 import { FiMail, FiLock, FiUser, FiDollarSign, FiArrowRight } from 'react-icons/fi';
-import { FcGoogle } from 'react-icons/fc';
+import { FaGoogle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
 const Register = () => {
@@ -225,7 +225,7 @@ const Register = () => {
                 <div className="w-5 h-5 border-2 border-slate-300 dark:border-slate-600 border-t-emerald-600 rounded-full animate-spin" />
               ) : (
                 <>
-                  <FcGoogle size={24} />
+                  <FaGoogle size={20} className="text-sky-500" />
                   <span>Continue with Google</span>
                 </>
               )}

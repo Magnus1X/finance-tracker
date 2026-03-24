@@ -194,6 +194,49 @@ const chatWithAI = async (req, res) => {
   }
 };
 
+const generateCourse = async (req, res) => {
+  try {
+    if (!model) {
+      return res.status(503).json({ success: false, message: 'AI service unavailable' });
+    }
+    const prompt = `Generate a comprehensive finance and investment course curriculum in JSON format.
+The JSON must be an array of objects representing "levels".
+Each level object must have exactly these keys:
+- title (string): e.g., "Level 1: Capital Fundamentals"
+- description (string)
+- icon (string): choose one from ["FiLayers", "FiActivity", "FiTrendingUp", "FiCheckCircle", "FiStar"]
+- lessons (array of objects)
+
+Each lesson object must have exactly these keys:
+- id (string): a unique identifier like "l1", "l2", etc.
+- title (string)
+- description (string)
+- image (string): a URL to a real unspash image like "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=600&q=80"
+- provider (string): e.g., "AI Academy" or "Wealth Mastery"
+- status (string): "Available"
+- deadline (string): a random date string like "Mar 2nd 2026, 11:56 am"
+- multiplier (string): e.g., "2x", "4x"
+- points (string): e.g., "0/40"
+- content (array of strings): 3 highly detailed, well-written paragraphs teaching the financial concept.
+
+Generate exactly 3 levels, each with exactly 2 professional lessons. Return ONLY valid JSON, do not wrap it in markdown codeblocks like \`\`\`json.`;
+
+    console.log('[DEBUG] AI Controller: Requesting dynamic course generation...');
+    const result = await model.generateContent(prompt);
+    let aiResponse = result.response.text().trim();
+    if (aiResponse.startsWith('\`\`\`json')) aiResponse = aiResponse.replace(/^\`\`\`json\s*/, '');
+    if (aiResponse.startsWith('\`\`\`')) aiResponse = aiResponse.replace(/^\`\`\`\s*/, '');
+    if (aiResponse.endsWith('\`\`\`')) aiResponse = aiResponse.replace(/\s*\`\`\`$/, '');
+
+    const courseData = JSON.parse(aiResponse);
+    res.json({ success: true, data: courseData });
+  } catch (error) {
+    console.error('Course Gen Error:', error.message);
+    res.status(500).json({ success: false, message: 'Failed to generate course via AI' });
+  }
+};
+
 module.exports = {
   chatWithAI,
+  generateCourse,
 };

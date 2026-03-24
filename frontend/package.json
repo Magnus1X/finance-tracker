@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Frontend for Personalized Finance & Budget Tracker",
   "private": true,
+  "type": "module",
   "dependencies": {
     "axios": "^1.13.5",
     "date-fns": "^2.30.0",

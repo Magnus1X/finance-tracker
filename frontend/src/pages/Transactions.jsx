@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { transactionAPI } from '../services/api';
-import { FiPlus, FiEdit, FiTrash2, FiFilter, FiSearch, FiArrowUpRight, FiArrowDownRight, FiClock } from 'react-icons/fi';
-import { FcPlus, FcMinus, FcOk, FcHighPriority, FcMoneyTransfer, FcComboChart, FcIdea } from 'react-icons/fc';
+import { FiPlus, FiEdit, FiTrash2, FiFilter, FiSearch, FiArrowUpRight, FiArrowDownRight, FiClock, FiDollarSign, FiInbox } from 'react-icons/fi';
 import { format } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -124,11 +123,13 @@ const Transactions = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-5xl mx-auto space-y-6 pb-16">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold mb-2">Transactions</h1>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">Manage your income and expenses</p>
+          <h1 className="text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">
+            Transactions
+          </h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Manage your income and expenses</p>
         </div>
         <button
           onClick={() => {
@@ -136,55 +137,53 @@ const Transactions = () => {
             setEditingTransaction(null);
             setShowModal(true);
           }}
-          className="btn-primary py-3 px-6 flex items-center justify-center gap-2 shadow-emerald-500/20 text-sm tracking-widest uppercase font-black w-full md:w-auto"
+          className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg py-2 px-5 flex items-center justify-center gap-2 shadow-sm text-xs tracking-widest uppercase font-bold w-full md:w-auto transition-colors"
         >
-          <FiPlus size={18} /> New Entry
+          <FiPlus size={16} /> New Entry
         </button>
       </div>
 
       {/* Analytics Summary */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className={`lg:col-span-1 card relative overflow-hidden border-0 shadow-2xl flex flex-col justify-center ${darkMode ? 'bg-slate-900 text-white' : 'bg-emerald-900 text-white'
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <div className={`lg:col-span-1 p-5 rounded-2xl relative overflow-hidden shadow-sm flex flex-col justify-center border ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
           }`}>
-          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-            <FcMoneyTransfer size={160} className="drop-shadow-2xl" />
+          <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+            <FiDollarSign size={100} className="text-emerald-100 dark:text-emerald-900/40 opacity-70" />
           </div>
-          <h2 className="text-xl font-black uppercase tracking-tighter mb-6 relative z-10 text-emerald-400">Cash Flow</h2>
-          <div className="flex flex-col gap-4 mb-4 relative z-10">
-            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-200/60 mb-1">Inflow</p>
-              <CurrencyDisplay amount={summary.income} className="text-2xl text-emerald-400 drop-shadow-sm" valueClassName="font-financial" />
+          <h2 className="text-xs font-bold uppercase tracking-widest mb-4 relative z-10 text-slate-500">Cash Flow</h2>
+          <div className="flex flex-col gap-3 mb-2 relative z-10">
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
+              <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Inflow</p>
+              <CurrencyDisplay amount={summary.income} className="text-lg font-bold text-emerald-600" valueClassName="font-financial" />
             </div>
-            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-200/60 mb-1">Outflow</p>
-              <CurrencyDisplay amount={summary.expense} className="text-2xl text-rose-400 drop-shadow-sm" valueClassName="font-financial" />
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
+              <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Outflow</p>
+              <CurrencyDisplay amount={summary.expense} className="text-lg font-bold text-rose-500" valueClassName="font-financial" />
             </div>
           </div>
-          <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px]" />
         </div>
 
         {/* Filters */}
-        <div className="lg:col-span-3 card flex flex-col justify-center border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-sky-500" />
-          <div className="flex items-center gap-3 mb-6">
-            <FiFilter className="text-emerald-500" size={20} />
-            <h3 className="text-lg font-black uppercase tracking-tighter text-slate-900 dark:text-white">Ledger Filters</h3>
+        <div className="lg:col-span-3 p-5 rounded-2xl flex flex-col justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <FiFilter className="text-slate-400" size={16} />
+            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500">Ledger Filters</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             <div className="relative">
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={filters.search}
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                className="input-field pl-10"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
             <select
               value={filters.type}
               onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-              className="input-field"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer"
             >
               <option value="">All Types</option>
               <option value="income">Income</option>
@@ -193,7 +192,7 @@ const Transactions = () => {
             <select
               value={filters.category}
               onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-              className="input-field"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer"
             >
               <option value="">All Categories</option>
               {filterCategories.map((cat) => (
@@ -204,10 +203,9 @@ const Transactions = () => {
             </select>
             <button
               onClick={() => setFilters({ type: '', category: '', search: '' })}
-              className="btn-secondary"
+              className="px-4 py-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2"
             >
-              <FiFilter className="inline mr-2" />
-              Clear Filters
+              <FiFilter size={14} /> Clear
             </button>
           </div>
         </div>
@@ -224,21 +222,21 @@ const Transactions = () => {
             {transactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="group relative overflow-hidden bg-white dark:bg-[#050505] border border-slate-100 dark:border-slate-800 rounded-3xl p-5 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+                className="group relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
                 <div className="flex items-center gap-4 min-w-0 flex-1">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-inner border border-white/20 dark:border-white/5 ${transaction.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'bg-rose-50 dark:bg-rose-950/30'
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-700/50 ${transaction.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-rose-50 dark:bg-rose-900/20'
                     }`}>
-                    {transaction.type === 'income' ? <FiArrowUpRight className="text-emerald-600" size={24} /> : <FiArrowDownRight className="text-rose-500" size={24} />}
+                    {transaction.type === 'income' ? <FiArrowUpRight className="text-emerald-600" size={18} /> : <FiArrowDownRight className="text-rose-500" size={18} />}
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-tight truncate">
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
                       {transaction.description || transaction.category}
                     </h4>
-                    <div className="flex items-center gap-2 mt-1 flex-wrap">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{transaction.category}</span>
-                      <span className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-700" />
-                      <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                      <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{transaction.category}</span>
+                      <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+                      <span className="text-[10px] font-medium text-slate-500 flex items-center gap-1">
                         <FiClock size={10} />
                         {format(new Date(transaction.date), 'dd MMM yyyy')}
                       </span>
@@ -246,28 +244,26 @@ const Transactions = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-6 relative z-10 w-full sm:w-auto mt-2 sm:mt-0 pt-4 sm:pt-0 border-t border-slate-100 dark:border-slate-800 sm:border-0">
+                <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t border-slate-100 dark:border-slate-800 sm:border-0 relative z-10">
                   <div className={`text-right ${transaction.type === 'income' ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}`}>
-                    <div className="text-xl font-black font-financial flex justify-end items-center gap-1">
+                    <div className="text-base font-bold font-financial flex justify-end items-center gap-1">
                       <span>{transaction.type === 'income' ? '+' : '-'}</span>
                       <CurrencyDisplay amount={transaction.amount} />
                     </div>
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md inline-block mt-1 ${transaction.type === 'income' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30' : 'bg-rose-50 text-rose-500 dark:bg-rose-950/30'
-                      }`}>{transaction.type}</span>
                   </div>
 
-                  <div className="flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => handleEdit(transaction)}
-                      className="p-3 bg-slate-50 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 text-slate-400 hover:text-emerald-600 rounded-xl transition-colors shadow-sm"
+                      className="p-2 bg-slate-50 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 text-slate-400 hover:text-emerald-600 rounded-lg transition-colors border border-transparent hover:border-emerald-200"
                     >
-                      <FiEdit size={16} />
+                      <FiEdit size={14} />
                     </button>
                     <button
                       onClick={() => handleDelete(transaction.id)}
-                      className="p-3 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-slate-400 hover:text-rose-600 rounded-xl transition-colors shadow-sm"
+                      className="p-2 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-900/30 text-slate-400 hover:text-rose-600 rounded-lg transition-colors border border-transparent hover:border-rose-200"
                     >
-                      <FiTrash2 size={16} />
+                      <FiTrash2 size={14} />
                     </button>
                   </div>
                 </div>
@@ -278,19 +274,19 @@ const Transactions = () => {
             ))}
           </div>
         ) : (
-          <div className="py-20 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] flex flex-col items-center justify-center text-center px-6 bg-slate-50/50 dark:bg-[#050505] card shadow-sm">
-            <FcIdea className="mb-6 drop-shadow-md grayscale opacity-50" size={64} />
-            <h3 className="text-xl font-black text-slate-800 dark:text-slate-200 uppercase tracking-tighter mb-2">No Transactions Found</h3>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-relaxed mb-8">It's quiet in here.<br />Time to log your first transaction.</p>
+          <div className="py-20 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center text-center px-6 bg-slate-50 dark:bg-slate-900/50 shadow-sm">
+            <FiInbox className="mb-6 text-slate-300 dark:text-slate-600" size={64} />
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">No Transactions Found</h3>
+            <p className="text-xs text-slate-500 mb-6">Your ledger is empty right now. Start logging your activity.</p>
             <button
               onClick={() => {
                 resetForm();
                 setEditingTransaction(null);
                 setShowModal(true);
               }}
-              className="btn-primary py-3 px-8 shadow-xl flex items-center gap-2 text-sm tracking-widest uppercase font-black"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-6 rounded-lg shadow-sm flex items-center gap-2 text-xs tracking-widest uppercase font-bold transition-colors"
             >
-              <FiPlus size={18} /> New Entry
+              <FiPlus size={16} /> New Entry
             </button>
           </div>
         )}

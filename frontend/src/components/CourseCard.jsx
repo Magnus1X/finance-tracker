@@ -1,84 +1,70 @@
 import { motion } from 'framer-motion';
-import { FiZap } from 'react-icons/fi';
+import { FiUser, FiStar } from 'react-icons/fi';
 
 const CourseCard = ({
-    provider = "DVALambda",
-    status = "In Class",
+    provider = "DEVELOPMENTS",
+    status = "Available",
     title,
-    description,
     image,
-    deadline,
-    multiplier = "2x",
+    multiplier,
+    points = "435,671",
     isCompleted = false,
     onToggleCompletion,
     onAction
 }) => {
+    // Generate a random high rating based on the title length or multiplier for realism
+    const rating = Math.min(5.0, (4.5 + (title.length % 5) * 0.1)).toFixed(1);
+
     return (
         <motion.div
-            whileHover={{ y: -5 }}
-            className="bg-[#f8fafd] dark:bg-[#0a0a0a] rounded-[2rem] p-3.5 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col min-h-[380px] h-full"
+            onClick={onAction}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className="group bg-white dark:bg-slate-900 rounded-none p-3 border border-slate-100 dark:border-slate-800 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col h-full cursor-pointer transition-all hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)]"
         >
-            <div className="bg-white dark:bg-[#050505] rounded-[1.6rem] p-6 border border-slate-50 dark:border-slate-800 shadow-sm flex flex-col h-full">
-                {/* Header */}
-                <div className="flex justify-between items-center pb-3 mb-4 border-b border-slate-50 dark:border-slate-800">
-                    <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.1em]">{provider}</span>
-                </div>
-
-                {/* Image Section */}
-                {image && (
-                    <div className="w-full h-32 shrink-0 rounded-xl overflow-hidden mb-5">
-                        <img src={image} alt={title} className="w-full h-full object-cover" />
-                    </div>
-                )}
-
-                {/* Content Section */}
-                <div className="flex-1 flex flex-col gap-3">
-                    <div className="flex items-center justify-between">
-                        <span className={`text-[9px] font-black uppercase tracking-[0.15em] px-2.5 py-1 rounded-md ${isCompleted ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/30' : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30'}`}>
-                            {isCompleted ? 'Completed' : status}
-                        </span>
-                        {isCompleted && (
-                            <span className="text-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 p-1 rounded-full">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                            </span>
-                        )}
-                    </div>
-
-                    <div className="space-y-2">
-                        <h3 className="text-[16px] font-black text-slate-900 dark:text-white leading-[1.4] tracking-normal mb-1">
-                            {title}
-                        </h3>
-                        {description && (
-                            <p className="text-[11px] font-bold text-slate-500 leading-relaxed">
-                                {description}
-                            </p>
-                        )}
-                    </div>
-
-                    <div className="mt-auto flex items-center justify-between pt-4">
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                            Until {deadline.split(',')[0]}
-                        </p>
-                        <div className="flex items-center gap-1.5 rounded-lg bg-orange-50 dark:bg-orange-950/20 px-2 py-1 border border-orange-100/50 dark:border-orange-900/30">
-                            <FiZap size={12} className="text-orange-500" />
-                            <span className="text-[11px] font-black text-orange-600 tracking-tighter">{multiplier}</span>
+            {/* Image Section - Notably, it has inner padding! */}
+            {image && (
+                <div className="w-full h-44 rounded-none relative overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
+                    <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    {isCompleted && (
+                        <div className="absolute top-3 right-3 bg-white/95 text-emerald-600 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm backdrop-blur-sm">
+                            ✓ Read
                         </div>
+                    )}
+                </div>
+            )}
+
+            {/* Content Section */}
+            <div className="flex-1 flex flex-col px-1 pt-4 pb-2">
+                {/* Meta Row: Tag & Rating */}
+                <div className="flex items-center justify-between mb-3">
+                    <span className="bg-[#f0f0ff] dark:bg-indigo-900/30 text-[#6a55fa] dark:text-indigo-400 text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md">
+                        {provider.substring(0, 14)}
+                    </span>
+                    <div className="flex items-center gap-1">
+                        <svg className="w-3.5 h-3.5 text-orange-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rating}</span>
                     </div>
                 </div>
+                
+                {/* Title */}
+                <h3 className="text-[14px] font-extrabold text-slate-900 dark:text-white leading-snug mb-4 line-clamp-2">
+                    {title}
+                </h3>
 
-                {/* Footer Area */}
-                <div className="mt-6 pt-6 border-t border-slate-50 dark:border-slate-800 flex flex-col gap-2">
+                {/* Footer Section */}
+                <div className="mt-auto pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500">
+                        <FiUser size={13} strokeWidth={2.5} />
+                        <span className="text-[10px] font-bold tracking-wide">{points} students</span>
+                    </div>
+                    {/* Pricing or Action logic replaces bottom right span */}
                     <button
-                        onClick={onAction}
-                        className="w-full py-4 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white rounded-xl font-black text-[11px] uppercase tracking-[0.2em] hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-600 transition-all active:scale-95 border border-slate-100 dark:border-slate-700/50"
+                        onClick={(e) => { e.stopPropagation(); onToggleCompletion(); }}
+                        className={`px-3 py-1.5 rounded w-auto font-black text-[10px] uppercase tracking-wider transition-colors border ${isCompleted ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800 hover:bg-slate-100 dark:hover:bg-slate-800' : 'bg-transparent text-slate-500 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
                     >
-                        Read Chapter
-                    </button>
-                    <button
-                        onClick={onToggleCompletion}
-                        className={`w-full py-4 rounded-xl font-black text-[11px] uppercase tracking-[0.2em] transition-all active:scale-95 border ${isCompleted ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 border-indigo-200 dark:border-indigo-800/50 hover:bg-slate-50 hover:text-slate-600' : 'bg-transparent text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
-                    >
-                        {isCompleted ? 'Mark Unread' : 'Mark as Read'}
+                        {isCompleted ? 'Unmark' : 'Mark Read'}
                     </button>
                 </div>
             </div>

@@ -24,6 +24,7 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const budgetRoutes = require('./routes/budgetRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const aiRoutes = require('./routes/aiRoutes');
+const learnRoutes = require('./routes/learnRoutes');
 
 // Initialize the Express application
 const app = express();
@@ -81,6 +82,7 @@ app.use('/api/transactions', transactionRoutes); // Handles all income/expense r
 app.use('/api/budgets', budgetRoutes); // Handles spending limits and limits tracking
 app.use('/api/goals', goalRoutes); // Handles user financial goals
 app.use('/api/ai', aiRoutes); // Handles Gemini AI assistant prompts
+app.use('/api/learn', learnRoutes); // Handles cross-user global learning modules
 
 // Simple health check endpoint used by uptime monitors (e.g. Vercel/Render)
 app.get('/api/health', (req, res) => {

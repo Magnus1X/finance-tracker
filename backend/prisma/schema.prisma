@@ -27,6 +27,7 @@ model User {
   budgets       Budget[]
   budgetHistory BudgetHistory[]
   goals         Goal[]
+  completedLessons String[] @default([])
 
   @@map("users")
 }

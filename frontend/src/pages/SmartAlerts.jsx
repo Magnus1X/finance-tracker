@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiBell, FiArrowRight, FiCheck } from 'react-icons/fi';
-import { FcHighPriority, FcApproval, FcIdea, FcFlashOn, FcMoneyTransfer, FcComboChart } from 'react-icons/fc';
+import { FiAlertCircle, FiCheckCircle, FiZap, FiDollarSign, FiBarChart2 } from 'react-icons/fi';
 import { transactionAPI, budgetAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -15,7 +15,12 @@ const SmartAlerts = () => {
     const navigate = useNavigate();
     const [alerts, setAlerts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [dismissed, setDismissed] = useState(new Set());
+    
+    // Initialize dismissed alerts from localStorage (parse as array, construct Set)
+    const [dismissed, setDismissed] = useState(() => {
+        const saved = localStorage.getItem('finance_tracker_dismissed_alerts');
+        return saved ? new Set(JSON.parse(saved)) : new Set();
+    });
 
     useEffect(() => {
         const fetchInsights = async () => {
@@ -46,7 +51,7 @@ const SmartAlerts = () => {
                         title: 'Deficit Warning',
                         message: `Your spending this month (${sym}${exp.toLocaleString()}) has exceeded your income by ${sym}${Math.abs(sav).toLocaleString()}. It's time to pause non-essential purchases.`,
                         time: 'Just now',
-                        icon: <FcHighPriority size={32} />,
+                        icon: <FiAlertCircle size={32} className="text-rose-500" />,
                         colorClass: 'rose',
                         actionLink: '/'
                     });
@@ -60,7 +65,7 @@ const SmartAlerts = () => {
                         title: 'Financial Goal Milestone!',
                         message: `Awesome job! You've secured ${sym}${sav.toLocaleString()} in surplus this month. You are firmly on track to hit your year-end financial goals.`,
                         time: '2 hours ago',
-                        icon: <FcApproval size={32} />,
+                        icon: <FiCheckCircle size={32} className="text-emerald-500" />,
                         colorClass: 'emerald',
                         actionLink: '/goals'
                     });
@@ -80,7 +85,7 @@ const SmartAlerts = () => {
                         title: `${b.category} Budget Nearing Limit`,
                         message: `You've used over 90% of your ${b.category} budget. You have ${sym}${((b.budgetedAmount ?? b.amount) - (b.spentAmount ?? b.spent)).toLocaleString()} left for the rest of the month.`,
                         time: '5 hours ago',
-                        icon: <FcComboChart size={32} />,
+                        icon: <FiBarChart2 size={32} className="text-emerald-500" />,
                         colorClass: 'amber',
                         actionLink: '/budgets'
                     });
@@ -99,7 +104,7 @@ const SmartAlerts = () => {
                         title: `Budget Exceeded`,
                         message: `You've overspent your ${b.category} budget by ${sym}${((b.spentAmount ?? b.spent) - (b.budgetedAmount ?? b.amount)).toLocaleString()}. Try to compensate by saving in other categories.`,
                         time: '1 day ago',
-                        icon: <FcMoneyTransfer size={32} />,
+                        icon: <FiDollarSign size={32} className="text-emerald-500" />,
                         colorClass: 'rose',
                         actionLink: '/budgets'
                     });
@@ -113,7 +118,7 @@ const SmartAlerts = () => {
                         title: 'Ready for action',
                         message: "Your financial dashboard is looking a bit quiet. Start logging your income and expenses so we can analyze your habits and generate smart reminders!",
                         time: 'Just now',
-                        icon: <FcFlashOn size={32} />,
+                        icon: <FiZap size={32} className="text-amber-500" />,
                         colorClass: 'sky',
                         actionLink: '/transactions'
                     });
@@ -124,7 +129,7 @@ const SmartAlerts = () => {
                         title: 'Missing Budget Limits',
                         message: "You haven't set up bounds for your spending. Creating budgets is the fastest way to control capital outflow and hit savings targets.",
                         time: '1 hour ago',
-                        icon: <FcIdea size={32} />,
+                        icon: <FiZap size={32} className="text-indigo-500" />,
                         colorClass: 'amber',
                         actionLink: '/budgets'
                     });
@@ -138,7 +143,7 @@ const SmartAlerts = () => {
                         title: 'Goal Progression',
                         message: `You're tracking well towards establishing a solid financial foundation. Log a new transaction today to keep your streak alive!`,
                         time: '1 day ago',
-                        icon: <FcApproval size={32} />,
+                        icon: <FiCheckCircle size={32} className="text-emerald-500" />,
                         colorClass: 'emerald',
                         actionLink: '/goals'
                     });
@@ -150,7 +155,7 @@ const SmartAlerts = () => {
                     title: 'Food for thought',
                     message: "Did you know that investing the cost of a daily coffee could turn into hundreds of thousands over a decade? Every small choice compounds!",
                     time: '1 day ago',
-                    icon: <FcIdea size={32} />,
+                    icon: <FiZap size={32} className="text-amber-500" />,
                     colorClass: 'sky',
                     actionLink: '/learn'
                 });
@@ -165,25 +170,30 @@ const SmartAlerts = () => {
         fetchInsights();
     }, [user?.currency]);
 
-    const handleDismiss = (id) => {
-        setDismissed(prev => new Set([...prev, id]));
+    const handleDismiss = (title) => {
+        setDismissed(prev => {
+            const newSet = new Set([...prev, title]);
+            localStorage.setItem('finance_tracker_dismissed_alerts', JSON.stringify([...newSet]));
+            return newSet;
+        });
     };
 
-    const activeAlerts = alerts.filter(a => !dismissed.has(a.id));
+    // Filter by title instead of id so it persists predictably across reloads
+    const activeAlerts = alerts.filter(a => !dismissed.has(a.title));
 
     return (
-        <div className="max-w-4xl mx-auto space-y-10 pb-20">
-            <div className="flex justify-between items-center bg-white/40 dark:bg-[#050505]/40 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/60 dark:border-slate-800/60 shadow-xl shadow-slate-200/20 relative overflow-hidden">
-                <div className="absolute -top-32 -right-32 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none" />
+        <div className="max-w-3xl mx-auto space-y-6 pb-16 px-4 md:px-0">
+            <div className="flex justify-between items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-[60px] pointer-events-none -mt-32 -mr-32" />
                 <div className="relative z-10 w-full flex justify-between items-center flex-wrap gap-4">
                     <div>
-                        <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-2 uppercase flex items-center gap-3">
-                            <span className="w-2 h-8 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/50" />
-                            Smart <span className="text-emerald-600 drop-shadow-sm">Reminders</span>
+                        <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1 flex items-center gap-2">
+                            <span className="w-1.5 h-6 bg-emerald-500 rounded-full" />
+                            Smart <span className="text-emerald-500">Reminders</span>
                         </h1>
-                        <p className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest text-xs pl-5">AI-Powered Financial Nudges</p>
+                        <p className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest text-[10px] pl-4">AI-Powered Financial Nudges</p>
                     </div>
-                    <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-900 shadow-xl border border-slate-100 dark:border-slate-800 flex items-center justify-center relative">
+                    <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800/50 shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center relative">
                         <FiBell className="text-slate-800 dark:text-slate-200" size={24} />
                         {activeAlerts.length > 0 && (
                             <motion.span
@@ -225,36 +235,36 @@ const SmartAlerts = () => {
                             return (
                                 <motion.div
                                     key={alert.id}
-                                    initial={{ opacity: 0, y: 20 }}
+                                    initial={{ opacity: 0, y: 15 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-                                    transition={{ delay: i * 0.1, type: 'spring', stiffness: 100 }}
-                                    className={`group p-8 md:ml-16 rounded-[2rem] border bg-white/80 dark:bg-[#050505] backdrop-blur-xl shadow-xl shadow-slate-200/50 dark:shadow-none transition-all duration-300 flex flex-col sm:flex-row gap-6 items-start relative z-10 ${colors[alert.colorClass]}`}
+                                    exit={{ opacity: 0, scale: 0.95, filter: 'blur(5px)' }}
+                                    transition={{ delay: i * 0.05, type: 'spring', stiffness: 120 }}
+                                    className={`group p-6 md:ml-12 rounded-2xl border bg-white dark:bg-slate-900 shadow-sm transition-all duration-300 flex flex-col sm:flex-row gap-5 items-start relative z-10 ${colors[alert.colorClass]}`}
                                 >
-                                    <div className="absolute -left-[4.5rem] top-8 w-4 h-4 rounded-full bg-white dark:bg-slate-900 border-4 border-slate-200 dark:border-slate-800 group-hover:border-emerald-500 transition-colors hidden md:block" />
+                                    <div className="absolute -left-14 top-6 w-3 h-3 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 group-hover:border-emerald-500 transition-colors hidden md:block" />
 
-                                    <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center flex-shrink-0 shadow-inner border border-slate-100 dark:border-slate-800 group-hover:scale-110 transition-transform duration-500">
-                                        {alert.icon}
+                                    <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center flex-shrink-0 shadow-inner border border-slate-100 dark:border-slate-700/50 group-hover:scale-110 transition-transform duration-500">
+                                        {React.cloneElement(alert.icon, { size: 24 })}
                                     </div>
                                     <div className="flex-1 w-full">
-                                        <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2">
-                                            <h4 className={`text-xl font-black text-slate-900 dark:text-white tracking-tighter`}>
+                                        <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
+                                            <h4 className={`text-lg font-bold text-slate-900 dark:text-white tracking-tight`}>
                                                 {alert.title}
                                             </h4>
-                                            <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg">{alert.time}</span>
+                                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded">{alert.time}</span>
                                         </div>
-                                        <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed mb-6 text-sm">
+                                        <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-4 text-sm">
                                             {alert.message}
                                         </p>
-                                        <div className="flex gap-3 pt-6 border-t border-slate-100 dark:border-slate-800/50">
+                                        <div className="flex gap-3 pt-4 border-t border-slate-100 dark:border-slate-800/50">
                                             <button
                                                 onClick={() => navigate(alert.actionLink)}
-                                                className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-2 ${btnColors[alert.colorClass]}`}
+                                                className={`px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center gap-1.5 ${btnColors[alert.colorClass]}`}
                                             >
-                                                Take Action <FiArrowRight />
+                                                Take Action <FiArrowRight size={14} />
                                             </button>
-                                            <button onClick={() => handleDismiss(alert.id)} className="px-5 py-2.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xs font-black uppercase tracking-widest transition-all bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
-                                                <FiCheck /> Dismiss
+                                            <button onClick={() => handleDismiss(alert.title)} className="px-4 py-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-[10px] font-bold uppercase tracking-widest transition-all bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5">
+                                                <FiCheck size={14} /> Dismiss
                                             </button>
                                         </div>
                                     </div>
@@ -263,11 +273,11 @@ const SmartAlerts = () => {
                         }) : (
                             <motion.div
                                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                                className="p-16 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[3rem] bg-slate-50/50 dark:bg-[#050505]"
+                                className="p-12 text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900"
                             >
-                                <FcApproval size={64} className="mx-auto mb-6 grayscale opacity-50" />
-                                <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-2">All Caught Up!</h3>
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">You have no pending reminders. Keep up the great work.</p>
+                                <FiCheckCircle size={48} className="mx-auto mb-4 text-emerald-500/50" />
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1">All Caught Up!</h3>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">You have no pending reminders. Keep up the great work.</p>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -275,18 +285,18 @@ const SmartAlerts = () => {
             )}
 
             {/* Persistence Awareness Card */}
-            <div className={`p-10 rounded-[3rem] shadow-2xl relative overflow-hidden border transition-colors ${darkMode ? 'bg-[#0a0a0a] text-white border-slate-800 shadow-emerald-500/5' : 'bg-slate-50 text-slate-900 border-slate-200 shadow-slate-200'
+            <div className={`p-8 rounded-2xl shadow-sm relative overflow-hidden border transition-colors ${darkMode ? 'bg-slate-900 text-white border-slate-800' : 'bg-slate-50 text-slate-900 border-slate-200'
                 }`}>
                 <div className="absolute top-0 right-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&q=80')] opacity-5 bg-cover pointer-events-none mix-blend-overlay" />
-                <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/20 rounded-full blur-[100px] pointer-events-none" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none" />
 
-                <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center justify-between">
+                <div className="relative z-10 flex flex-col md:flex-row gap-6 items-center justify-between">
                     <div>
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className={`p-3 rounded-2xl shadow-inner border ${darkMode ? 'bg-white/10 border-white/10 backdrop-blur-md' : 'bg-white border-slate-200'}`}>
-                                <FcFlashOn size={28} />
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className={`p-2 rounded-xl shadow-sm border flex items-center justify-center ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+                                <FiZap size={20} className="text-emerald-500" />
                             </div>
-                            <h3 className={`text-2xl font-black tracking-tighter uppercase ${darkMode ? 'text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400' : 'text-slate-900'}`}>
+                            <h3 className={`text-xl font-extrabold tracking-tight uppercase ${darkMode ? 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-100 to-emerald-500' : 'text-slate-900'}`}>
                                 Small Steps, Big Impact
                             </h3>
                         </div>

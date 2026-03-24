@@ -43,7 +43,7 @@ const createGoal = async (req, res, next) => {
         title,
         target: parseFloat(target),
         deadline,
-        icon: icon || '🎯',
+        icon: icon || 'target',
       },
     });
 
@@ -90,8 +90,52 @@ const deleteGoal = async (req, res, next) => {
   }
 };
 
+/**
+ * @desc    Update a goal (typically for updating 'current' amount)
+ * @route   PUT /api/goals/:id
+ * @access  Private
+ */
+const updateGoal = async (req, res, next) => {
+  try {
+    const { title, target, current, deadline, icon } = req.body;
+
+    const goal = await prisma.goal.findFirst({
+      where: {
+        id: req.params.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!goal) {
+      return res.status(404).json({
+        success: false,
+        message: 'Goal not found',
+      });
+    }
+
+    const updatedGoal = await prisma.goal.update({
+      where: { id: req.params.id },
+      data: {
+        title: title !== undefined ? title : goal.title,
+        target: target !== undefined ? parseFloat(target) : goal.target,
+        current: current !== undefined ? parseFloat(current) : goal.current,
+        deadline: deadline !== undefined ? deadline : goal.deadline,
+        icon: icon !== undefined ? icon : goal.icon,
+      },
+    });
+
+    res.json({
+      success: true,
+      data: updatedGoal,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getGoals,
   createGoal,
   deleteGoal,
+  updateGoal,
 };

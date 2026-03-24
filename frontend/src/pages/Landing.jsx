@@ -13,20 +13,16 @@ import {
   FiGithub,
   FiInstagram,
   FiSun,
-  FiMoon
+  FiMoon,
+  FiBarChart2,
+  FiTrendingUp,
+  FiZap,
+  FiShield,
+  FiSmartphone,
+  FiBarChart,
+  FiCheckCircle,
+  FiPieChart
 } from 'react-icons/fi';
-import {
-  FcComboChart,
-  FcBullish,
-  FcIdea,
-  FcDataProtection,
-  FcCellPhone,
-  FcBarChart,
-  FcApproval,
-  FcPositiveDynamic,
-  FcLineChart,
-  FcPieChart
-} from 'react-icons/fc';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -40,19 +36,19 @@ const Landing = () => {
 
   const features = [
     {
-      icon: FcComboChart,
+      icon: FiBarChart2,
       title: 'Smart Analytics',
       description: 'Real-time data visualization of your cash flow and spending patterns.',
       accent: 'emerald'
     },
     {
-      icon: FcBullish,
+      icon: FiTrendingUp,
       title: 'Goal Tracking',
       description: 'Define and monitor long-term financial milestones with precision.',
       accent: 'emerald'
     },
     {
-      icon: FcIdea,
+      icon: FiZap,
       title: 'AI Advisor',
       description: 'Get automated insights and budget optimizations from our proprietary engine.',
       accent: 'emerald'
@@ -63,17 +59,17 @@ const Landing = () => {
     {
       title: 'Built for Security',
       description: 'Your data is encrypted with bank-level protocols and never shared.',
-      icon: FcDataProtection
+      icon: FiShield
     },
     {
       title: 'Universal Access',
       description: 'Switch seamlessly between desktop and mobile with perfect sync.',
-      icon: FcCellPhone
+      icon: FiSmartphone
     },
     {
       title: 'Advanced Reporting',
       description: 'Export deep-dive financial reports in PDF and CSV anytime.',
-      icon: FcBarChart
+      icon: FiBarChart
     }
   ];
 
@@ -133,7 +129,7 @@ const Landing = () => {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400 text-xs font-black uppercase tracking-widest mb-2"
           >
-            <FcApproval size={16} /> Your Money. Your Rules. Your Future.
+            <FiCheckCircle size={16} className="text-emerald-500" /> Your Money. Your Rules. Your Future.
           </motion.div>
 
           <motion.h1
@@ -202,19 +198,19 @@ const Landing = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {[
               {
-                icon: FcComboChart,
+                icon: FiBarChart2,
                 title: 'Smart Analytics',
                 description: 'Real-time data visualization of your cash flow and spending patterns.',
                 photo: "/smart-analytics.png"
               },
               {
-                icon: FcBullish,
+                icon: FiTrendingUp,
                 title: 'Goal Tracking',
                 description: 'Define and monitor long-term financial milestones with precision.',
                 photo: "/goal-tracking.jpg"
               },
               {
-                icon: FcIdea,
+                icon: FiZap,
                 title: 'AI Advisor',
                 description: 'Get automated insights and budget optimizations from our proprietary engine.',
                 photo: "/ai-advisor.png"
@@ -282,7 +278,7 @@ const Landing = () => {
 
           <div className="relative">
             <div className="aspect-square rounded-[3rem] bg-emerald-600/5 dark:bg-emerald-600/10 border border-emerald-600/10 relative overflow-hidden flex items-center justify-center">
-              <FcPieChart className="text-emerald-600/20 w-3/4 h-3/4 animate-pulse" />
+              <FiPieChart className="text-emerald-500/20 w-3/4 h-3/4 animate-pulse" />
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-t from-white dark:from-slate-950 to-transparent" />
             </div>
             {/* Floating Card UI Mock */}

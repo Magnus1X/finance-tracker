@@ -70,13 +70,20 @@ export const budgetAPI = {
 };
 
 export const aiAPI = {
-  chat: (message) => api.post('/ai/chat', { message }),
+  chat: (messages) => api.post('/ai/chat', { messages }),
+  generateCourse: () => api.get('/ai/course'), // Endpoint dynamically generating rich financial learning JSON content
+};
+
+export const learnAPI = {
+  getStats: () => api.get('/learn/stats'),
+  toggleLesson: (lessonId) => api.post('/learn/toggle', { lessonId }),
 };
 
 export const goalAPI = {
   getAll: () => api.get('/goals'),
   create: (data) => api.post('/goals', data),
   delete: (id) => api.delete(`/goals/${id}`),
+  update: (id, data) => api.put(`/goals/${id}`, data),
 };
 
 export default api;
