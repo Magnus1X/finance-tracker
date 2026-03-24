@@ -12,6 +12,19 @@ import { transactionAPI, budgetAPI } from '../services/api';
 import { exportToCSV, exportToPDF } from '../utils/exportData';
 import { FiDownload } from 'react-icons/fi';
 
+const RADIAN = Math.PI / 180;
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  if (percent < 0.04) return null;
+  return (
+    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" className="text-xs font-bold drop-shadow-md">
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
 const Dashboard = () => {
   const { user } = useAuth();
   const [analytics, setAnalytics] = useState({ income: 0, expenses: 0, savings: 0 });
@@ -195,9 +208,6 @@ const Dashboard = () => {
           <div key={i} className="card group relative overflow-hidden bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl border border-white dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-none hover:-translate-y-1 transition-all duration-300">
             <div className="flex justify-between items-start mb-4 relative z-10">
               <span className="text-sm font-semibold text-slate-500">{stat.label}</span>
-              <div className={`p-2 rounded-xl bg-slate-50 dark:bg-slate-800 group-hover:scale-110 transition-transform ${stat.color}`}>
-                <stat.icon size={20} />
-              </div>
             </div>
             <div className="flex items-baseline gap-1 relative z-10 w-full overflow-hidden">
               <CurrencyDisplay
@@ -477,11 +487,12 @@ const Dashboard = () => {
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  innerRadius="65%"
-                  outerRadius="90%"
-                  paddingAngle={5}
+                  outerRadius="95%"
                   dataKey="value"
-                  stroke="none"
+                  stroke="#ffffff"
+                  strokeWidth={2}
+                  labelLine={false}
+                  label={renderCustomizedLabel}
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -494,15 +505,6 @@ const Dashboard = () => {
                 />
               </PieChart>
             </ResponsiveContainer>
-            {/* Total value in the center */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-xs font-semibold text-slate-400 mb-1">Total</span>
-              <CurrencyDisplay
-                amount={totalExpenseValue}
-                className="text-lg text-slate-900 dark:text-white font-black"
-                valueClassName="font-financial"
-              />
-            </div>
           </div>
 
           <div className="space-y-3 mt-8">
