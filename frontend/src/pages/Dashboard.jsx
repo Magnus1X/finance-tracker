@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { FiCalendar, FiArrowRight, FiZap, FiTrendingUp, FiCreditCard, FiPieChart, FiDollarSign } from 'react-icons/fi';
+import { FiCalendar, FiArrowRight, FiZap, FiAlertCircle, FiCheckCircle, FiTrendingUp, FiTrendingDown, FiCreditCard, FiPieChart, FiDollarSign } from 'react-icons/fi';
 import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol, formatCurrency } from '../utils/currency';
