@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { transactionAPI } from '../services/api';
+import Spinner from '../components/Spinner';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { getCurrencySymbol } from '../utils/currency';
@@ -222,8 +223,8 @@ const History = () => {
 
       {/* Transaction List */}
       {loading ? (
-        <div className="flex items-center justify-center p-20 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
-          <div className="w-8 h-8 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin" />
+        <div className="flex justify-center py-20 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+          <Spinner text="Loading history..." />
         </div>
       ) : transactions.length === 0 ? (
         <div className="py-16 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center text-center px-6 bg-slate-50 dark:bg-slate-900/50 shadow-sm">

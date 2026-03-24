@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { getCurrencySymbol, formatCurrency } from '../utils/currency';
 import CurrencyDisplay from '../components/CurrencyDisplay';
+import Spinner from '../components/Spinner';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 
 const Transactions = () => {
@@ -214,8 +215,8 @@ const Transactions = () => {
       {/* Transactions List */}
       <div className="space-y-4">
         {loading ? (
-          <div className="flex items-center justify-center p-20 card">
-            <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin" />
+          <div className="flex items-center justify-center p-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+            <Spinner text="Loading ledger..." />
           </div>
         ) : transactions.length > 0 ? (
           <div className="grid grid-cols-1 gap-4">

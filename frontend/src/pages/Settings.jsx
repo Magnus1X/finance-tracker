@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
 import { currencies, getCurrencySymbol } from '../utils/currency';
 import { FiUser, FiLock, FiSettings, FiSave, FiBriefcase, FiActivity, FiMail, FiGlobe } from 'react-icons/fi';
+import Spinner from '../components/Spinner';
 
 const Settings = () => {
   const { user, updateUser } = useAuth();
@@ -218,7 +219,7 @@ const Settings = () => {
                     className="btn btn-primary flex items-center gap-2"
                   >
                     {loading ? (
-                      <span className="loading-spinner w-4 h-4 border-2"></span>
+                      <Spinner size="sm" text="" />
                     ) : (
                       <>
                         <FiSave /> Save Changes
@@ -292,7 +293,7 @@ const Settings = () => {
                     className="btn btn-primary flex items-center gap-2"
                   >
                     {loading ? (
-                      <span className="loading-spinner w-4 h-4 border-2"></span>
+                      <Spinner size="sm" text="" />
                     ) : (
                       <>
                         <FiSave /> Save Preferences
@@ -364,7 +365,7 @@ const Settings = () => {
                     className="btn btn-primary w-full flex items-center justify-center gap-2"
                   >
                     {pwdLoading ? (
-                      <span className="loading-spinner w-4 h-4 border-2"></span>
+                      <Spinner size="sm" text="" />
                     ) : (
                       'Update Password'
                     )}

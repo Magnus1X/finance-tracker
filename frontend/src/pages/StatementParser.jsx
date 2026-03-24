@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiFileText, FiUploadCloud, FiShield, FiCheckCircle, FiInfo, FiArrowRight, FiX } from 'react-icons/fi';
+import Spinner from '../components/Spinner';
 
 const StatementParser = () => {
     const [file, setFile] = useState(null);
@@ -81,9 +82,8 @@ const StatementParser = () => {
                                     className="w-full btn-primary py-5 text-base rounded-2xl flex items-center justify-center gap-3 shadow-2xl shadow-emerald-500/10"
                                 >
                                     {isParsing ? (
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                            <span>Parsing Audit Sequences...</span>
+                                        <div className="flex items-center">
+                                            <Spinner size="sm" text="Parsing Audit Sequences..." />
                                         </div>
                                     ) : (
                                         <>

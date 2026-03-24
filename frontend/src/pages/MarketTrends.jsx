@@ -5,6 +5,7 @@ import { FiArrowRight } from 'react-icons/fi';
 import { FiGlobe, FiTrendingUp, FiTrendingDown, FiFileText, FiActivity, FiZap, FiCheckCircle, FiInfo } from 'react-icons/fi';
 import axios from 'axios';
 import { aiAPI } from '../services/api';
+import Spinner from '../components/Spinner';
 
 const FINNHUB_KEY = 'd6g3bhhr01qqnmbqjv20d6g3bhhr01qqnmbqjv2g';
 
@@ -232,8 +233,8 @@ const MarketTrends = () => {
                     </div>
 
                     {loading ? (
-                        <div className="flex items-center justify-center p-20">
-                            <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin"></div>
+                        <div className="flex justify-center p-20 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+                            <Spinner text="Loading trends..." />
                         </div>
                     ) : news.map((item, i) => (
                         <motion.div
@@ -355,9 +356,8 @@ const MarketTrends = () => {
                             </button>
                         </div>
                         {aiLoading ? (
-                            <div className="flex flex-col items-center justify-center py-10 opacity-50 animate-pulse">
-                                <div className="w-10 h-10 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin mb-4" />
-                                <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Retrieving intelligence...</p>
+                            <div className="flex flex-col items-center justify-center p-12">
+                                <Spinner size="md" text="Loading definitions..." />
                             </div>
                         ) : (
                             <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 font-medium leading-relaxed space-y-4">

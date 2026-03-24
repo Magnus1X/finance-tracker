@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol, formatCurrency } from '../utils/currency';
 import CurrencyDisplay from '../components/CurrencyDisplay';
+import Spinner from '../components/Spinner';
 
 const Budgets = () => {
   const { user } = useAuth();
@@ -165,8 +166,8 @@ const Budgets = () => {
       {/* Budgets List */}
       <div className="space-y-6">
         {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
+          <div className="flex items-center justify-center p-20">
+            <Spinner text="Loading budgets..." />
           </div>
         ) : budgets.length > 0 ? (
           <div className="space-y-4">

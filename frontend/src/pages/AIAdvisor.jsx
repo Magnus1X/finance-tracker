@@ -7,6 +7,7 @@ import { getCurrencySymbol, formatCurrency } from '../utils/currency';
 import CurrencyDisplay from '../components/CurrencyDisplay';
 import { useAuth } from '../context/AuthContext';
 import { aiAPI } from '../services/api';
+import Spinner from '../components/Spinner';
 
 const AIAdvisor = () => {
     const { user } = useAuth();
@@ -208,9 +209,8 @@ const AIAdvisor = () => {
                                 Your Personalized Tips
                             </h2>
                             {loading ? (
-                                <div className="flex flex-col items-center justify-center py-10 opacity-50 animate-pulse">
-                                    <FiZap size={48} className="mb-4 text-emerald-500 opacity-80" />
-                                    <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Analyzing Your Finances...</p>
+                                <div className="flex flex-col items-center justify-center py-10">
+                                    <Spinner text="Analyzing Your Finances..." />
                                 </div>
                             ) : (
                                 <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 font-medium leading-relaxed space-y-4">

@@ -6,6 +6,7 @@ import { FiAlertCircle, FiCheckCircle, FiZap, FiDollarSign, FiBarChart2 } from '
 import { transactionAPI, budgetAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import Spinner from '../components/Spinner';
 import { getCurrencySymbol } from '../utils/currency';
 import { startOfMonth, endOfMonth, format } from 'date-fns';
 
@@ -209,8 +210,8 @@ const SmartAlerts = () => {
             </div>
 
             {loading ? (
-                <div className="flex justify-center p-20">
-                    <div className="w-12 h-12 border-4 border-slate-200 border-t-emerald-500 rounded-full animate-spin" />
+                <div className="col-span-full py-20 flex justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+                    <Spinner text="Scanning activity..." />
                 </div>
             ) : (
                 <div className="space-y-6 relative">

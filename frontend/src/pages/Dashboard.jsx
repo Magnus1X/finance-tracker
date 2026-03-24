@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { FiCalendar, FiArrowRight, FiZap, FiAlertCircle, FiCheckCircle, FiTrendingUp, FiTrendingDown, FiDollarSign, FiPieChart } from 'react-icons/fi';
+import { FiCalendar, FiArrowRight, FiZap, FiTrendingUp, FiCreditCard, FiPieChart, FiDollarSign } from 'react-icons/fi';
 import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol, formatCurrency } from '../utils/currency';
 import CurrencyDisplay from '../components/CurrencyDisplay';
 import { motion } from 'framer-motion';
+import Spinner from '../components/Spinner';
 import { portfolioHistory, cashFlowData, expenseCategories, recentTransactions as dummyTransactions } from '../utils/dummyData';
 import { transactionAPI, budgetAPI } from '../services/api';
 import { exportToCSV, exportToPDF } from '../utils/exportData';
@@ -141,9 +142,8 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
-        <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin"></div>
-        <p className="text-sm font-bold text-slate-400 uppercase tracking-widest animate-pulse">Synchronizing Data...</p>
+      <div className="flex items-center justify-center p-20">
+        <Spinner text="Building Dashboard..." />
       </div>
     );
   }
@@ -201,13 +201,14 @@ const Dashboard = () => {
       {/* Summary Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-          { label: 'Total Revenue', value: analytics?.income, color: 'text-emerald-600', icon: FiTrendingUp },
-          { label: 'Expenditure', value: analytics?.expenses, color: 'text-rose-600', icon: FiTrendingDown },
-          { label: 'Net Capital Surplus', value: analytics?.savings, color: analytics?.savings >= 0 ? 'text-emerald-600' : 'text-rose-600', icon: FiDollarSign }
+          { label: 'Total Revenue', value: analytics?.income, color: 'text-emerald-500', icon: FiTrendingUp },
+          { label: 'Expenditure', value: analytics?.expenses, color: 'text-rose-500', icon: FiTrendingDown },
+          { label: 'Net Capital Surplus', value: analytics?.savings, color: analytics?.savings >= 0 ? 'text-emerald-500' : 'text-rose-500', icon: FiDollarSign }
         ].map((stat, i) => (
-          <div key={i} className="card group relative overflow-hidden bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl border border-white dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-none hover:-translate-y-1 transition-all duration-300">
-            <div className="flex justify-between items-start mb-4 relative z-10">
-              <span className="text-sm font-semibold text-slate-500">{stat.label}</span>
+          <div key={i} className="group relative overflow-hidden bg-white dark:bg-[#050505] p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none hover:-translate-y-1 transition-all duration-500">
+            <div className="flex justify-between items-start mb-4 relative z-10 text-slate-400 group-hover:text-emerald-500 transition-colors">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em]">{stat.label}</span>
+              <stat.icon size={20} />
             </div>
             <div className="flex items-baseline gap-1 relative z-10 w-full overflow-hidden">
               <CurrencyDisplay
@@ -378,8 +379,11 @@ const Dashboard = () => {
         </div>
 
         {/* Budget Health Card */}
-        <div className="card">
-          <h2 className="text-xl font-bold mb-6 text-slate-800 dark:text-white tracking-tight">Expenditure Controls</h2>
+        <div className="card bg-white dark:bg-[#050505] rounded-[2.5rem] p-10 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/30">
+          <h2 className="text-2xl font-black mb-10 text-slate-900 dark:text-white tracking-tighter uppercase flex items-center gap-3">
+            <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm"><FiPieChart size={24} className="text-emerald-500" /></div>
+            Capital Bounds
+          </h2>
           <div className="space-y-8">
             {budgets.length > 0 ? budgets.slice(0, 3).map((budget, i) => {
               const spent = budget.spentAmount ?? budget.spent ?? 0;
@@ -475,9 +479,9 @@ const Dashboard = () => {
         </div>
 
         {/* Category breakdown (Donut) */}
-        <div className="lg:col-span-4 card flex flex-col h-full bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl border border-white dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-none">
+        <div className="lg:col-span-4 card flex flex-col h-full bg-white dark:bg-[#050505] p-10 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Category Split</h2>
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Ledger Split</h2>
           </div>
 
           <div className="relative w-full aspect-square max-h-[260px] mx-auto mb-6 flex items-center justify-center min-h-[220px]">

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiTarget, FiPlus, FiTrash2, FiFlag, FiTrendingUp, FiClock } from 'react-icons/fi';
+import { FiTarget, FiPlus, FiTrash2, FiFlag, FiTrendingUp, FiClock, FiHome, FiTruck, FiBriefcase, FiBook, FiUmbrella, FiCoffee, FiStar, FiSearch } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol } from '../utils/currency';
 import { goalAPI } from '../services/api';
+import Spinner from '../components/Spinner';
 
 const FinancialGoals = () => {
     const { user } = useAuth();
@@ -72,19 +73,31 @@ const FinancialGoals = () => {
         return months > 0 ? months : 1;
     };
 
+    const getGoalIcon = (title) => {
+        const t = title.toLowerCase();
+        if (t.includes('home') || t.includes('house') || t.includes('rent')) return FiHome;
+        if (t.includes('car') || t.includes('bike') || t.includes('travel') || t.includes('trip')) return FiTruck;
+        if (t.includes('education') || t.includes('school') || t.includes('course')) return FiBook;
+        if (t.includes('business') || t.includes('work') || t.includes('startup')) return FiBriefcase;
+        if (t.includes('emergency') || t.includes('health') || t.includes('insurance')) return FiUmbrella;
+        if (t.includes('coffee') || t.includes('food')) return FiCoffee;
+        if (t.includes('investment') || t.includes('stocks')) return FiStar;
+        return FiTarget;
+    };
+
     return (
         <div className="max-w-5xl mx-auto space-y-6 pb-16 px-4 md:px-0">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
                 <div>
-                    <h1 className="text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">Financial <span className="text-emerald-500">Goals</span></h1>
-                    <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Turn your dreams into achievable milestones.</p>
+                    <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">Wealth<span className="text-emerald-600">Targets</span></h1>
+                    <p className="text-slate-500 font-bold text-sm tracking-wide uppercase mt-2">Strategic Milestone Tracking • Phase 5 Monitoring</p>
                 </div>
                 <button
                     onClick={() => setShowForm(true)}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg py-2 px-5 flex items-center justify-center gap-2 shadow-sm text-xs tracking-widest uppercase font-bold w-full md:w-auto transition-colors"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl py-4 px-8 flex items-center justify-center gap-3 shadow-2xl shadow-emerald-500/20 text-xs tracking-[0.2em] uppercase font-black w-full md:w-auto transition-all active:scale-95"
                 >
-                    <FiPlus size={16} />
-                    <span>Set New Goal</span>
+                    <FiPlus size={20} />
+                    <span>Establish Target</span>
                 </button>
             </div>
 
@@ -128,14 +141,14 @@ const FinancialGoals = () => {
 
             {isLoading ? (
                 <div className="flex justify-center p-16 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
-                    <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <Spinner text="Loading goals..." />
                 </div>
             ) : goals.length === 0 ? (
                 <div className="text-center py-16 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 shadow-sm">
                     <p className="text-xs font-bold uppercase tracking-widest text-slate-400">No financial goals set yet. Click "Set New Goal" to start tracking!</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {goals.map((goal) => {
                     const progress = (goal.current / goal.target) * 100;
                     const monthsLeft = getMonthsLeft(goal.deadline);
@@ -144,18 +157,21 @@ const FinancialGoals = () => {
                         <motion.div
                             key={goal.id}
                             layout
-                            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                            className="group relative overflow-hidden bg-white dark:bg-[#050505] p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none hover:-translate-y-1 transition-all duration-500"
                         >
+                            <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-700">
+                                {React.createElement(getGoalIcon(goal.title), { size: 120 })}
+                            </div>
                             <div className="flex justify-between items-start mb-4">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-800/50">
-                                        <FiTarget className="text-emerald-600" size={20} />
+                                <div className="flex items-center gap-5">
+                                    <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-900 flex items-center justify-center shrink-0 border border-slate-200 dark:border-slate-800 shadow-sm group-hover:text-emerald-500 transition-colors">
+                                        {React.createElement(getGoalIcon(goal.title), { size: 28 })}
                                     </div>
                                     <div>
-                                        <h4 className="text-base font-bold text-slate-900 dark:text-white leading-tight mb-0.5">{goal.title}</h4>
-                                        <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                                            <FiClock size={10} />
-                                            <span>By {goal.deadline}</span>
+                                        <h4 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter mb-1 uppercase h-7 overflow-hidden">{goal.title}</h4>
+                                        <div className="flex items-center gap-2 text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                                            <FiClock size={12} className="text-emerald-500" />
+                                            <span>Deadline: {goal.deadline}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -179,25 +195,27 @@ const FinancialGoals = () => {
 
                             <div className="space-y-3">
                                 <div className="flex justify-between items-end">
-                                    <div className="space-y-0.5">
-                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Progress</p>
-                                        <p className="text-base font-bold font-financial text-slate-900 dark:text-white flex items-end gap-1">
-                                            {sym}{goal.current.toLocaleString()} 
-                                            <span className="text-slate-400 text-xs font-sans pb-0.5">/ {sym}{goal.target.toLocaleString()}</span>
-                                        </p>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Audit Progress</p>
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-2xl font-black font-financial text-slate-900 dark:text-white tracking-tighter">{sym}{goal.current.toLocaleString()}</span>
+                                            <span className="text-xs font-bold text-slate-400 lowercase tracking-tight">of {sym}{goal.target.toLocaleString()}</span>
+                                        </div>
                                     </div>
-                                    <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest ${progress >= 75 ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600' : 'bg-amber-50 dark:bg-amber-900/20 text-amber-600'
-                                        }`}>
-                                        {Math.min(progress, 100).toFixed(0)}% Achieved
-                                    </span>
+                                    <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${progress >= 100 ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30' : 'bg-slate-50 text-slate-500 border-slate-200 dark:bg-slate-900'}`}>
+                                        {Math.min(progress, 100).toFixed(0)}% SYNCHRONIZED
+                                    </div>
                                 </div>
 
-                                <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-700/50">
+                                <div className="w-full bg-slate-100 dark:bg-slate-900 h-3 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-800 relative">
                                     <motion.div
                                         initial={{ width: 0 }}
                                         whileInView={{ width: `${Math.min(progress, 100)}%` }}
-                                        className={`h-full bg-gradient-to-r ${progress >= 75 ? 'from-emerald-400 to-emerald-500' : 'from-emerald-300 to-emerald-400'}`}
+                                        className={`h-full relative z-10 ${progress >= 100 ? 'bg-emerald-500' : 'bg-slate-900 dark:bg-emerald-600'}`}
                                     />
+                                    {progress > 0 && progress < 100 && (
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent w-full h-full animate-shimmer" />
+                                    )}
                                 </div>
 
                                 {/* Tracking Form Box */}
@@ -227,11 +245,16 @@ const FinancialGoals = () => {
                                     )}
                                 </AnimatePresence>
 
-                                <div className="p-3 rounded-lg bg-emerald-50/50 dark:bg-slate-800/80 border border-emerald-100/50 dark:border-slate-700/50 flex items-center gap-2.5">
-                                    <FiTrendingUp className="text-emerald-500" size={12} />
-                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest leading-relaxed">
-                                        Save {sym}{amountPerMonth.toLocaleString()} / mo for {monthsLeft} mo{monthsLeft !== 1 ? 's' : ''} to reach goal
-                                    </p>
+                                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center gap-4 group-hover:border-emerald-500/30 transition-colors">
+                                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-slate-800 flex items-center justify-center text-emerald-500 shadow-sm">
+                                        <FiTrendingUp size={18} />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Required Inflow</p>
+                                        <p className="text-sm text-slate-900 dark:text-white font-black tracking-tight leading-none uppercase">
+                                            {sym}{amountPerMonth.toLocaleString()} <span className="text-[10px] text-slate-400 font-bold tracking-normal">Per Month</span>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
