@@ -140,8 +140,8 @@ const Dashboard = () => {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-slate-900 dark:text-white mb-1 uppercase">Dashboard</h1>
-          <p className="text-slate-500 font-bold text-xs tracking-wide uppercase">{format(new Date(), 'MMMM yyyy')} Overview</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-1">Dashboard</h1>
+          <p className="text-slate-500 font-medium text-sm">{format(new Date(), 'MMMM yyyy')} Overview</p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -194,7 +194,7 @@ const Dashboard = () => {
         ].map((stat, i) => (
           <div key={i} className="card group relative overflow-hidden bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl border border-white dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-none hover:-translate-y-1 transition-all duration-300">
             <div className="flex justify-between items-start mb-4 relative z-10">
-              <span className="text-xs font-black text-slate-500 uppercase tracking-widest">{stat.label}</span>
+              <span className="text-sm font-semibold text-slate-500">{stat.label}</span>
               <div className={`p-2 rounded-xl bg-slate-50 dark:bg-slate-800 group-hover:scale-110 transition-transform ${stat.color}`}>
                 <stat.icon size={20} />
               </div>
@@ -204,7 +204,7 @@ const Dashboard = () => {
                 amount={stat.value || 0}
                 className="text-slate-900 dark:text-white"
                 symbolClassName={`${stat.color} opacity-80`}
-                valueClassName="text-3xl md:text-4xl font-financial drop-shadow-sm font-black"
+                valueClassName="text-3xl font-financial drop-shadow-sm font-bold"
               />
             </div>
             {/* Subtle glow effect behind numbers */}
@@ -220,13 +220,13 @@ const Dashboard = () => {
           <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Data Abstract" className="absolute inset-0 w-full h-full object-cover opacity-5 contrast-100 grayscale mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-br from-white/95 to-slate-50/95" />
 
-          <div className="relative z-10 p-8 h-full flex flex-col">
+          <div className="relative z-10 p-6 h-full flex flex-col">
             <div className="flex justify-between items-start mb-8">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center shadow-sm border border-slate-200 text-amber-500">
                   <FiZap size={32} />
                 </div>
-                <h2 className="text-2xl font-black text-slate-800 uppercase tracking-tighter">Your Financial Insights</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Financial Insights</h2>
               </div>
             </div>
 
@@ -369,7 +369,7 @@ const Dashboard = () => {
 
         {/* Budget Health Card */}
         <div className="card">
-          <h2 className="text-lg font-black mb-6 text-slate-900 dark:text-white uppercase tracking-tighter">Expenditure Controls</h2>
+          <h2 className="text-xl font-bold mb-6 text-slate-800 dark:text-white tracking-tight">Expenditure Controls</h2>
           <div className="space-y-8">
             {budgets.length > 0 ? budgets.slice(0, 3).map((budget, i) => {
               const spent = budget.spentAmount ?? budget.spent ?? 0;
@@ -400,7 +400,7 @@ const Dashboard = () => {
                 </div>
               );
             }) : (
-              <div className="py-16 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] flex flex-col items-center justify-center text-center px-6 bg-slate-50/50 dark:bg-[#050505]">
+              <div className="py-12 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center text-center px-6 bg-slate-50/50 dark:bg-[#050505]">
                 <FiZap className="mb-6 drop-shadow-md opacity-50 text-slate-400" size={56} />
                 <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-relaxed">No primary budget models identified. <br /> Establish a monitoring threshold.</p>
               </div>
@@ -414,7 +414,7 @@ const Dashboard = () => {
         {/* Income vs Expense Graph */}
         <div className="lg:col-span-8 card">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Wealth Growth</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Wealth Growth</h2>
             <div className="flex gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-600" />
@@ -457,8 +457,8 @@ const Dashboard = () => {
                     return value;
                   }}
                 />
-                <Area type="monotone" dataKey="portfolioValue" stroke="#059669" strokeWidth={2.5} fillOpacity={1} fill="url(#colorNetWorth)" name="Net Worth" />
-                <Area type="monotone" dataKey="investments" stroke="#8b5cf6" strokeWidth={2.5} fillOpacity={0.1} fill="none" name="Investments" />
+                <Area type="monotone" dataKey="portfolioValue" stroke="#059669" strokeWidth={2} fillOpacity={1} fill="url(#colorNetWorth)" name="Net Worth" />
+                <Area type="monotone" dataKey="investments" stroke="#8b5cf6" strokeWidth={2} fillOpacity={0.1} fill="none" name="Investments" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -467,7 +467,7 @@ const Dashboard = () => {
         {/* Category breakdown (Donut) */}
         <div className="lg:col-span-4 card flex flex-col h-full bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl border border-white dark:border-slate-800 shadow-2xl shadow-slate-200/40 dark:shadow-none">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Category Split</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Category Split</h2>
           </div>
 
           <div className="relative w-full aspect-square max-h-[260px] mx-auto mb-6 flex items-center justify-center min-h-[220px]">
@@ -496,7 +496,7 @@ const Dashboard = () => {
             </ResponsiveContainer>
             {/* Total value in the center */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none mb-1">Total</span>
+              <span className="text-xs font-semibold text-slate-400 mb-1">Total</span>
               <CurrencyDisplay
                 amount={totalExpenseValue}
                 className="text-lg text-slate-900 dark:text-white font-black"
@@ -527,7 +527,7 @@ const Dashboard = () => {
       {/* Recent Activity List */}
       <div className="card">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-          <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter text-center sm:text-left">Recent Audit Log</h2>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight text-center sm:text-left">Recent Audit Log</h2>
           <Link to="/transactions" className="btn-secondary py-2 px-6 text-[10px] tracking-widest flex items-center gap-2 w-full sm:w-auto justify-center">
             Full Ledger <FiArrowRight />
           </Link>

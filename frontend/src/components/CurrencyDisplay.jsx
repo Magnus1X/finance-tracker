@@ -11,7 +11,7 @@ const CurrencyDisplay = ({ amount, code, className = "", symbolClassName = "", v
 
     return (
         <span className={`inline-flex items-baseline ${className}`}>
-            <span className={`text-[1em] font-black mr-1 text-inherit ${symbolClassName}`}>
+            <span className={`text-[1em] font-bold mr-1 text-inherit ${symbolClassName}`}>
                 {symbol}
             </span>
             <span className={`font-financial ${valueClassName}`}>
