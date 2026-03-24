@@ -12,10 +12,48 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(288);
+  const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
     setIsMobileOpen(false);
   }, [location.pathname]);
+
+  const startResizing = (e) => {
+    e.preventDefault();
+    setIsResizing(true);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isResizing) return;
+      let newWidth = e.clientX - 16; // 16px padding on the left
+      if (newWidth < 96) newWidth = 96;
+      if (newWidth > 480) newWidth = 480;
+      setSidebarWidth(newWidth);
+      if (newWidth < 140) setIsMinimized(true);
+      else setIsMinimized(false);
+    };
+
+    const handleMouseUp = () => setIsResizing(false);
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    } else {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing]);
 
   const handleLogout = () => {
     logout();
@@ -37,7 +75,10 @@ const Layout = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-black flex transition-colors duration-300">
+    <div 
+      className="min-h-screen bg-slate-50 dark:bg-black flex transition-colors duration-300"
+      style={{ '--sidebar-width': isMinimized ? '96px' : `${sidebarWidth}px` }}
+    >
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileOpen && (
@@ -53,9 +94,16 @@ const Layout = ({ children }) => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-full ${isMinimized ? 'w-24' : 'w-72'} bg-white dark:bg-[#050505] border-r border-slate-200 dark:border-slate-800 z-40 transition-all duration-300 ease-in-out md:translate-x-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        style={{ width: isMobileOpen ? '288px' : isMinimized ? '96px' : `${sidebarWidth}px` }}
+        className={`fixed left-0 top-0 h-full md:left-4 md:top-4 md:h-[calc(100vh-32px)] bg-white dark:bg-[#050505] md:rounded-3xl border border-slate-200 dark:border-slate-800 z-40 ease-in-out md:translate-x-0 ${isMobileOpen ? 'translate-x-0 transition-transform duration-300' : '-translate-x-full'} ${isResizing ? 'transition-none' : 'transition-all duration-300'} shadow-xl`}
       >
-        <div className="h-full flex flex-col relative">
+        <div className="h-full flex flex-col relative overflow-hidden md:rounded-3xl">
+          
+          {/* Resizer Handle (Desktop Only) */}
+          <div
+            onMouseDown={startResizing}
+            className="hidden md:block absolute top-0 right-0 bottom-0 w-1.5 cursor-col-resize z-50 hover:bg-emerald-500/50 active:bg-emerald-500 transition-colors"
+          />
 
           {/* Collapse Toggle Button (Desktop Only) */}
           <button
@@ -187,7 +235,9 @@ const Layout = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <main className={`flex-1 min-w-0 transition-all duration-300 ease-in-out ${isMinimized ? 'ml-0 md:ml-24' : 'ml-0 md:ml-72'}`}>
+      <main 
+        className={`flex-1 min-w-0 ease-in-out md:ml-0 md:pl-[calc(var(--sidebar-width)+16px)] ${isResizing ? 'transition-none' : 'transition-all duration-300'}`}
+      >
         <div className="max-w-[1600px] mx-auto p-4 sm:p-6 md:p-12 overflow-x-hidden">
           {children}
         </div>
