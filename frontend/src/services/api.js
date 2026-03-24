@@ -73,4 +73,10 @@ export const aiAPI = {
   chat: (message) => api.post('/ai/chat', { message }),
 };
 
+export const goalAPI = {
+  getAll: () => api.get('/goals'),
+  create: (data) => api.post('/goals', data),
+  delete: (id) => api.delete(`/goals/${id}`),
+};
+
 export default api;

@@ -1,28 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiTarget, FiPlus, FiTrash2, FiFlag, FiTrendingUp, FiClock } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { getCurrencySymbol } from '../utils/currency';
+import { goalAPI } from '../services/api';
 
 const FinancialGoals = () => {
     const { user } = useAuth();
     const sym = getCurrencySymbol(user?.currency);
-    const [goals, setGoals] = useState([
-        { id: 1, title: 'Emergency Fund', target: 100000, current: 45000, deadline: '2026-12-31', icon: '🛡️' },
-        { id: 2, title: 'New Laptop', target: 80000, current: 20000, deadline: '2026-06-30', icon: '💻' },
-    ]);
-
+    const [goals, setGoals] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [newGoal, setNewGoal] = useState({ title: '', target: '', deadline: '', icon: '🎯' });
+    const [isLoading, setIsLoading] = useState(true);
 
-    const addGoal = () => {
-        if (!newGoal.title || !newGoal.target) return;
-        setGoals([...goals, { ...newGoal, id: Date.now(), current: 0 }]);
-        setNewGoal({ title: '', target: '', deadline: '', icon: '🎯' });
-        setShowForm(false);
+    const fetchGoals = async () => {
+        try {
+            const res = await goalAPI.getAll();
+            setGoals(res.data.data);
+        } catch (error) {
+            console.error('Error fetching goals:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    const deleteGoal = (id) => setGoals(goals.filter(g => g.id !== id));
+    useEffect(() => {
+        fetchGoals();
+    }, []);
+
+    const addGoal = async () => {
+        if (!newGoal.title || !newGoal.target || !newGoal.deadline) return;
+        try {
+            const res = await goalAPI.create(newGoal);
+            setGoals([res.data.data, ...goals]);
+            setNewGoal({ title: '', target: '', deadline: '', icon: '🎯' });
+            setShowForm(false);
+        } catch (error) {
+            console.error('Error adding goal:', error);
+        }
+    };
+
+    const deleteGoal = async (id) => {
+        try {
+            await goalAPI.delete(id);
+            setGoals(goals.filter(g => g.id !== id));
+        } catch (error) {
+            console.error('Error deleting goal:', error);
+        }
+    };
 
     const getMonthsLeft = (deadline) => {
         if (!deadline) return 1;
@@ -86,7 +111,16 @@ const FinancialGoals = () => {
                 )}
             </AnimatePresence>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {isLoading ? (
+                <div className="flex justify-center py-20">
+                    <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            ) : goals.length === 0 ? (
+                <div className="text-center py-20 card border-2 border-dashed border-slate-200 dark:border-slate-800">
+                    <p className="text-slate-500 dark:text-slate-400">No financial goals set yet. Click "Set New Goal" to start tracking!</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {goals.map((goal) => {
                     const progress = (goal.current / goal.target) * 100;
                     const monthsLeft = getMonthsLeft(goal.deadline);
@@ -147,6 +181,7 @@ const FinancialGoals = () => {
                     );
                 })}
             </div>
+            )}
         </div>
     );
 };

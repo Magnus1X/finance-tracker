@@ -26,6 +26,7 @@ model User {
   transactions  Transaction[]
   budgets       Budget[]
   budgetHistory BudgetHistory[]
+  goals         Goal[]
 
   @@map("users")
 }
@@ -82,4 +83,20 @@ model BudgetHistory {
   @@index([userId, year(sort: Desc), month(sort: Desc)])
   @@index([userId, category])
   @@map("budget_history")
+}
+
+model Goal {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @map("user") @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  target      Float
+  current     Float    @default(0)
+  deadline    String
+  icon        String   @default("🎯")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@map("goals")
 }

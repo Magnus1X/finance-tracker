@@ -22,6 +22,7 @@ require('./config/passport'); // Initializes Google OAuth strategy
 const authRoutes = require('./routes/authRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const budgetRoutes = require('./routes/budgetRoutes');
+const goalRoutes = require('./routes/goalRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 
 // Initialize the Express application
@@ -68,6 +69,7 @@ app.get('/', (req, res) => {
       auth: '/api/auth',
       transactions: '/api/transactions',
       budgets: '/api/budgets',
+      goals: '/api/goals',
       ai: '/api/ai'
     }
   });
@@ -77,6 +79,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes); // Handles login, register, oauth, profile setup
 app.use('/api/transactions', transactionRoutes); // Handles all income/expense records
 app.use('/api/budgets', budgetRoutes); // Handles spending limits and limits tracking
+app.use('/api/goals', goalRoutes); // Handles user financial goals
 app.use('/api/ai', aiRoutes); // Handles Gemini AI assistant prompts
 
 // Simple health check endpoint used by uptime monitors (e.g. Vercel/Render)
