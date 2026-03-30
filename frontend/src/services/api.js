@@ -70,7 +70,7 @@ export const budgetAPI = {
 };
 
 export const aiAPI = {
-  chat: (messages) => api.post('/ai/chat', { messages }),
+  chat: (message) => api.post('/ai/chat', { message }),
   generateCourse: () => api.get('/ai/course'), // Endpoint dynamically generating rich financial learning JSON content
 };
 

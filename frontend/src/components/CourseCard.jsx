@@ -27,7 +27,7 @@ const CourseCard = ({
                     <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                     {isCompleted && (
                         <div className="absolute top-3 right-3 bg-white/95 text-emerald-600 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm backdrop-blur-sm">
-                            ✓ Read
+                            Read
                         </div>
                     )}
                 </div>

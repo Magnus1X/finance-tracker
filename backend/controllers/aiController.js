@@ -8,12 +8,12 @@ try {
   if (process.env.GOOGLE_AI_KEY) {
     genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY);
     model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    console.log('✅ Google Generative AI initialized');
+    console.log('Google Generative AI initialized');
   } else {
-    console.log('⚠️ GOOGLE_AI_KEY not found in environment.');
+    console.log('GOOGLE_AI_KEY not found in environment.');
   }
 } catch (error) {
-  console.error('❌ Google Generative AI init failed:', error.message);
+  console.error('Google Generative AI init failed:', error.message);
 }
 
 const getFinancialContext = async (userId) => {
@@ -93,7 +93,7 @@ const chatWithAI = async (req, res) => {
 
     // Mock response if AI service is not available (missing key)
     if (!model) {
-      console.warn('⚠️ AI service not init, returning mock response');
+      console.warn('AI service not init, returning mock response');
       return res.json({
         success: true,
         data: {

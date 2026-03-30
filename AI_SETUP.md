@@ -32,12 +32,12 @@
 ## Features
 
 The AI chatbot now:
-- ✅ Analyzes your real financial data
-- ✅ Provides personalized budget advice
-- ✅ Gives insights on spending patterns
-- ✅ Offers savings recommendations
-- ✅ Answers general financial questions
-- ✅ Uses your actual income, expenses, and budget data
+- Analyzes your real financial data
+- Provides personalized budget advice
+- Gives insights on spending patterns
+- Offers savings recommendations
+- Answers general financial questions
+- Uses your actual income, expenses, and budget data
 
 ## API Endpoint
 

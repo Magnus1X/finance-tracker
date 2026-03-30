@@ -94,7 +94,7 @@ model Goal {
   target      Float
   current     Float    @default(0)
   deadline    String
-  icon        String   @default("🎯")
+  icon        String   @default("target")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
